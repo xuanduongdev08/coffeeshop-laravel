@@ -1,0 +1,199 @@
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- SYSTEM BOUNDARY -->
+    <mxCell id="sys" value="He thong Website Coffee Shop - XDTHECOFFEEHOUSE"
+      style="swimlane;startSize=35;fillColor=none;strokeColor=#000000;strokeWidth=2;fontSize=15;align=center;fontStyle=1;"
+      vertex="1" parent="1">
+      <mxGeometry x="180" y="10" width="1100" height="1560" as="geometry"/>
+    </mxCell>
+
+    <!-- ===================== ACTORS (trai) ===================== -->
+    <mxCell id="a_kh" value="Khach Hang"
+      style="shape=mxgraph.flowchart.actor;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;verticalLabelPosition=bottom;verticalAlign=top;"
+      vertex="1" parent="1">
+      <mxGeometry x="30" y="700" width="60" height="80" as="geometry"/>
+    </mxCell>
+
+    <!-- ===================== ACTORS (phai) ===================== -->
+    <mxCell id="a_ad" value="Admin"
+      style="shape=mxgraph.flowchart.actor;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;verticalLabelPosition=bottom;verticalAlign=top;"
+      vertex="1" parent="1">
+      <mxGeometry x="1360" y="200" width="60" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="a_ql" value="Quan Ly"
+      style="shape=mxgraph.flowchart.actor;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;verticalLabelPosition=bottom;verticalAlign=top;"
+      vertex="1" parent="1">
+      <mxGeometry x="1360" y="700" width="60" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="a_nv" value="Nhan Vien Pha Che"
+      style="shape=mxgraph.flowchart.actor;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;verticalLabelPosition=bottom;verticalAlign=top;"
+      vertex="1" parent="1">
+      <mxGeometry x="1360" y="1200" width="60" height="80" as="geometry"/>
+    </mxCell>
+
+    <!-- ===================== USE CASES (giua) ===================== -->
+    <!-- Nhom 1: Tai khoan (KH + Admin) -->
+    <mxCell id="uc1"  value="Dang ky tai khoan"                style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="50"  width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc2"  value="Dang nhap / Dang xuat"            style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="110" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc3"  value="Dang nhap Google / Facebook"      style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="170" width="220" height="45" as="geometry"/></mxCell>
+
+    <!-- Nhom 2: San pham (KH + Admin) -->
+    <mxCell id="uc4"  value="Xem danh sach san pham theo danh muc" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="250" width="260" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc5"  value="Xem chi tiet san pham"            style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="310" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc6"  value="Quan ly san pham va danh muc"     style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="370" width="240" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc7"  value="Quan ly kich co (M/L/XL) va modifier" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="430" width="260" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc8"  value="Quan ly banner trang chu"         style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="490" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc9"  value="Duyet yeu cau san pham moi"       style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="550" width="230" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc10" value="Yeu cau san pham moi"             style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="610" width="220" height="45" as="geometry"/></mxCell>
+
+    <!-- Nhom 3: Gio hang va Dat hang (KH) -->
+    <mxCell id="uc11" value="Chon size va modifier (duong/da/sua/topping)" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="690" width="290" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc12" value="Them vao gio hang"                style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="750" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc13" value="Dat hang va xac nhan"             style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="810" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc14" value="Thanh toan (COD/VietQR/VNPay/MoMo)" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="870" width="270" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc15" value="Ap dung ma giam gia"              style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="930" width="220" height="45" as="geometry"/></mxCell>
+
+    <!-- Nhom 4: Don hang (KH + Quan Ly + NV) -->
+    <mxCell id="uc16" value="Xem lich su don hang"             style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="1010" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc17" value="Theo doi trang thai pha che"      style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="1070" width="230" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc18" value="Huy don hang"                     style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="1130" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc19" value="Cap nhat trang thai don hang (Cho xu ly - Dang giao - Hoan thanh)" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="1190" width="330" height="55" as="geometry"/></mxCell>
+    <mxCell id="uc20" value="Cap nhat trang thai pha che (Cho - Dang pha - Hoan thanh)" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="1260" width="310" height="55" as="geometry"/></mxCell>
+    <mxCell id="uc21" value="Xem chi tiet don hang (san pham, size, modifier)" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="1330" width="290" height="45" as="geometry"/></mxCell>
+
+    <!-- Nhom 5: Khach hang + Quan Ly -->
+    <mxCell id="uc22" value="Quan ly khach hang"               style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="1400" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc23" value="Quan ly nhan vien (them/sua/xoa/phan quyen)" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="500" y="1460" width="300" height="45" as="geometry"/></mxCell>
+
+    <!-- Nhom 6: Thong ke + Bao cao (Quan Ly) -->
+    <mxCell id="uc24" value="Quan ly ma giam gia"              style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="690" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc25" value="Thong ke doanh thu theo thang"    style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="750" width="250" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc26" value="Thong ke san pham ban chay"       style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="810" width="240" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc27" value="Xuat bao cao (PDF / CSV)"         style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="870" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc28" value="Gui email thong bao cho khach hang" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="930" width="260" height="45" as="geometry"/></mxCell>
+
+    <!-- Nhom 7: He thong + Admin -->
+    <mxCell id="uc29" value="Phan quyen tai khoan (admin/staff/cashier/warehouse)" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="50"  width="310" height="55" as="geometry"/></mxCell>
+    <mxCell id="uc30" value="Cai dat he thong"                 style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="120" width="220" height="45" as="geometry"/></mxCell>
+
+    <!-- Nhom 8: KH rieng -->
+    <mxCell id="uc31" value="Viet danh gia san pham"           style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="200" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc32" value="Quan ly ho so ca nhan (thong tin, mat khau, avatar)" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="260" width="300" height="55" as="geometry"/></mxCell>
+    <mxCell id="uc33" value="Nhan thong bao trang thai don hang" style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="330" width="260" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc34" value="Chat AI ho tro (Chatbox)"         style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="390" width="220" height="45" as="geometry"/></mxCell>
+    <mxCell id="uc35" value="Xem thong bao he thong"           style="ellipse;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1"><mxGeometry x="860" y="450" width="220" height="45" as="geometry"/></mxCell>
+
+    <!-- ===================== EDGES: Khach Hang ===================== -->
+    <!-- Tai khoan -->
+    <mxCell id="e1"  edge="1" source="a_kh" target="uc1"  parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e2"  edge="1" source="a_kh" target="uc2"  parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e3"  edge="1" source="a_kh" target="uc3"  parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- San pham -->
+    <mxCell id="e4"  edge="1" source="a_kh" target="uc4"  parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e5"  edge="1" source="a_kh" target="uc5"  parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e10" edge="1" source="a_kh" target="uc10" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- Gio hang / Dat hang -->
+    <mxCell id="e11" edge="1" source="a_kh" target="uc11" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e12" edge="1" source="a_kh" target="uc12" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e13" edge="1" source="a_kh" target="uc13" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e14" edge="1" source="a_kh" target="uc14" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e15" edge="1" source="a_kh" target="uc15" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- Don hang -->
+    <mxCell id="e16" edge="1" source="a_kh" target="uc16" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e17" edge="1" source="a_kh" target="uc17" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e18" edge="1" source="a_kh" target="uc18" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- KH rieng (ben phai) -->
+    <mxCell id="e31" edge="1" source="a_kh" target="uc31" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e32" edge="1" source="a_kh" target="uc32" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e33" edge="1" source="a_kh" target="uc33" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e34" edge="1" source="a_kh" target="uc34" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e35" edge="1" source="a_kh" target="uc35" parent="1" style="edgeStyle=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ===================== EDGES: Admin ===================== -->
+    <!-- Tai khoan -->
+    <mxCell id="ea2"  edge="1" source="a_ad" target="uc2"  parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- San pham -->
+    <mxCell id="ea6"  edge="1" source="a_ad" target="uc6"  parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ea7"  edge="1" source="a_ad" target="uc7"  parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ea8"  edge="1" source="a_ad" target="uc8"  parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ea9"  edge="1" source="a_ad" target="uc9"  parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- He thong (ben phai) -->
+    <mxCell id="ea29" edge="1" source="a_ad" target="uc29" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ea30" edge="1" source="a_ad" target="uc30" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ===================== EDGES: Quan Ly ===================== -->
+    <!-- Don hang -->
+    <mxCell id="eql2"  edge="1" source="a_ql" target="uc2"  parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="eql19" edge="1" source="a_ql" target="uc19" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="eql21" edge="1" source="a_ql" target="uc21" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="eql22" edge="1" source="a_ql" target="uc22" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="eql23" edge="1" source="a_ql" target="uc23" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <!-- Thong ke (ben phai) -->
+    <mxCell id="eql24" edge="1" source="a_ql" target="uc24" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="eql25" edge="1" source="a_ql" target="uc25" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="eql26" edge="1" source="a_ql" target="uc26" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="eql27" edge="1" source="a_ql" target="uc27" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="eql28" edge="1" source="a_ql" target="uc28" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ===================== EDGES: Nhan Vien Pha Che ===================== -->
+    <mxCell id="env2"  edge="1" source="a_nv" target="uc2"  parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="env19" edge="1" source="a_nv" target="uc19" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="env20" edge="1" source="a_nv" target="uc20" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="env21" edge="1" source="a_nv" target="uc21" parent="1" style="edgeStyle=none;exitX=0;exitY=0.5;exitDx=0;exitDy=0;"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ===================== QUAN HE extend / include ===================== -->
+
+    <!-- include: Dat hang -> Chon size modifier -->
+    <mxCell id="inc1" value="&lt;&lt;include&gt;&gt;"
+      edge="1" source="uc13" target="uc11" parent="1"
+      style="dashed=1;endArrow=open;endFill=0;fontSize=10;strokeColor=#666666;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- include: Dat hang -> Thanh toan -->
+    <mxCell id="inc2" value="&lt;&lt;include&gt;&gt;"
+      edge="1" source="uc13" target="uc14" parent="1"
+      style="dashed=1;endArrow=open;endFill=0;fontSize=10;strokeColor=#666666;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- extend: Xem lich su don hang -> Theo doi trang thai pha che -->
+    <mxCell id="ext1" value="&lt;&lt;extend&gt;&gt;"
+      edge="1" source="uc16" target="uc17" parent="1"
+      style="dashed=1;endArrow=open;endFill=0;fontSize=10;strokeColor=#666666;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- extend: Dat hang -> Ap dung ma giam gia -->
+    <mxCell id="ext2" value="&lt;&lt;extend&gt;&gt;"
+      edge="1" source="uc13" target="uc15" parent="1"
+      style="dashed=1;endArrow=open;endFill=0;fontSize=10;strokeColor=#666666;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- extend: Cap nhat trang thai pha che -> Gui thong bao KH -->
+    <mxCell id="ext3" value="&lt;&lt;extend&gt;&gt;"
+      edge="1" source="uc20" target="uc33" parent="1"
+      style="dashed=1;endArrow=open;endFill=0;fontSize=10;strokeColor=#d79b00;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- extend: Cap nhat trang thai don hang -> Gui email KH -->
+    <mxCell id="ext4" value="&lt;&lt;extend&gt;&gt;"
+      edge="1" source="uc19" target="uc28" parent="1"
+      style="dashed=1;endArrow=open;endFill=0;fontSize=10;strokeColor=#82b366;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- extend: Yeu cau san pham moi -> Duyet yeu cau -->
+    <mxCell id="ext5" value="&lt;&lt;extend&gt;&gt;"
+      edge="1" source="uc10" target="uc9" parent="1"
+      style="dashed=1;endArrow=open;endFill=0;fontSize=10;strokeColor=#666666;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

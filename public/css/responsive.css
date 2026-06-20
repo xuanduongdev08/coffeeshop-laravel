@@ -1,0 +1,832 @@
+/* ============================================
+   RESPONSIVE CSS - Mobile First Approach
+   Tối ưu cho tất cả thiết bị từ mobile đến desktop
+   ============================================ */
+
+/* Reset và Base Styles */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    min-width: 320px;
+    overflow-x: hidden;
+}
+
+/* Container Responsive */
+.container,
+.container-wrap {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* ============================================
+   MOBILE FIRST (320px - 575px)
+   ============================================ */
+
+/* Hero Slider - Mobile */
+.home-slider .slider-item {
+    min-height: 500px !important;
+    height: auto !important;
+    padding: 60px 0 !important;
+}
+
+.home-slider .slider-text {
+    padding: 20px 0 !important;
+}
+
+.home-slider .slider-text h1 {
+    font-size: 1.8rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 1rem !important;
+}
+
+.home-slider .slider-text .subheading {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.home-slider .slider-text p {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.home-slider .btn {
+    font-size: 0.85rem !important;
+    padding: 12px 20px !important;
+    margin: 5px !important;
+    display: inline-block !important;
+}
+
+/* Navbar - Mobile */
+.ftco_navbar {
+    padding: 10px 0 !important;
+}
+
+.navbar-brand {
+    font-size: 1.3rem !important;
+}
+
+.navbar-toggler {
+    padding: 8px 12px !important;
+    font-size: 1rem !important;
+}
+
+.navbar-nav {
+    padding: 10px 0 !important;
+}
+
+.navbar-nav .nav-item {
+    margin: 5px 0 !important;
+}
+
+.navbar-nav .nav-link {
+    padding: 10px 15px !important;
+    font-size: 1rem !important;
+}
+
+/* Intro Section - Mobile */
+.ftco-intro .info .col-md-4 {
+    margin-bottom: 20px !important;
+    padding: 15px !important;
+}
+
+.ftco-intro .icon {
+    font-size: 2rem !important;
+    margin-bottom: 10px !important;
+}
+
+.ftco-intro h3 {
+    font-size: 1.1rem !important;
+    margin-bottom: 5px !important;
+}
+
+.ftco-intro p {
+    font-size: 0.9rem !important;
+}
+
+/* About Section - Mobile */
+.ftco-about {
+    flex-direction: column !important;
+}
+
+.ftco-about .one-half {
+    width: 100% !important;
+    min-height: 300px !important;
+}
+
+.ftco-about .overlap {
+    padding: 30px 20px !important;
+    margin: 0 !important;
+}
+
+.ftco-about h2 {
+    font-size: 1.5rem !important;
+}
+
+.ftco-about p {
+    font-size: 0.95rem !important;
+}
+
+/* Services Section - Mobile */
+.ftco-services .col-md-4 {
+    margin-bottom: 30px !important;
+}
+
+.ftco-services .icon {
+    font-size: 3rem !important;
+    margin-bottom: 15px !important;
+}
+
+.ftco-services .heading {
+    font-size: 1.2rem !important;
+}
+
+.ftco-services p {
+    font-size: 0.9rem !important;
+}
+
+/* Products Section - Mobile */
+.ftco-section .heading-section {
+    margin-bottom: 30px !important;
+}
+
+.ftco-section .heading-section h2 {
+    font-size: 1.8rem !important;
+}
+
+.ftco-section .heading-section .subheading {
+    font-size: 0.9rem !important;
+}
+
+.ftco-section .heading-section p {
+    font-size: 0.95rem !important;
+}
+
+/* Product Cards - Mobile */
+.menu-entry {
+    margin-bottom: 30px !important;
+    width: 100% !important;
+}
+
+.menu-entry .img {
+    height: 250px !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+.menu-entry .text h3 {
+    font-size: 1.1rem !important;
+    margin-bottom: 10px !important;
+}
+
+.menu-entry .text p {
+    font-size: 0.9rem !important;
+}
+
+.menu-entry .price {
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+    margin: 10px 0 !important;
+}
+
+.menu-entry .btn {
+    font-size: 0.9rem !important;
+    padding: 10px 20px !important;
+    width: 100% !important;
+    max-width: 200px !important;
+}
+
+/* Counter Section - Mobile */
+.ftco-counter {
+    padding: 60px 0 !important;
+}
+
+.ftco-counter .col-md-6,
+.ftco-counter .col-lg-3 {
+    margin-bottom: 30px !important;
+}
+
+.ftco-counter .number {
+    font-size: 2.5rem !important;
+}
+
+.ftco-counter span {
+    font-size: 1rem !important;
+}
+
+/* Footer - Mobile */
+footer {
+    padding: 40px 0 20px !important;
+}
+
+footer .col-md-3,
+footer .col-md-4 {
+    margin-bottom: 30px !important;
+}
+
+footer h2 {
+    font-size: 1.3rem !important;
+}
+
+footer p,
+footer li {
+    font-size: 0.9rem !important;
+}
+
+/* Cart - Mobile */
+.cart-wrap table {
+    font-size: 0.85rem !important;
+}
+
+.cart-wrap .img {
+    width: 60px !important;
+    height: 60px !important;
+}
+
+.cart-wrap .product-name {
+    font-size: 0.9rem !important;
+}
+
+.cart-wrap .quantity {
+    width: 60px !important;
+}
+
+.cart-total {
+    margin-top: 30px !important;
+}
+
+.cart-total h3 {
+    font-size: 1.3rem !important;
+}
+
+/* Forms - Mobile */
+.form-control {
+    font-size: 1rem !important;
+    padding: 12px 15px !important;
+}
+
+label {
+    font-size: 0.95rem !important;
+}
+
+.btn-primary {
+    font-size: 1rem !important;
+    padding: 12px 30px !important;
+}
+
+/* Search and Filter - Mobile */
+.form-inline {
+    flex-direction: column !important;
+    width: 100% !important;
+}
+
+.form-inline .form-control {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    margin-right: 0 !important;
+}
+
+.form-inline .btn {
+    width: 100% !important;
+}
+
+.dropdown .btn {
+    width: 100% !important;
+}
+
+.dropdown-menu {
+    width: 100% !important;
+}
+
+/* Product Grid - Mobile */
+.col-md-3.mb-4 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+}
+
+/* Pagination - Mobile */
+.pagination {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+}
+
+.pagination .page-item {
+    margin: 2px !important;
+}
+
+.pagination .page-link {
+    padding: 8px 12px !important;
+    font-size: 0.9rem !important;
+}
+
+/* Product Detail - Mobile */
+.product-detail-img {
+    width: 100% !important;
+    height: auto !important;
+    margin-bottom: 20px !important;
+}
+
+.product-detail-info h2 {
+    font-size: 1.5rem !important;
+}
+
+.product-detail-info .price {
+    font-size: 1.5rem !important;
+}
+
+.quantity-selector {
+    width: 100% !important;
+    margin-bottom: 15px !important;
+}
+
+.quantity-selector input {
+    width: 80px !important;
+}
+
+/* Cart Table - Mobile */
+.table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+.cart-wrap table thead {
+    display: none !important;
+}
+
+.cart-wrap table,
+.cart-wrap table tbody,
+.cart-wrap table tr,
+.cart-wrap table td {
+    display: block !important;
+    width: 100% !important;
+}
+
+.cart-wrap table tr {
+    margin-bottom: 20px !important;
+    border: 1px solid #ddd !important;
+    padding: 15px !important;
+    border-radius: 5px !important;
+}
+
+.cart-wrap table td {
+    text-align: left !important;
+    padding: 10px 0 !important;
+    border: none !important;
+}
+
+.cart-wrap table td:before {
+    content: attr(data-label) !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+    width: 100px !important;
+}
+
+/* Checkout - Mobile */
+.checkout-form .col-md-6 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 20px !important;
+}
+
+.order-summary {
+    margin-top: 30px !important;
+}
+
+.order-summary h3 {
+    font-size: 1.3rem !important;
+}
+
+/* Profile Page - Mobile */
+.profile-card {
+    margin-bottom: 20px !important;
+}
+
+.profile-avatar-img {
+    width: 120px !important;
+    height: 120px !important;
+}
+
+/* Review Section - Mobile */
+.review-item {
+    padding: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+.review-item .reviewer-name {
+    font-size: 1rem !important;
+}
+
+.review-item .review-text {
+    font-size: 0.9rem !important;
+}
+
+/* Breadcrumbs - Mobile */
+.breadcrumbs {
+    font-size: 0.85rem !important;
+}
+
+.breadcrumbs span {
+    display: inline-block !important;
+    margin: 2px !important;
+}
+
+/* ============================================
+   SMALL DEVICES (576px - 767px)
+   ============================================ */
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+
+    .home-slider .slider-item {
+        min-height: 550px !important;
+    }
+
+    .home-slider .slider-text h1 {
+        font-size: 2.2rem !important;
+    }
+
+    .menu-entry .img {
+        height: 280px !important;
+    }
+
+    .ftco-section .col-md-3 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+}
+
+/* ============================================
+   MEDIUM DEVICES (768px - 991px) - Tablets
+   ============================================ */
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+
+    .home-slider .slider-item {
+        min-height: 600px !important;
+    }
+
+    .home-slider .slider-text h1 {
+        font-size: 2.5rem !important;
+    }
+
+    .home-slider .btn {
+        font-size: 0.95rem !important;
+        padding: 14px 25px !important;
+    }
+
+    .ftco-intro .info .col-md-4 {
+        flex: 0 0 33.333333% !important;
+        max-width: 33.333333% !important;
+        margin-bottom: 0 !important;
+    }
+
+    .ftco-about {
+        flex-direction: row !important;
+    }
+
+    .ftco-about .one-half {
+        width: 50% !important;
+        min-height: 500px !important;
+    }
+
+    .ftco-services .col-md-4 {
+        flex: 0 0 33.333333% !important;
+        max-width: 33.333333% !important;
+    }
+
+    .ftco-section .col-md-3 {
+        flex: 0 0 33.333333% !important;
+        max-width: 33.333333% !important;
+    }
+
+    .menu-entry .img {
+        height: 300px !important;
+    }
+
+    .ftco-counter .col-lg-3 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    footer .col-md-3,
+    footer .col-md-4 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    /* Form inline trở lại bình thường trên tablet */
+    .form-inline {
+        flex-direction: row !important;
+    }
+
+    .form-inline .form-control {
+        width: auto !important;
+        flex: 1 !important;
+        margin-bottom: 0 !important;
+        margin-right: 10px !important;
+    }
+
+    .form-inline .btn {
+        width: auto !important;
+    }
+
+    .dropdown .btn {
+        width: auto !important;
+    }
+
+    .dropdown-menu {
+        width: auto !important;
+    }
+
+    /* Filter row layout */
+    .row.mb-4 .col-md-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    .col-md-6.d-flex.justify-content-end {
+        justify-content: flex-end !important;
+    }
+
+    /* Reset cart table về bình thường trên tablet */
+    .cart-wrap table thead {
+        display: table-header-group !important;
+    }
+
+    .cart-wrap table,
+    .cart-wrap table tbody,
+    .cart-wrap table tr,
+    .cart-wrap table td {
+        display: table !important;
+        width: auto !important;
+    }
+
+    .cart-wrap table tbody {
+        display: table-row-group !important;
+    }
+
+    .cart-wrap table tr {
+        display: table-row !important;
+        margin-bottom: 0 !important;
+        border: none !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .cart-wrap table td {
+        display: table-cell !important;
+        text-align: center !important;
+        padding: 15px !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    .cart-wrap table td:before {
+        content: none !important;
+    }
+
+    /* Checkout form layout */
+    .checkout-form .col-md-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    /* Profile avatar */
+    .profile-avatar-img {
+        width: 150px !important;
+        height: 150px !important;
+    }
+}
+
+/* ============================================
+   LARGE DEVICES (992px - 1199px) - Desktops
+   ============================================ */
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+
+    .home-slider .slider-item {
+        min-height: 700px !important;
+    }
+
+    .home-slider .slider-text h1 {
+        font-size: 3rem !important;
+    }
+
+    .home-slider .slider-text p {
+        font-size: 1rem !important;
+    }
+
+    .home-slider .btn {
+        font-size: 1rem !important;
+        padding: 15px 30px !important;
+    }
+
+    .ftco-about .one-half {
+        min-height: 600px !important;
+    }
+
+    .ftco-section .col-md-3 {
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+    }
+
+    .menu-entry .img {
+        height: 320px !important;
+    }
+
+    .ftco-counter .col-lg-3 {
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+    }
+
+    footer .col-md-3 {
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+    }
+
+    footer .col-md-4 {
+        flex: 0 0 33.333333% !important;
+        max-width: 33.333333% !important;
+    }
+}
+
+/* ============================================
+   EXTRA LARGE DEVICES (1200px+) - Large Desktops
+   ============================================ */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+
+    .home-slider .slider-item {
+        min-height: 750px !important;
+    }
+
+    .home-slider .slider-text h1 {
+        font-size: 3.5rem !important;
+    }
+
+    .menu-entry .img {
+        height: 350px !important;
+    }
+}
+
+/* ============================================
+   SPECIFIC MOBILE FIXES
+   ============================================ */
+
+/* iPhone 14 Pro Max và các thiết bị tương tự (430px) */
+@media (max-width: 430px) {
+    .home-slider .slider-text h1 {
+        font-size: 1.6rem !important;
+    }
+
+    .home-slider .btn {
+        font-size: 0.8rem !important;
+        padding: 10px 18px !important;
+    }
+
+    .menu-entry .text h3 {
+        font-size: 1rem !important;
+    }
+
+    .menu-entry .text p {
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Landscape Orientation */
+@media (max-width: 991px) and (orientation: landscape) {
+    .home-slider .slider-item {
+        min-height: 400px !important;
+    }
+
+    .home-slider .slider-text h1 {
+        font-size: 1.8rem !important;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Text Responsive */
+.text-responsive {
+    font-size: calc(14px + 0.5vw) !important;
+}
+
+/* Image Responsive */
+.img-responsive {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Spacing Responsive */
+.p-responsive {
+    padding: calc(10px + 1vw) !important;
+}
+
+.m-responsive {
+    margin: calc(10px + 1vw) !important;
+}
+
+/* Hide on Mobile */
+@media (max-width: 767px) {
+    .hide-mobile {
+        display: none !important;
+    }
+}
+
+/* Show only on Mobile */
+@media (min-width: 768px) {
+    .show-mobile {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   TOUCH OPTIMIZATION
+   ============================================ */
+
+/* Tăng kích thước vùng chạm cho mobile */
+@media (max-width: 991px) {
+
+    a,
+    button,
+    .btn,
+    .nav-link {
+        min-height: 44px !important;
+        min-width: 44px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 15px 20px !important;
+    }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATION
+   ============================================ */
+
+/* Tối ưu hóa rendering */
+.home-slider,
+.ftco-about .img,
+.menu-entry .img {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Focus States for keyboard navigation */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #c49b63 !important;
+    outline-offset: 2px !important;
+}
+
+/* Skip to content link */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #c49b63;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
