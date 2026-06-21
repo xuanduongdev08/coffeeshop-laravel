@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Services\MoMoService;
-use App\Services\VNPayService;
+use App\Services\PayPalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -51,62 +51,76 @@ class PaymentController extends Controller
     }
 
     /**
-     * Redirect sang VNPay
+     * Redirect sang PayPal
      */
-    public function redirectVNPay(Order $order, VNPayService $vnpay)
+    public function redirectPayPal(Order $order, PayPalService $paypal)
     {
         abort_if($order->user_id !== auth()->id(), 403);
 
-        $order->update(['payment_method' => 'VNPay']);
-        $payUrl = $vnpay->createPaymentUrl($order, request()->ip());
+        $order->update(['payment_method' => 'PayPal']);
+        $payUrl = $paypal->createOrder($order);
 
-        return redirect()->away($payUrl);
+        if ($payUrl) {
+            return redirect()->away($payUrl);
+        }
+
+        return redirect()->route('payment.index', $order)
+            ->with('error', 'Không thể tạo liên kết thanh toán PayPal. Vui lòng thử lại sau.');
     }
 
     /**
-     * VNPay return callback
+     * PayPal return callback (Capture payment)
      */
-    public function vnpayReturn(Request $request, VNPayService $vnpay)
+    public function paypalReturn(Request $request, PayPalService $paypal)
     {
-        $params = $request->all();
-
-        // Xác thực chữ ký VNPay
-        if (! $vnpay->verifyReturn($params)) {
-            return redirect()->route('home')
-                ->with('error', 'Chữ ký VNPay không hợp lệ.');
+        $paypalOrderId = $request->get('token');
+        if (!$paypalOrderId) {
+            return redirect()->route('home')->with('error', 'Liên kết thanh toán không hợp lệ.');
         }
 
-        $trackingCode = $vnpay->extractTrackingCode($params['vnp_TxnRef'] ?? '');
-        $order        = Order::where('tracking_code', $trackingCode)->first();
+        // Capture đơn hàng trên PayPal
+        $result = $paypal->captureOrder($paypalOrderId);
 
-        if (! $order) {
-            return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng.');
-        }
-
-        if ($vnpay->isSuccess($params)) {
-            // IPN có thể đã cập nhật trước — chỉ update nếu chưa paid
-            if ($order->payment_status !== 'paid') {
-                $order->update(['payment_status' => 'paid', 'payment_method' => 'VNPay']);
+        if ($result && ($result['status'] ?? '') === 'COMPLETED') {
+            $purchaseUnit = $result['purchase_units'][0] ?? [];
+            $trackingCode = $purchaseUnit['custom_id'] ?? $purchaseUnit['reference_id'] ?? '';
+            
+            if (!$trackingCode) {
+                return redirect()->route('home')->with('error', 'Không thể xác định thông tin đơn hàng từ PayPal.');
             }
 
-            // Nếu user chưa đăng nhập (session mất sau redirect), yêu cầu login lại
-            if (! auth()->check()) {
+            $order = Order::where('tracking_code', $trackingCode)->first();
+
+            if (!$order) {
+                return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng tương ứng.');
+            }
+
+            if ($order->payment_status !== 'paid') {
+                $order->update([
+                    'payment_status' => 'paid',
+                    'payment_method' => 'PayPal'
+                ]);
+            }
+
+            if (!auth()->check()) {
                 return redirect()->route('login')
                     ->with('success', 'Thanh toán thành công! Đăng nhập để xem đơn hàng ' . $trackingCode . '.');
             }
 
             return redirect()->route('payment.success', $order)
-                ->with('success', 'Thanh toán VNPay thành công!');
+                ->with('success', 'Thanh toán qua PayPal thành công!');
         }
 
-        // Thanh toán thất bại / huỷ
-        if (auth()->check()) {
-            return redirect()->route('payment.index', $order)
-                ->with('error', 'Thanh toán VNPay thất bại. Mã lỗi: ' . ($params['vnp_ResponseCode'] ?? 'unknown'));
-        }
+        return redirect()->route('home')->with('error', 'Thanh toán qua PayPal thất bại hoặc chưa hoàn tất.');
+    }
 
-        return redirect()->route('home')
-            ->with('error', 'Thanh toán VNPay thất bại hoặc đã bị huỷ.');
+    /**
+     * PayPal cancel callback
+     */
+    public function paypalCancel(Order $order)
+    {
+        return redirect()->route('payment.index', $order)
+            ->with('error', 'Bạn đã hủy thanh toán qua PayPal.');
     }
 
     /**

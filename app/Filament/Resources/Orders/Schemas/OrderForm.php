@@ -67,7 +67,7 @@ class OrderForm
                                 'COD'    => 'COD (Tiền mặt)',
                                 'VietQR' => 'VietQR',
                                 'MoMo'   => 'MoMo',
-                                'VNPay'  => 'VNPay',
+                                'PayPal' => 'PayPal',
                             ])
                             ->default('COD'),
                         Select::make('payment_status')

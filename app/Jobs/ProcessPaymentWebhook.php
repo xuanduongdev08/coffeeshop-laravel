@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
  * Cách dùng:
  *   ProcessPaymentWebhook::dispatch($payload, 'casso');
  *   ProcessPaymentWebhook::dispatch($payload, 'momo');
- *   ProcessPaymentWebhook::dispatch($payload, 'vnpay');
+ *   ProcessPaymentWebhook::dispatch($payload, 'paypal');
  *
  * Khi QUEUE_CONNECTION=sync (mặc định), job chạy ngay lập tức.
  * Khi QUEUE_CONNECTION=database, job chạy nền qua `php artisan queue:work`.
@@ -40,7 +40,7 @@ class ProcessPaymentWebhook implements ShouldQueue
 
     public function __construct(
         private readonly array  $payload,
-        private readonly string $source  // 'casso' | 'momo' | 'vnpay'
+        private readonly string $source  // 'casso' | 'momo' | 'paypal'
     ) {}
 
     public function handle(): void
@@ -48,10 +48,10 @@ class ProcessPaymentWebhook implements ShouldQueue
         Log::channel('daily')->info("ProcessPaymentWebhook [{$this->source}]", $this->payload);
 
         match ($this->source) {
-            'casso' => $this->processCasso(),
-            'momo'  => $this->processMoMo(),
-            'vnpay' => $this->processVNPay(),
-            default => Log::warning("ProcessPaymentWebhook: Unknown source [{$this->source}]"),
+            'casso'  => $this->processCasso(),
+            'momo'   => $this->processMoMo(),
+            'paypal' => $this->processPayPal(),
+            default  => Log::warning("ProcessPaymentWebhook: Unknown source [{$this->source}]"),
         };
     }
 
@@ -132,39 +132,54 @@ class ProcessPaymentWebhook implements ShouldQueue
     }
 
     // ─────────────────────────────────────────────
-    // VNPAY IPN
+    // PAYPAL WEBHOOK
     // ─────────────────────────────────────────────
 
-    private function processVNPay(): void
+    private function processPayPal(): void
     {
-        $responseCode      = $this->payload['vnp_ResponseCode']      ?? '';
-        $transactionStatus = $this->payload['vnp_TransactionStatus'] ?? '';
+        $eventType = $this->payload['event_type'] ?? '';
 
-        if ($responseCode !== '00' || $transactionStatus !== '00') {
-            Log::info("VNPay: Payment failed. ResponseCode={$responseCode}");
+        if ($eventType !== 'PAYMENT.CAPTURE.COMPLETED') {
+            Log::info("PayPal: Skipping event type {$eventType}");
             return;
         }
 
-        $txnRef       = $this->payload['vnp_TxnRef'] ?? '';
-        $trackingCode = explode('_', $txnRef)[0]; // XD00001_timestamp → XD00001
-        $order        = Order::where('tracking_code', $trackingCode)->first();
+        $resource = $this->payload['resource'] ?? [];
+        $status   = $resource['status'] ?? '';
+
+        if ($status !== 'COMPLETED') {
+            Log::info("PayPal: Payment not completed. Status={$status}");
+            return;
+        }
+
+        $trackingCode = $resource['custom_id'] ?? '';
+        if (!$trackingCode) {
+            $trackingCode = $resource['invoice_id'] ?? '';
+        }
+
+        if (!$trackingCode) {
+            Log::warning("PayPal Webhook: No custom_id/trackingCode found.");
+            return;
+        }
+
+        $order = Order::where('tracking_code', $trackingCode)->first();
 
         if (! $order) {
-            Log::warning("VNPay: Order {$trackingCode} not found.");
+            Log::warning("PayPal: Order {$trackingCode} not found.");
             return;
         }
 
         if ($order->payment_status === 'paid') {
-            Log::info("VNPay: Order {$trackingCode} already paid. Skipping.");
+            Log::info("PayPal: Order {$trackingCode} already paid. Skipping.");
             return;
         }
 
         $order->update([
             'payment_status' => 'paid',
-            'payment_method' => 'VNPay',
+            'payment_method' => 'PayPal',
         ]);
 
-        Log::info("VNPay: Order {$trackingCode} marked paid.");
+        Log::info("PayPal: Order {$trackingCode} marked paid.");
     }
 
     /**

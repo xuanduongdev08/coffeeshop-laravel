@@ -44,7 +44,7 @@ class OrdersTable
                         'COD'    => 'gray',
                         'VietQR' => 'info',
                         'MoMo'   => 'pink',
-                        'VNPay'  => 'success',
+                        'PayPal' => 'success',
                         default  => 'gray',
                     }),
                 TextColumn::make('payment_status')
@@ -114,7 +114,7 @@ class OrdersTable
                         'COD'    => 'COD',
                         'VietQR' => 'VietQR',
                         'MoMo'   => 'MoMo',
-                        'VNPay'  => 'VNPay',
+                        'PayPal' => 'PayPal',
                     ]),
                 SelectFilter::make('drink_status')
                     ->label('Pha chế')

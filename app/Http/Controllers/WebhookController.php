@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\ProcessPaymentWebhook;
 use App\Models\Order;
 use App\Services\MoMoService;
-use App\Services\VNPayService;
+use App\Services\PayPalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -72,22 +72,20 @@ class WebhookController extends Controller
     }
 
     /**
-     * Webhook IPN từ VNPay
+     * Webhook IPN từ PayPal
      */
-    public function handleVNPay(Request $request, VNPayService $vnpay)
+    public function handlePayPal(Request $request, PayPalService $paypal)
     {
-        Log::channel('daily')->info('VNPay IPN received', $request->all());
+        Log::channel('daily')->info('PayPal Webhook received', $request->all());
 
-        $params = $request->all();
-
-        // Xác thực chữ ký trước khi dispatch
-        if (! $vnpay->verifyReturn($params)) {
-            Log::warning('VNPay IPN: Invalid signature. Rejected.');
-            return response()->json(['RspCode' => '97', 'Message' => 'Invalid signature']);
+        // Xác thực chữ ký webhook trước khi dispatch
+        if (! $paypal->verifyWebhookSignature($request)) {
+            Log::warning('PayPal Webhook: Invalid signature. Rejected.');
+            return response()->json(['status' => 'failed', 'message' => 'Invalid signature'], 400);
         }
 
-        ProcessPaymentWebhook::dispatch($params, 'vnpay');
+        ProcessPaymentWebhook::dispatch($request->all(), 'paypal');
 
-        return response()->json(['RspCode' => '00', 'Message' => 'Confirm Success']);
+        return response()->json(['status' => 'success', 'message' => 'Confirm Success']);
     }
 }

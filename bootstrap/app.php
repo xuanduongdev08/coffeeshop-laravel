@@ -17,10 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             return $request->is('admin*') ? route('admin.login') : route('login');
         });
 
-        // Bỏ qua CSRF cho webhook thanh toán và return callback từ VNPay/MoMo
+        // Bỏ qua CSRF cho webhook thanh toán và return callback từ PayPal/MoMo
         $middleware->validateCsrfTokens(except: [
             'webhook/*',
-            'thanh-toan/vnpay/*',
+            'thanh-toan/paypal/*',
             'thanh-toan/momo/*',
         ]);
 

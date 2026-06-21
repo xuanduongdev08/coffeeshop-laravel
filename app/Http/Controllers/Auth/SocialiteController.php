@@ -14,7 +14,9 @@ class SocialiteController extends Controller
      */
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')
+            ->redirectUrl(route('auth.google.callback'))
+            ->redirect();
     }
 
     /**
@@ -23,7 +25,9 @@ class SocialiteController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')
+                ->redirectUrl(route('auth.google.callback'))
+                ->user();
         } catch (\Exception $e) {
             return redirect()->route('login')
                 ->with('error', 'Đăng nhập Google thất bại. Vui lòng thử lại.');

@@ -98,17 +98,17 @@
                                 </a>
                             </div>
 
-                            {{-- VNPay --}}
+                            {{-- PayPal --}}
                             <div class="payment-option mb-3">
-                                <form method="POST" action="{{ route('payment.vnpay', $order) }}">
+                                <form method="POST" action="{{ route('payment.paypal', $order) }}">
                                     @csrf
                                     <button type="submit" class="payment-btn w-100 text-left">
                                         <div class="payment-card">
                                             <div class="d-flex align-items-center">
-                                                <span style="font-size:2rem;margin-right:15px;">💳</span>
+                                                <span style="font-size:2rem;margin-right:15px;">🅿️</span>
                                                 <div>
-                                                    <h5 class="mb-1">Thanh toán qua VNPay</h5>
-                                                    <p class="mb-0 text-muted">Thanh toán quét mã VNPay-QR, Thẻ ATM hoặc Thẻ quốc tế</p>
+                                                    <h5 class="mb-1">Thanh toán qua PayPal</h5>
+                                                    <p class="mb-0 text-muted">Thanh toán bằng tài khoản PayPal hoặc thẻ quốc tế (USD)</p>
                                                 </div>
                                             </div>
                                         </div>
