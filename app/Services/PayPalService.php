@@ -109,7 +109,8 @@ class PayPalService
             if ($response->successful()) {
                 $links = $response->json('links') ?: [];
                 foreach ($links as $link) {
-                    if (($link['rel'] ?? '') === 'approve') {
+                    $rel = $link['rel'] ?? '';
+                    if ($rel === 'approve' || $rel === 'payer-action') {
                         return $link['href'];
                     }
                 }
@@ -141,7 +142,7 @@ class PayPalService
                 ->withHeaders([
                     'Content-Type' => 'application/json'
                 ])
-                ->post("{$this->baseUrl}/v2/checkout/orders/{$paypalOrderId}/capture");
+                ->post("{$this->baseUrl}/v2/checkout/orders/{$paypalOrderId}/capture", (object)[]);
 
             if ($response->successful()) {
                 return $response->json();

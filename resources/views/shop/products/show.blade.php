@@ -118,11 +118,11 @@
                 @if($modifiers->isNotEmpty())
                     <div class="mb-3" id="modifier-selector">
                         @php
-                            $typeLabels = ['sugar' => '🍬 Mức đường', 'ice' => '🧊 Mức đá', 'milk' => '🥛 Loại sữa', 'topping' => '🧋 Topping'];
+                            $typeLabels = ['sugar' => 'Mức đường', 'ice' => 'Mức đá', 'milk' => 'Loại sữa', 'topping' => 'Topping'];
                             $typeRadio  = ['sugar', 'ice', 'milk']; // radio (chọn 1)
                             $typeCheck  = ['topping'];               // checkbox (chọn nhiều)
                             $isJuice    = $product->has_topping && !$product->allow_milk;
-                            if ($isJuice) $typeLabels['sugar'] = '🍬 Mức ngọt';
+                            if ($isJuice) $typeLabels['sugar'] = 'Mức ngọt';
                         @endphp
                         @foreach($modifiers as $type => $group)
                             <div class="modifier-group mb-3">
@@ -224,9 +224,9 @@
                 </div>
                 <p>
                     @if($product->stock == 0)
-                        <button class="btn btn-primary py-3 px-5" disabled>Hết hàng</button>
+                        <button class="btn btn-primary btn-outline-primary py-3 px-5" disabled>Hết hàng</button>
                     @else
-                        <button class="btn btn-primary py-3 px-5" id="btn-add-to-cart-custom"
+                        <button class="btn btn-primary btn-outline-primary py-3 px-5" id="btn-add-to-cart-custom"
                             data-product-id="{{ $product->id }}"
                             data-has-size="{{ $product->has_size ? '1' : '0' }}">
                             Thêm vào giỏ hàng
@@ -404,6 +404,21 @@
 <style>
 .modifier-btn.active span {
     color: rgba(255, 255, 255, 0.85) !important;
+}
+#btn-add-to-cart-custom {
+    transition: all 0.3s ease !important;
+}
+#btn-add-to-cart-custom:hover {
+    color: #fff !important;
+    background: #c49b63 !important;
+    border-color: transparent !important;
+}
+.product-details .btn-outline-primary:disabled {
+    color: #c49b63 !important;
+    background: transparent !important;
+    opacity: 0.5 !important;
+    border-color: #c49b63 !important;
+    cursor: not-allowed;
 }
 </style>
 @endpush

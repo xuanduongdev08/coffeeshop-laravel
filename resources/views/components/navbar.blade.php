@@ -33,7 +33,7 @@
                     <a href="{{ route('products.index') }}" class="nav-link">Sản phẩm</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
+                    <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="dropdown04" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">Danh mục</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown04">
                         <a class="dropdown-item" href="{{ route('products.index') }}">Tất cả sản phẩm</a>
@@ -49,8 +49,9 @@
                 @auth
                     {{-- Notification Bell --}}
                     <li class="nav-item notification-bell" id="notificationBell">
-                        <a class="nav-link" href="#" id="notifBellBtn" onclick="toggleNotifDropdown(event)">
+                        <a class="nav-link" href="javascript:void(0)" id="notifBellBtn" onclick="toggleNotifDropdown(event)">
                             <span class="icon-bell" style="font-size: 18px;"></span>
+                            <span class="d-lg-none ml-2">Thông báo</span>
                             <span class="notif-badge" id="notifBadge"
                                 style="{{ $unreadNotifications > 0 ? '' : 'display:none;' }}">
                                 {{ $unreadNotifications }}
@@ -69,7 +70,7 @@
 
                     {{-- User Dropdown --}}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="userDropdown" data-toggle="dropdown">
                             @php
                                 $avatarUrl = null;
                                 $userAvatar = auth()->user()->avatar;
@@ -121,6 +122,7 @@
                 <li class="nav-item cart">
                     <a href="{{ route('cart.index') }}" class="nav-link">
                         <span class="icon icon-shopping_cart"></span>
+                        <span class="d-lg-none ml-2">Giỏ hàng</span>
                         <span class="bag d-flex justify-content-center align-items-center">
                             <small>{{ $cartCount }}</small>
                         </span>
@@ -188,6 +190,72 @@
 .notif-empty { text-align: center; padding: 40px 20px; color: #aaa; }
 .notif-loading { text-align: center; padding: 30px; color: #999; }
 @media (max-width: 480px) { .notif-dropdown { width: 300px; right: -50px; } }
+
+/* Collapsed Mobile Navbar styling overrides */
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        padding: 10px 15px !important;
+        background: #000000;
+        border-radius: 8px;
+    }
+    .navbar-nav .nav-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 2px 0;
+        width: 100%;
+    }
+    .navbar-nav .nav-item:last-child {
+        border-bottom: none;
+    }
+    .navbar-nav .nav-link {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        width: 100%;
+        padding: 12px 10px !important;
+        text-align: left !important;
+    }
+    .navbar-nav .dropdown-toggle::after {
+        margin-left: auto !important;
+    }
+    .navbar-nav .dropdown-menu {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: none !important;
+        padding-left: 15px !important;
+        margin: 5px 0 !important;
+        box-shadow: none !important;
+        float: none !important;
+        position: static !important;
+        width: 100% !important;
+    }
+    .navbar-nav .dropdown-item {
+        color: rgba(255, 255, 255, 0.75) !important;
+        padding: 8px 15px !important;
+        text-align: left !important;
+        display: flex !important;
+        align-items: center;
+    }
+    .notif-badge {
+        position: static !important;
+        margin-left: 10px !important;
+        transform: none !important;
+    }
+    .nav-item.cart .bag {
+        position: static !important;
+        margin-left: 10px !important;
+        transform: none !important;
+        width: 20px !important;
+        height: 20px !important;
+    }
+    .notif-dropdown {
+        position: fixed !important;
+        top: 60px !important;
+        left: 15px !important;
+        right: 15px !important;
+        width: auto !important;
+        max-width: none !important;
+        z-index: 10000 !important;
+    }
+}
 </style>
 
 <script>
