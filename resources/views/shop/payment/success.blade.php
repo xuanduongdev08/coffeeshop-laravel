@@ -146,5 +146,21 @@
     50%  { transform: scale(1.1); }
     100% { transform: scale(1); opacity: 1; }
 }
+.card {
+    background: #ffffff !important;
+}
+.card h5 {
+    color: #c49b63 !important;
+    font-weight: 700 !important;
+}
+.card p {
+    color: #555555 !important;
+}
+.card strong {
+    color: #2b2b2b !important;
+}
+.card-body {
+    color: #555555 !important;
+}
 </style>
 @endpush

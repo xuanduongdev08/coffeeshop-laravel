@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/{order}',                [PaymentController::class, 'index'])->name('index');
         Route::post('/cod/{order}',           [PaymentController::class, 'processCOD'])->name('cod');
-        Route::post('/vnpay/{order}',         [PaymentController::class, 'redirectVNPay'])->name('vnpay');
+        Route::post('/paypal/{order}',        [PaymentController::class, 'redirectPayPal'])->name('paypal');
         Route::post('/momo/{order}',          [PaymentController::class, 'redirectMoMo'])->name('momo');
         Route::get('/vietqr/{order}',         [PaymentController::class, 'showVietQR'])->name('vietqr');
         Route::get('/status/{order}',         [\App\Http\Controllers\Api\PaymentStatusController::class, 'check'])->name('status');
@@ -84,7 +84,8 @@ Route::middleware('auth')->group(function () {
 // ── Callback redirect từ VNPay/MoMo — đặt NGOÀI auth vì user redirect từ domain ngoài về ──
 // Bảo mật do chữ ký (vnp_SecureHash / MoMo signature) được xác thực bên trong controller
 Route::prefix('thanh-toan')->name('payment.')->group(function () {
-    Route::get('/vnpay/ket-qua',  [PaymentController::class, 'vnpayReturn'])->name('vnpay.return');
+    Route::get('/paypal/ket-qua', [PaymentController::class, 'paypalReturn'])->name('paypal.return');
+    Route::get('/paypal/huy/{order}', [PaymentController::class, 'paypalCancel'])->name('paypal.cancel');
     Route::get('/momo/ket-qua',   [PaymentController::class, 'momoReturn'])->name('momo.return');
 });
 
@@ -92,7 +93,7 @@ Route::prefix('thanh-toan')->name('payment.')->group(function () {
 Route::prefix('webhook')->name('webhook.')->group(function () {
     Route::post('/casso', [\App\Http\Controllers\WebhookController::class, 'handleCasso'])->name('casso');
     Route::post('/momo', [\App\Http\Controllers\WebhookController::class, 'handleMoMo'])->name('momo');
-    Route::post('/vnpay', [\App\Http\Controllers\WebhookController::class, 'handleVNPay'])->name('vnpay');
+    Route::post('/paypal', [\App\Http\Controllers\WebhookController::class, 'handlePayPal'])->name('paypal');
 });
 
 /*

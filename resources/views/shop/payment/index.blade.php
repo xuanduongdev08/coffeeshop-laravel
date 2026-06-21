@@ -72,7 +72,7 @@
                                     <button type="submit" class="payment-btn w-100 text-left">
                                         <div class="payment-card">
                                             <div class="d-flex align-items-center">
-                                                <span style="font-size:2rem;margin-right:15px;">💵</span>
+                                                <img src="{{ asset('images/paymentlogo/COD_Payment.png') }}" alt="COD" class="payment-logo">
                                                 <div>
                                                     <h5 class="mb-1">Thanh toán khi nhận hàng (COD)</h5>
                                                     <p class="mb-0 text-muted">Thanh toán bằng tiền mặt khi nhận hàng</p>
@@ -88,9 +88,9 @@
                                 <a href="{{ route('payment.vietqr', $order) }}" class="payment-btn d-block">
                                     <div class="payment-card">
                                         <div class="d-flex align-items-center">
-                                            <span style="font-size:2rem;margin-right:15px;">📱</span>
+                                            <img src="{{ asset('images/paymentlogo/Vietqr logo.png') }}" alt="VietQR" class="payment-logo">
                                             <div>
-                                                <h5 class="mb-1">Chuyển khoản VietQR (Ngân hàng)</h5>
+                                                <h5 class="mb-1">Thanh toán VietQR</h5>
                                                 <p class="mb-0 text-muted">Quét mã QR qua App Ngân hàng hoặc Ví điện tử</p>
                                             </div>
                                         </div>
@@ -98,17 +98,17 @@
                                 </a>
                             </div>
 
-                            {{-- VNPay --}}
+                            {{-- PayPal --}}
                             <div class="payment-option mb-3">
-                                <form method="POST" action="{{ route('payment.vnpay', $order) }}">
+                                <form method="POST" action="{{ route('payment.paypal', $order) }}">
                                     @csrf
                                     <button type="submit" class="payment-btn w-100 text-left">
                                         <div class="payment-card">
                                             <div class="d-flex align-items-center">
-                                                <span style="font-size:2rem;margin-right:15px;">💳</span>
+                                                <img src="{{ asset('images/paymentlogo/PayPal_logo.png') }}" alt="PayPal" class="payment-logo">
                                                 <div>
-                                                    <h5 class="mb-1">Thanh toán qua VNPay</h5>
-                                                    <p class="mb-0 text-muted">Thanh toán quét mã VNPay-QR, Thẻ ATM hoặc Thẻ quốc tế</p>
+                                                    <h5 class="mb-1">Thanh toán qua PayPal</h5>
+                                                    <p class="mb-0 text-muted">Thanh toán bằng tài khoản PayPal hoặc thẻ quốc tế (USD)</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -123,9 +123,9 @@
                                     <button type="submit" class="payment-btn w-100 text-left">
                                         <div class="payment-card">
                                             <div class="d-flex align-items-center">
-                                                <span style="font-size:2rem;margin-right:15px;">📲</span>
+                                                <img src="{{ asset('images/paymentlogo/MOMO-Logo-App.png') }}" alt="MoMo" class="payment-logo">
                                                 <div>
-                                                    <h5 class="mb-1">Ví MoMo</h5>
+                                                    <h5 class="mb-1">Thanh toán với Ví MoMo</h5>
                                                     <p class="mb-0 text-muted">Thanh toán qua ví điện tử MoMo</p>
                                                 </div>
                                             </div>
@@ -161,18 +161,58 @@
     color: inherit;
 }
 .payment-card {
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 20px;
-    transition: all 0.3s ease;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px 24px;
+    transition: all 0.25s ease-in-out;
     background: white;
 }
 .payment-card:hover {
     border-color: #c49b63;
-    box-shadow: 0 5px 15px rgba(196,155,99,0.2);
+    box-shadow: 0 8px 20px rgba(196, 155, 99, 0.12);
     transform: translateY(-2px);
 }
-.payment-card h5 { color: #333; font-weight: 600; }
-.payment-card p { color: #666; }
+.payment-logo {
+    width: 60px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+.payment-card h5 {
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 2px;
+}
+.payment-card p {
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+.card-body > h3 {
+    color: #c49b63 !important;
+}
+.order-summary h5 {
+    color: #c49b63 !important;
+}
+
+/* Mobile Responsive Optimization */
+@media (max-width: 576px) {
+    .payment-card {
+        padding: 14px 18px;
+    }
+    .payment-logo {
+        width: 50px;
+        height: 35px;
+        margin-right: 15px;
+    }
+    .payment-card h5 {
+        font-size: 0.95rem;
+    }
+    .payment-card p {
+        font-size: 0.8rem;
+    }
+}
 </style>
 @endpush

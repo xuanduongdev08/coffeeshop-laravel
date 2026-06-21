@@ -302,7 +302,7 @@
         <div class="row justify-content-center">
             @foreach($categories as $category)
                 <div class="col-md-3 col-sm-6 mb-4">
-                    <a href="{{ route('categories.show', $category->slug) }}" class="text-decoration-none">
+                    <a href="{{ route('categories.show', $category->slug) }}" class="text-decoration-none d-block w-100">
                         <div class="text-center h-100 category-card-dark">
                             <div style="font-size:48px;margin-bottom:15px;line-height:1;">
                                 @switch($category->name)

@@ -128,11 +128,10 @@
             </div>
         @else
             <div class="row">
-                <div class="col-12 text-center py-5">
-                    <div style="font-size:80px;margin-bottom:20px;">🛒</div>
-                    <h3>Giỏ hàng của bạn đang trống</h3>
-                    <p class="text-muted">Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.</p>
-                    <a href="{{ route('products.index') }}" class="btn btn-primary mt-3 py-3 px-5">Tiếp tục mua sắm</a>
+                <div class="col-12 text-center py-5 my-4">
+                    <h3 class="mb-3" style="color: #fff;">Giỏ hàng của bạn đang trống</h3>
+                    <p class="text-muted mb-4">Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.</p>
+                    <a href="{{ route('products.index') }}" class="btn btn-primary py-3 px-5">Tiếp tục mua sắm</a>
                 </div>
             </div>
         @endif
