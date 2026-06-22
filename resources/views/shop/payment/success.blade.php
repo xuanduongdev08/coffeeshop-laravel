@@ -29,7 +29,7 @@
                         {{-- Success Icon --}}
                         <div class="success-icon mb-4">
                             <div class="success-circle">
-                                <span style="font-size:60px;line-height:1;">✓</span>
+                                <span style="font-size:60px;line-height:1;color:#ffffff !important;">✓</span>
                             </div>
                         </div>
 
@@ -138,8 +138,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: white !important;
     animation: scaleIn 0.5s ease-out;
+}
+.success-circle span {
+    color: #ffffff !important;
 }
 @keyframes scaleIn {
     0%   { transform: scale(0); opacity: 0; }

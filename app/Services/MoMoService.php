@@ -108,18 +108,18 @@ class MoMoService
     public function verifySignature(array $data): bool
     {
         $rawHash = "accessKey={$this->accessKey}"
-            . "&amount={$data['amount']}"
-            . "&extraData={$data['extraData']}"
-            . "&message={$data['message']}"
-            . "&orderId={$data['orderId']}"
-            . "&orderInfo={$data['orderInfo']}"
-            . "&orderType={$data['orderType']}"
-            . "&partnerCode={$data['partnerCode']}"
-            . "&payType={$data['payType']}"
-            . "&requestId={$data['requestId']}"
-            . "&responseTime={$data['responseTime']}"
-            . "&resultCode={$data['resultCode']}"
-            . "&transId={$data['transId']}";
+            . "&amount=" . ($data['amount'] ?? '')
+            . "&extraData=" . ($data['extraData'] ?? '')
+            . "&message=" . ($data['message'] ?? '')
+            . "&orderId=" . ($data['orderId'] ?? '')
+            . "&orderInfo=" . ($data['orderInfo'] ?? '')
+            . "&orderType=" . ($data['orderType'] ?? '')
+            . "&partnerCode=" . ($data['partnerCode'] ?? '')
+            . "&payType=" . ($data['payType'] ?? '')
+            . "&requestId=" . ($data['requestId'] ?? '')
+            . "&responseTime=" . ($data['responseTime'] ?? '')
+            . "&resultCode=" . ($data['resultCode'] ?? '')
+            . "&transId=" . ($data['transId'] ?? '');
 
         $expected = hash_hmac('sha256', $rawHash, $this->secretKey);
         return hash_equals($expected, $data['signature'] ?? '');
@@ -130,7 +130,7 @@ class MoMoService
      */
     public function isSuccess(array $data): bool
     {
-        return ($data['resultCode'] ?? -1) === 0;
+        return isset($data['resultCode']) && (int) $data['resultCode'] === 0;
     }
 
     /**

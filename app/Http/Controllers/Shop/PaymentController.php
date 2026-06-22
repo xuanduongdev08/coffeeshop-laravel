@@ -161,6 +161,13 @@ class PaymentController extends Controller
             return redirect()->route('home')->with('error', 'Không tìm thấy đơn hàng.');
         }
 
+        // Xác thực chữ ký phản hồi từ MoMo
+        if (! $momo->verifySignature($params)) {
+            \Log::warning("MoMo Return: Signature verification failed for order {$trackingCode}. Spoofing attempt?", $params);
+            return redirect()->route('payment.index', $order)
+                ->with('error', 'Chữ ký giao dịch MoMo không hợp lệ hoặc dữ liệu bị thay đổi.');
+        }
+
         if ($momo->isSuccess($params)) {
             $order->update(['payment_status' => 'paid']);
             return redirect()->route('payment.success', $order)
