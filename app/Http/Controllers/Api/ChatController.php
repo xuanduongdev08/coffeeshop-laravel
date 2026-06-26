@@ -21,8 +21,10 @@ class ChatController extends Controller
     public function handle(Request $request): JsonResponse
     {
         $request->validate([
-            'message' => 'required|string|max:1000',
-            'action'  => 'nullable|string',
+            'message'    => ($request->input('action', 'chat') === 'chat') ? 'required|string|max:1000' : 'nullable|string|max:1000',
+            'action'     => 'nullable|string',
+            'product_id' => 'required_if:action,add_to_cart|integer',
+            'quantity'   => 'nullable|integer|min:1',
         ]);
 
         $message   = trim($request->input('message'));
@@ -32,9 +34,10 @@ class ChatController extends Controller
 
         try {
             return match ($action) {
-                'greeting' => $this->handleGreeting($user),
-                'weather'  => $this->handleWeather(),
-                default    => $this->handleChat($message, $user, $sessionId),
+                'greeting'    => $this->handleGreeting($user),
+                'weather'     => $this->handleWeather(),
+                'add_to_cart' => $this->handleAddToCart($request),
+                default       => $this->handleChat($message, $user, $sessionId),
             };
         } catch (\Exception $e) {
             Log::error('CaféAI Error: ' . $e->getMessage());
@@ -56,12 +59,12 @@ class ChatController extends Controller
 
         $weatherInfo = '';
         if ($weather) {
-            $weatherInfo = "\n\n🌤️ Thời tiết tại {$weather['city']}: {$weather['temp']}°C, {$weather['description']}";
+            $weatherInfo = "\n\nThời tiết tại {$weather['city']}: {$weather['temp']}°C, {$weather['description']}";
         }
 
         $greeting = config('services.cafeai.greeting_vi',
-            "Xin chào{$name}! 👋 Tôi là CaféAI, trợ lý ảo của XDTHECOFFEEHOUSE.\n\n" .
-            "☕ Tìm đồ uống phù hợp\n📦 Theo dõi đơn hàng\n🛒 Đặt hàng nhanh\n🌤️ Gợi ý theo thời tiết\n\n" .
+            "Xin chào{$name}! Tôi là CaféAI, trợ lý ảo của XDTHECOFFEEHOUSE.\n\n" .
+            "Tìm đồ uống phù hợp\nTheo dõi đơn hàng\nĐặt hàng nhanh\nGợi ý theo thời tiết\n\n" .
             "Bạn cần gì hôm nay?"
         );
 
@@ -97,9 +100,9 @@ class ChatController extends Controller
         // Try local processing first
         $response = $this->processLocally($intent, $message, $language, $user);
 
-        // Fallback to Claude API for general chat
+        // Fallback to Gemini API for general chat
         if ($response === null) {
-            $response = $this->callClaudeAPI($message, $language, $user, $sessionId);
+            $response = $this->callGeminiAPI($message, $language, $user, $sessionId);
         }
 
         // Log AI response
@@ -141,6 +144,79 @@ class ChatController extends Controller
         ]);
     }
 
+    /**
+     * Thêm sản phẩm vào giỏ hàng từ CaféAI
+     */
+    private function handleAddToCart(Request $request): JsonResponse
+    {
+        $productId = $request->input('product_id');
+        $quantity = (int) $request->input('quantity', 1);
+
+        $product = Product::find($productId);
+        if (!$product) {
+            return response()->json([
+                'success' => false,
+                'error'   => 'Sản phẩm không tồn tại.',
+            ]);
+        }
+
+        if (!$product->is_active) {
+            return response()->json([
+                'success' => false,
+                'error'   => 'Sản phẩm không còn kinh doanh.',
+            ]);
+        }
+
+        if ($product->stock < 1) {
+            return response()->json([
+                'success' => false,
+                'error'   => 'Sản phẩm đã hết hàng.',
+            ]);
+        }
+
+        $cart = session('cart', []);
+        
+        // Key duy nhất cho mỗi combination (product + size + modifiers)
+        // Chatbot thêm trực tiếp mặc định không có size/modifier
+        $key = 'p' . $product->id . '_ns_0';
+
+        if (isset($cart[$key])) {
+            $newQty = $cart[$key]['quantity'] + $quantity;
+            if ($newQty > $product->stock) {
+                return response()->json([
+                    'success' => false,
+                    'error'   => 'Số lượng vượt quá tồn kho.',
+                ]);
+            }
+            $cart[$key]['quantity'] = $newQty;
+        } else {
+            $cart[$key] = [
+                'product_id'     => $product->id,
+                'name'           => $product->name,
+                'slug'           => $product->slug,
+                'image'          => $product->image,
+                'size'           => null,
+                'base_price'     => $product->effective_price,
+                'modifier_extra' => 0,
+                'unit_price'     => $product->effective_price,
+                'price'          => $product->effective_price,
+                'modifier_ids'   => [],
+                'modifier_names' => '',
+                'quantity'       => $quantity,
+            ];
+        }
+
+        session(['cart' => $cart]);
+
+        $cartCount = array_sum(array_column($cart, 'quantity'));
+
+        return response()->json([
+            'success'   => true,
+            'total_qty' => $cartCount,
+            'cart_count'=> $cartCount,
+        ]);
+    }
+
     // ─────────────────────────────────────────────
     // LOCAL INTENT PROCESSING
     // ─────────────────────────────────────────────
@@ -150,7 +226,8 @@ class ChatController extends Controller
         $isVi = $language === 'vi';
 
         return match ($intent) {
-            'greeting'       => $this->intentGreeting($user, $isVi),
+            // Let Gemini handle conversational greetings dynamically
+            // 'greeting'       => $this->intentGreeting($user, $isVi),
             'product_lookup' => $this->intentProductLookup($message, $isVi),
             'order_tracking' => $this->intentOrderTracking($user, $message, $isVi),
             'weather'        => $this->intentWeather($isVi),
@@ -165,13 +242,13 @@ class ChatController extends Controller
     {
         $name = $user ? " {$user->name}" : '';
         $msg  = $isVi
-            ? "Xin chào{$name}! 👋 Tôi là CaféAI, trợ lý ảo của XDTHECOFFEEHOUSE.\n\n☕ Tìm đồ uống phù hợp\n📦 Theo dõi đơn hàng\n🛒 Đặt hàng nhanh\n🌤️ Gợi ý theo thời tiết\n\nBạn cần gì hôm nay?"
-            : "Hello{$name}! 👋 I'm CaféAI, XDTHECOFFEEHOUSE's virtual assistant.\n\n☕ Find the perfect drink\n📦 Track your orders\n🛒 Quick ordering\n🌤️ Weather-based suggestions\n\nWhat can I do for you today?";
+            ? "Xin chào{$name}! Tôi là CaféAI, trợ lý ảo của XDTHECOFFEEHOUSE.\n\nTìm đồ uống phù hợp\nTheo dõi đơn hàng\nĐặt hàng nhanh\nGợi ý theo thời tiết\n\nBạn cần gì hôm nay?"
+            : "Hello{$name}! I'm CaféAI, XDTHECOFFEEHOUSE's virtual assistant.\n\nFind the perfect drink\nTrack your orders\nQuick ordering\nWeather-based suggestions\n\nWhat can I do for you today?";
 
         return ['message' => $msg, 'suggestions' => $this->getSuggestions('greeting')];
     }
 
-    private function intentProductLookup(string $message, bool $isVi): array
+    private function intentProductLookup(string $message, bool $isVi): ?array
     {
         $products = $this->smartProductSearch($message);
 
@@ -189,20 +266,21 @@ class ChatController extends Controller
         // Log market gap
         ProductRequest::logRequest($message, $message);
 
-        $msg = $isVi
-            ? "Xin lỗi, không tìm thấy sản phẩm phù hợp với \"{$message}\" 😔\n\nBạn có thể mô tả hương vị bạn thích hoặc xem menu đầy đủ."
-            : "Sorry, no products found matching \"{$message}\" 😔\n\nTry describing the flavor you like or view our full menu.";
-
-        return ['message' => $msg, 'suggestions' => $this->getSuggestions('no_results')];
+        // Returning null allows falling back to Gemini, which is better for conversational responses
+        return null;
     }
 
-    private function intentOrderTracking(?object $user, string $message, bool $isVi): array
+    private function intentOrderTracking(?object $user, string $message, bool $isVi): ?array
     {
         if (! $user) {
-            return [
-                'message'     => $isVi ? "Bạn cần đăng nhập để xem đơn hàng. 🔐" : "Please login to track your orders. 🔐",
-                'suggestions' => [['text' => '🔑 ' . ($isVi ? 'Đăng nhập' : 'Login'), 'action' => 'login']],
-            ];
+            // Only prompt login if they actually ask about status/tracking
+            if (preg_match('/theo dõi|kiểm tra|trạng thái|track|status/iu', $message)) {
+                return [
+                    'message'     => $isVi ? "Bạn cần đăng nhập để xem đơn hàng. 🔐" : "Please login to track your orders. 🔐",
+                    'suggestions' => [['text' => '🔑 ' . ($isVi ? 'Đăng nhập' : 'Login'), 'action' => 'login']],
+                ];
+            }
+            return null;
         }
 
         // Check for specific order ID
@@ -222,24 +300,30 @@ class ChatController extends Controller
             }
         }
 
-        $orders = Order::where('user_id', $user->id)->latest()->take(5)->get();
+        // If asking to track, list recent orders
+        if (preg_match('/theo dõi|kiểm tra|trạng thái|track|status/iu', $message)) {
+            $orders = Order::where('user_id', $user->id)->latest()->take(5)->get();
 
-        if ($orders->isEmpty()) {
-            return [
-                'message'     => $isVi ? "Bạn chưa có đơn hàng nào. Hãy khám phá menu! ☕" : "No orders yet. Let's explore our menu! ☕",
-                'suggestions' => $this->getSuggestions('no_orders'),
-            ];
+            if ($orders->isEmpty()) {
+                return [
+                    'message'     => $isVi ? "Bạn chưa có đơn hàng nào. Hãy khám phá menu! ☕" : "No orders yet. Let's explore our menu! ☕",
+                    'suggestions' => $this->getSuggestions('no_orders'),
+                ];
+            }
+
+            $msg = $isVi ? "📦 Đơn hàng gần đây của bạn:\n\n" : "📦 Your recent orders:\n\n";
+            foreach ($orders as $o) {
+                $emoji = match ($o->status) {
+                    'Hoàn thành' => '✅', 'Đang giao' => '🚚', 'Đã hủy' => '❌', default => '⏳'
+                };
+                $msg .= "{$emoji} **{$o->tracking_code}** — " . number_format($o->total, 0, ',', '.') . "đ — {$o->status}\n";
+            }
+
+            return ['message' => $msg, 'suggestions' => $this->getSuggestions('order')];
         }
 
-        $msg = $isVi ? "📦 Đơn hàng gần đây của bạn:\n\n" : "📦 Your recent orders:\n\n";
-        foreach ($orders as $o) {
-            $emoji = match ($o->status) {
-                'Hoàn thành' => '✅', 'Đang giao' => '🚚', 'Đã hủy' => '❌', default => '⏳'
-            };
-            $msg .= "{$emoji} **{$o->tracking_code}** — " . number_format($o->total, 0, ',', '.') . "đ — {$o->status}\n";
-        }
-
-        return ['message' => $msg, 'suggestions' => $this->getSuggestions('order')];
+        // Fallback to Gemini for general questions about orders
+        return null;
     }
 
     private function intentWeather(bool $isVi): array
@@ -248,11 +332,11 @@ class ChatController extends Controller
         $suggestions = $this->getWeatherSuggestions($weather);
 
         $msg = $isVi
-            ? "🌤️ **Thời tiết tại {$weather['city']}:**\n🌡️ {$weather['temp']}°C | 💧 {$weather['humidity']}% | {$weather['description']}\n\n{$suggestions['message']}"
-            : "🌤️ **Weather in {$weather['city']}:**\n🌡️ {$weather['temp']}°C | 💧 {$weather['humidity']}% | {$weather['description']}\n\n{$suggestions['message']}";
+            ? "**Thời tiết tại {$weather['city']}:**\n{$weather['temp']}°C | Độ ẩm: {$weather['humidity']}% | {$weather['description']}\n\n{$suggestions['message']}"
+            : "**Weather in {$weather['city']}:**\n{$weather['temp']}°C | Humidity: {$weather['humidity']}% | {$weather['description']}\n\n{$suggestions['message']}";
 
         foreach ($suggestions['products'] as $p) {
-            $msg .= "\n☕ **{$p->name}** — " . number_format($p->effective_price, 0, ',', '.') . "đ";
+            $msg .= "\n**{$p->name}** — " . number_format($p->effective_price, 0, ',', '.') . "đ";
         }
 
         return ['message' => $msg, 'products' => $suggestions['products']->toArray(), 'suggestions' => $this->getSuggestions('weather'), 'metadata' => ['weather' => $weather]];
@@ -263,10 +347,10 @@ class ChatController extends Controller
         $msgLower = mb_strtolower($message, 'UTF-8');
 
         $moods = [
-            'tired'    => ['patterns' => ['mệt', 'tired', 'buồn ngủ', 'sleepy', 'exhausted'], 'emoji' => '⚡', 'vi' => 'Đây là những thức uống giúp bạn tỉnh táo! ⚡', 'en' => 'Here are drinks to boost your energy! ⚡', 'keywords' => 'espresso americano robusta'],
-            'stressed' => ['patterns' => ['stress', 'căng thẳng', 'lo lắng', 'anxious'], 'emoji' => '🧘', 'vi' => 'Hít thở sâu... Đây là thức uống giúp bạn thư giãn 🍃', 'en' => 'Take a deep breath... Here are relaxing drinks 🍃', 'keywords' => 'trà latte'],
-            'sad'      => ['patterns' => ['buồn', 'sad', 'chán', 'cô đơn', 'lonely'], 'emoji' => '💙', 'vi' => 'Một ly ấm áp sẽ giúp bạn cảm thấy tốt hơn 🤗', 'en' => 'A warm drink will make you feel better 🤗', 'keywords' => 'latte capuccino caramel'],
-            'happy'    => ['patterns' => ['vui', 'happy', 'hạnh phúc', 'tuyệt vời', 'great'], 'emoji' => '😄', 'vi' => 'Tuyệt vời! Hãy thử những thức uống tràn đầy năng lượng! 🎉', 'en' => "That's great! Here are some energetic drinks! 🎉", 'keywords' => 'caramel trà vải nước cam'],
+            'tired'    => ['patterns' => ['mệt', 'tired', 'buồn ngủ', 'sleepy', 'exhausted'], 'vi' => 'Đây là những thức uống giúp bạn tỉnh táo!', 'en' => 'Here are drinks to boost your energy!', 'keywords' => 'espresso americano robusta'],
+            'stressed' => ['patterns' => ['stress', 'căng thẳng', 'lo lắng', 'anxious'], 'vi' => 'Hít thở sâu... Đây là thức uống giúp bạn thư giãn', 'en' => 'Take a deep breath... Here are relaxing drinks', 'keywords' => 'trà latte'],
+            'sad'      => ['patterns' => ['buồn', 'sad', 'chán', 'cô đơn', 'lonely'], 'vi' => 'Một ly ấm áp sẽ giúp bạn cảm thấy tốt hơn', 'en' => 'A warm drink will make you feel better', 'keywords' => 'latte capuccino caramel'],
+            'happy'    => ['patterns' => ['vui', 'happy', 'hạnh phúc', 'tuyệt vời', 'great'], 'vi' => 'Tuyệt vời! Hãy thử những thức uống tràn đầy năng lượng!', 'en' => "That's great! Here are some energetic drinks!", 'keywords' => 'caramel trà vải nước cam'],
         ];
 
         $detected = 'happy';
@@ -278,10 +362,10 @@ class ChatController extends Controller
 
         $mood     = $moods[$detected];
         $products = $this->smartProductSearch($mood['keywords']);
-        $msg      = "{$mood['emoji']} **Virtual Barista** {$mood['emoji']}\n\n" . ($isVi ? $mood['vi'] : $mood['en']) . "\n\n";
+        $msg      = "**Virtual Barista**\n\n" . ($isVi ? $mood['vi'] : $mood['en']) . "\n\n";
 
         foreach ($products as $p) {
-            $msg .= "☕ **{$p->name}** — " . number_format($p->effective_price, 0, ',', '.') . "đ\n";
+            $msg .= "**{$p->name}** — " . number_format($p->effective_price, 0, ',', '.') . "đ\n";
         }
 
         return ['message' => $msg, 'products' => $products->toArray(), 'suggestions' => $this->getSuggestions('mood'), 'metadata' => ['mood' => $detected]];
@@ -290,10 +374,10 @@ class ChatController extends Controller
     private function intentRecommendation(?object $user, bool $isVi): array
     {
         $products = Product::active()->inStock()->latest()->take(4)->get();
-        $msg      = $isVi ? "⭐ Sản phẩm bán chạy nhất:\n\n" : "⭐ Our best sellers:\n\n";
+        $msg      = $isVi ? "Sản phẩm bán chạy nhất:\n\n" : "Our best sellers:\n\n";
 
         foreach ($products as $p) {
-            $msg .= "☕ **{$p->name}** — " . number_format($p->effective_price, 0, ',', '.') . "đ\n   " . \Str::limit($p->description, 80) . "\n\n";
+            $msg .= "**{$p->name}** — " . number_format($p->effective_price, 0, ',', '.') . "đ\n   " . \Str::limit($p->description, 80) . "\n\n";
         }
 
         return ['message' => $msg, 'products' => $products->toArray(), 'suggestions' => $this->getSuggestions('recommendation')];
@@ -302,17 +386,17 @@ class ChatController extends Controller
     private function intentEscalation(bool $isVi): array
     {
         $msg = $isVi
-            ? "Tôi hiểu bạn cần hỗ trợ thêm! 🤝\n\n📞 **Hotline:** +84 978 853 110\n📧 **Email:** dn250621@coffeeshop.com\n📍 **Địa chỉ:** 93 Lê Cao Lãng, Quận Tân Phú, TP.HCM\n🕐 **Giờ mở cửa:** 8:00 - 21:00"
-            : "I understand you need more help! 🤝\n\n📞 **Hotline:** +84 978 853 110\n📧 **Email:** dn250621@coffeeshop.com\n📍 **Address:** 93 Le Cao Lang, Tan Phu, HCMC\n🕐 **Hours:** 8:00 AM - 9:00 PM";
+            ? "Tôi hiểu bạn cần hỗ trợ thêm!\n\n**Hotline:** +84 978 853 110\n**Email:** dn250621@coffeeshop.com\n**Địa chỉ:** 93 Lê Cao Lãng, Quận Tân Phú, TP.HCM\n**Giờ mở cửa:** 8:00 - 21:00"
+            : "I understand you need more help!\n\n**Hotline:** +84 978 853 110\n**Email:** dn250621@coffeeshop.com\n**Address:** 93 Le Cao Lang, Tan Phu, HCMC\n**Hours:** 8:00 AM - 9:00 PM";
 
-        return ['message' => $msg, 'suggestions' => [['text' => '☕ Menu', 'action' => 'menu']]];
+        return ['message' => $msg, 'suggestions' => [['text' => 'Menu', 'action' => 'menu']]];
     }
 
     // ─────────────────────────────────────────────
-    // CLAUDE API FALLBACK
+    // GEMINI API FALLBACK
     // ─────────────────────────────────────────────
 
-    private function callClaudeAPI(string $message, string $language, ?object $user, string $sessionId): array
+    private function callGeminiAPI(string $message, string $language, ?object $user, string $sessionId): array
     {
         $apiKey = config('services.gemini.api_key'); // Dùng Gemini API (key trong .env: GEMINI_API_KEY)
 
@@ -326,11 +410,20 @@ class ChatController extends Controller
 
         $weather = $this->getWeather();
 
-        $systemPrompt = "You are CaféAI, a friendly virtual barista for XDTHECOFFEEHOUSE (Vietnamese coffee shop).\n" .
-            "Language: {$language} | Customer: " . ($user?->name ?? 'Guest') . "\n" .
-            "Weather: {$weather['temp']}°C, {$weather['description']}\n\n" .
-            "MENU:\n{$menuContext}\n\n" .
-            "Rules: Only recommend products from the menu above. Include [ID:X] when mentioning a product. Keep responses concise.";
+        $systemPrompt = "You are CaféAI, a friendly, professional virtual barista for the coffee shop 'XDTHECOFFEEHOUSE'.\n" .
+            "Language: " . ($language === 'vi' ? 'Vietnamese' : 'English') . "\n" .
+            "Customer Name: " . ($user?->name ?? 'Guest') . "\n" .
+            "Current Weather in Shop City: {$weather['temp']}°C, {$weather['description']}\n\n" .
+            "COFFEE SHOP DETAILS:\n" .
+            "- Address: 93 Lê Cao Lãng, Quận Tân Phú, TP.HCM\n" .
+            "- Hotline: +84 978 853 110\n" .
+            "- Email: dn250621@coffeeshop.com\n" .
+            "- Opening Hours: 8:00 AM - 9:00 PM (Every day)\n\n" .
+            "PRODUCT MENU:\n{$menuContext}\n\n" .
+            "INSTRUCTIONS:\n" .
+            "1. You must answer questions using the shop details and menu context. If asked about recommendations, suggest drinks from the menu based on the weather, customer preferences, or mood.\n" .
+            "2. When recommending or mentioning a product from the MENU, you must append [ID:X] (where X is the product ID, e.g. [ID:3]) to the product name. This is crucial for the front-end to display clickable product cards.\n" .
+            "3. Keep your responses friendly, concise, natural, and helpful. Avoid using emojis inside the text to keep the interface clean.";
 
         $history = ChatLog::where('session_id', $sessionId)->latest()->take(10)->get()->reverse()
             ->map(fn($log) => ['role' => $log->role, 'content' => $log->message])
@@ -344,23 +437,16 @@ class ChatController extends Controller
             'parts' => [['text' => $h['content']]],
         ], $history);
 
-        // Thêm system prompt vào đầu
-        array_unshift($contents, [
-            'role'  => 'user',
-            'parts' => [['text' => $systemPrompt]],
-        ]);
-        array_splice($contents, 1, 0, [[
-            'role'  => 'model',
-            'parts' => [['text' => 'Understood. I am CaféAI, ready to assist.']],
-        ]]);
-
-        $model = config('services.gemini.model', 'gemini-2.0-flash');
+        $model = config('services.gemini.model', 'gemini-3.5-flash');
 
         try {
             $response = Http::timeout(30)
                 ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
-                    'contents'         => $contents,
-                    'generationConfig' => [
+                    'contents'          => $contents,
+                    'systemInstruction' => [
+                        'parts' => [['text' => $systemPrompt]],
+                    ],
+                    'generationConfig'  => [
                         'maxOutputTokens' => 1024,
                         'temperature'     => 0.7,
                     ],
@@ -377,6 +463,8 @@ class ChatController extends Controller
                 }
 
                 return ['message' => trim($aiMessage), 'products' => $products->toArray()];
+            } else {
+                Log::warning('Gemini API returned error: ' . $response->body());
             }
         } catch (\Exception $e) {
             Log::warning('Gemini API failed: ' . $e->getMessage());
@@ -389,8 +477,8 @@ class ChatController extends Controller
     {
         $isVi = $language === 'vi';
         $msg  = $isVi
-            ? "Xin lỗi, tôi chưa hiểu câu hỏi của bạn. Bạn có thể hỏi về:\n\n☕ Sản phẩm & menu\n📦 Theo dõi đơn hàng\n🌤️ Gợi ý theo thời tiết\n💬 Tư vấn đồ uống"
-            : "Sorry, I didn't quite understand. You can ask about:\n\n☕ Products & menu\n📦 Order tracking\n🌤️ Weather suggestions\n💬 Drink recommendations";
+            ? "Xin lỗi, tôi chưa hiểu câu hỏi của bạn. Bạn có thể hỏi về:\n\nSản phẩm & menu\nTheo dõi đơn hàng\nGợi ý theo thời tiết\nTư vấn đồ uống"
+            : "Sorry, I didn't quite understand. You can ask about:\n\nProducts & menu\nOrder tracking\nWeather suggestions\nDrink recommendations";
 
         return ['message' => $msg, 'suggestions' => $this->getSuggestions('greeting')];
     }
@@ -479,13 +567,13 @@ class ChatController extends Controller
         $temp = $weather['temp'];
 
         if ($temp >= 30) {
-            $msg      = "Trời nóng {$temp}°C! Hãy thử những thức uống mát lạnh sau 🧊:";
+            $msg      = "Trời nóng {$temp}°C! Hãy thử những thức uống mát lạnh sau:";
             $keywords = 'trà đá nước lạnh iced';
         } elseif ($temp <= 20) {
-            $msg      = "Trời lạnh {$temp}°C! Một ly nóng sẽ giúp bạn ấm lòng ☕:";
+            $msg      = "Trời lạnh {$temp}°C! Một ly nóng sẽ giúp bạn ấm lòng:";
             $keywords = 'latte capuccino espresso nóng';
         } else {
-            $msg      = "Thời tiết dễ chịu {$temp}°C! Thưởng thức bất kỳ thức uống nào bạn thích 😊:";
+            $msg      = "Thời tiết dễ chịu {$temp}°C! Thưởng thức bất kỳ thức uống nào bạn thích:";
             $keywords = 'cà phê trà';
         }
 
@@ -495,15 +583,15 @@ class ChatController extends Controller
     private function getSuggestions(string $context): array
     {
         return match ($context) {
-            'greeting'       => [['text' => '☕ Xem menu', 'action' => 'menu'], ['text' => '🔍 Gợi ý cho tôi', 'action' => 'recommend'], ['text' => '📦 Theo dõi đơn hàng', 'action' => 'track_order'], ['text' => '🌤️ Gợi ý theo thời tiết', 'action' => 'weather_suggest']],
-            'product'        => [['text' => '🛒 Thêm vào giỏ', 'action' => 'add_to_cart'], ['text' => '🔍 Tìm thêm', 'action' => 'menu'], ['text' => '💡 Gợi ý khác', 'action' => 'recommend']],
-            'order'          => [['text' => '📦 Xem tất cả đơn', 'action' => 'all_orders'], ['text' => '☕ Tiếp tục mua sắm', 'action' => 'menu']],
-            'weather'        => [['text' => '🛒 Đặt ngay', 'action' => 'menu'], ['text' => '💡 Gợi ý khác', 'action' => 'recommend']],
-            'mood'           => [['text' => '🛒 Đặt ngay', 'action' => 'menu'], ['text' => '🌤️ Theo thời tiết', 'action' => 'weather_suggest']],
-            'recommendation' => [['text' => '🛒 Đặt ngay', 'action' => 'menu'], ['text' => '🌤️ Theo thời tiết', 'action' => 'weather_suggest']],
-            'no_results'     => [['text' => '☕ Xem menu đầy đủ', 'action' => 'menu'], ['text' => '💡 Gợi ý cho tôi', 'action' => 'recommend']],
-            'no_orders'      => [['text' => '☕ Mua sắm ngay', 'action' => 'menu'], ['text' => '💡 Gợi ý cho tôi', 'action' => 'recommend']],
-            default          => [['text' => '☕ Xem menu', 'action' => 'menu']],
+            'greeting'       => [['text' => 'Xem menu', 'action' => 'menu'], ['text' => 'Gợi ý cho tôi', 'action' => 'recommend'], ['text' => 'Theo dõi đơn hàng', 'action' => 'track_order'], ['text' => 'Gợi ý theo thời tiết', 'action' => 'weather_suggest']],
+            'product'        => [['text' => 'Thêm vào giỏ', 'action' => 'add_to_cart'], ['text' => 'Tìm thêm', 'action' => 'menu'], ['text' => 'Gợi ý khác', 'action' => 'recommend']],
+            'order'          => [['text' => 'Xem tất cả đơn', 'action' => 'all_orders'], ['text' => 'Tiếp tục mua sắm', 'action' => 'menu']],
+            'weather'        => [['text' => 'Đặt ngay', 'action' => 'menu'], ['text' => 'Gợi ý khác', 'action' => 'recommend']],
+            'mood'           => [['text' => 'Đặt ngay', 'action' => 'menu'], ['text' => 'Theo thời tiết', 'action' => 'weather_suggest']],
+            'recommendation' => [['text' => 'Đặt ngay', 'action' => 'menu'], ['text' => 'Theo thời tiết', 'action' => 'weather_suggest']],
+            'no_results'     => [['text' => 'Xem menu đầy đủ', 'action' => 'menu'], ['text' => 'Gợi ý cho tôi', 'action' => 'recommend']],
+            'no_orders'      => [['text' => 'Mua sắm ngay', 'action' => 'menu'], ['text' => 'Gợi ý cho tôi', 'action' => 'recommend']],
+            default          => [['text' => 'Xem menu', 'action' => 'menu']],
         };
     }
 }

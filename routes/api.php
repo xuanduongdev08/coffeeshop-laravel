@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // CaféAI Chatbox
-Route::post('/chat', [ChatController::class, 'handle'])->name('api.chat');
+Route::post('/chat', [ChatController::class, 'handle'])
+    ->middleware('web')
+    ->name('api.chat');
 
 // Webhook SePay / Casso
 Route::post('/sepay', [\App\Http\Controllers\WebhookController::class, 'handleCasso'])->name('api.sepay');
