@@ -18,7 +18,7 @@ Route::post('/chat', [ChatController::class, 'handle'])
 Route::post('/sepay', [\App\Http\Controllers\WebhookController::class, 'handleCasso'])->name('api.sepay');
 
 // Thông báo người dùng
-Route::middleware('auth')->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/notifications', [\App\Http\Controllers\Api\NotificationController::class, 'index'])
         ->name('api.notifications.index');
     Route::post('/notifications/read-all', [\App\Http\Controllers\Api\NotificationController::class, 'markAllRead'])

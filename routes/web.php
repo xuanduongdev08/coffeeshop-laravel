@@ -151,6 +151,7 @@ Route::prefix('admin')
         Route::middleware('role:admin')->group(function() {
             Route::prefix('email-templates')->name('email-templates.')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Admin\EmailTemplateController::class, 'index'])->name('index');
+                Route::get('/{emailTemplate}/preview', [\App\Http\Controllers\Admin\EmailTemplateController::class, 'preview'])->name('preview');
                 Route::get('/{emailTemplate}/edit', [\App\Http\Controllers\Admin\EmailTemplateController::class, 'edit'])->name('edit');
                 Route::patch('/{emailTemplate}', [\App\Http\Controllers\Admin\EmailTemplateController::class, 'update'])->name('update');
             });

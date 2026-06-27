@@ -234,6 +234,66 @@
         }
         .btn-coffee:hover { background: var(--coffee-light); color: #fff; transform: translateY(-1px); }
 
+        /* ===== Coffee Theme Buttons inside Tables (Action column) ===== */
+        .admin-table tbody td .btn:not(.btn-danger):not(.btn-outline-danger):not(.btn-delete-confirm) {
+            color: var(--coffee) !important;
+            border-color: var(--coffee) !important;
+            background-color: transparent !important;
+            transition: var(--transition-smooth);
+        }
+        .admin-table tbody td .btn:not(.btn-danger):not(.btn-outline-danger):not(.btn-delete-confirm):hover {
+            color: #fff !important;
+            background-color: var(--coffee) !important;
+            border-color: var(--coffee) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(111, 78, 55, 0.15);
+        }
+        
+        /* ===== Pagination Circle Coffee Theme Overrides ===== */
+        .pagination {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            gap: 6px;
+            justify-content: flex-end !important;
+        }
+        .pagination .page-item {
+            margin: 0 !important;
+            border: none !important;
+            background: transparent !important;
+        }
+        .pagination .page-link {
+            color: #c49b63 !important;
+            background-color: #fff !important;
+            border: 1px solid #674c27 !important;
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            transition: var(--transition-smooth);
+        }
+        .pagination .page-link:hover {
+            color: #fff !important;
+            background-color: #c49b63 !important;
+            border-color: transparent !important;
+        }
+        .pagination .page-item.active .page-link {
+            color: #fff !important;
+            background-color: #c49b63 !important;
+            border-color: transparent !important;
+        }
+        .pagination .page-item.disabled .page-link {
+            color: #ccc !important;
+            background-color: #fff !important;
+            border-color: #f5ede3 !important;
+            opacity: 0.6;
+        }
+
         /* ===== Forms & Cards ===== */
         .admin-card {
             background: #fff; border-radius: 12px; padding: 24px;

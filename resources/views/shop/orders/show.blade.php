@@ -51,6 +51,11 @@
                                 @if($order->notes)
                                     <p><strong>Ghi chú:</strong> {{ $order->notes }}</p>
                                 @endif
+                                @if($order->status === 'Đã hủy' && $order->cancel_reason)
+                                    <p style="background:#fff5f5; border-left:3px solid #dc3545; padding:8px 12px; border-radius:4px; margin-top:10px; color:#b21f2d;">
+                                        <strong>Lý do hủy đơn:</strong> {{ $order->cancel_reason }}
+                                    </p>
+                                @endif
                             </div>
                             <div class="col-md-6">
                                 <p>
@@ -104,14 +109,9 @@
                         {{-- Nút hủy đơn --}}
                         @if($order->status === 'Chờ xử lý')
                             <div class="text-right mt-3">
-                                <form method="POST" action="{{ route('orders.cancel', $order) }}"
-                                    onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này?')">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        ❌ Hủy đơn hàng
-                                    </button>
-                                </form>
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancelOrderModal">
+                                    ❌ Hủy đơn hàng
+                                </button>
                             </div>
                         @endif
                     </div>
@@ -197,6 +197,7 @@
                                     </tr>
                                 </tfoot>
                             </table>
+
                         </div>
                         <div class="text-center mt-4">
                             <a href="{{ route('products.index') }}" class="btn btn-primary py-3 px-4">
@@ -209,5 +210,36 @@
         </div>
     </div>
 </section>
+
+{{-- Modal Hủy Đơn Hàng --}}
+@if($order->status === 'Chờ xử lý')
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="border-radius:15px; border:none; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <div class="modal-header" style="background:#f8f9fa; border-bottom:1px solid #eee; border-top-left-radius:15px; border-top-right-radius:15px;">
+                <h5 class="modal-title font-weight-bold" id="cancelOrderModalLabel" style="color:#2b2b2b;">❌ Xác nhận hủy đơn hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ route('orders.cancel', $order) }}">
+                @csrf
+                @method('PATCH')
+                <div class="modal-body p-4">
+                    <p style="color:#666; font-size:14px;">Bạn có chắc chắn muốn hủy đơn hàng <strong>{{ $order->tracking_code ?? '#' . $order->id }}</strong>? Vui lòng cho cửa hàng biết lý do hủy đơn của bạn để chúng tôi cải thiện dịch vụ:</p>
+                    <div class="form-group mb-0">
+                        <label class="small font-weight-bold" style="color:#444;">Lý do hủy đơn <span class="text-danger">*</span></label>
+                        <textarea name="cancel_reason" class="form-control" rows="3" required placeholder="Nhập lý do hủy đơn (bắt buộc)..." style="border-radius:8px; border:1px solid #ddd; padding:10px; font-size:14px; color:#333; resize:none;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background:#f8f9fa; border-top:1px solid #eee; border-bottom-left-radius:15px; border-bottom-right-radius:15px;">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" style="border-radius:20px; padding:6px 16px; font-weight:600;">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-danger btn-sm" style="border-radius:20px; padding:6px 16px; font-weight:600;">Xác nhận hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif
 
 @endsection

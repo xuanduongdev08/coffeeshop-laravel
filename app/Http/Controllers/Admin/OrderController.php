@@ -65,9 +65,9 @@ class OrderController extends Controller
         $oldStatus = $order->status;
         $newStatus = $request->status;
 
-        // Không cho phép đổi từ "Đã hủy" sang trạng thái khác (tránh sai lệch kho)
-        if ($oldStatus === 'Đã hủy' && $newStatus !== 'Đã hủy') {
-            return back()->with('error', 'Không thể thay đổi trạng thái đơn hàng đã bị hủy. Vui lòng tạo đơn hàng mới nếu cần.');
+        // Đối với đơn hàng đã hoàn thành hoặc đã hủy thì không được phép thay đổi trạng thái nữa
+        if (in_array($oldStatus, ['Hoàn thành', 'Đã hủy']) && $newStatus !== $oldStatus) {
+            return back()->with('error', "Đơn hàng đã ở trạng thái \"{$oldStatus}\" nên không thể thay đổi trạng thái được nữa.");
         }
 
         // Hoàn kho khi chuyển sang "Đã hủy" (và trước đó chưa hủy)
@@ -116,7 +116,18 @@ class OrderController extends Controller
             'payment_status' => 'required|in:pending,paid,failed,refunded',
         ]);
 
-        $order->update(['payment_status' => $request->payment_status]);
+        $oldStatus = $order->payment_status;
+        $newStatus = $request->payment_status;
+
+        if ($oldStatus === 'paid' && !in_array($newStatus, ['paid', 'refunded'])) {
+            return back()->with('error', 'Đơn hàng đã thanh toán chỉ có thể chuyển sang trạng thái "Hoàn tiền".');
+        }
+
+        if ($oldStatus === 'refunded' && $newStatus !== 'refunded') {
+            return back()->with('error', 'Không thể thay đổi trạng thái của đơn hàng đã hoàn tiền.');
+        }
+
+        $order->update(['payment_status' => $newStatus]);
 
         return back()->with('success', "Đã cập nhật trạng thái thanh toán đơn #{$order->tracking_code}.");
     }
