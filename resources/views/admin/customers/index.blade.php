@@ -13,7 +13,7 @@
                 placeholder="Tìm tên, email, SĐT của khách hàng..." value="{{ request('search') }}">
         </div>
         <div class="col-md-2 mb-2">
-            <button type="submit" class="btn btn-sm btn-coffee w-100">🔍 Tìm kiếm</button>
+            <button type="submit" class="btn btn-sm btn-coffee w-100"><span class="ion-md-search" style="margin-right:4px;"></span>Tìm kiếm</button>
         </div>
     </form>
 </div>

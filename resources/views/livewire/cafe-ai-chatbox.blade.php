@@ -1,6 +1,5 @@
 {{--
     CaféAI Chatbox Widget — Livewire Component
-    Thay thế cafe_ai_chatbox.html cũ.
     Giao tiếp với /api/chat qua fetch() JS.
     Styles: css/cafeai.css
 --}}
@@ -23,66 +22,78 @@
 
     {{-- ── Chat Container ── --}}
     @if($isOpen)
-    <div id="cafeai-container" class="cafeai-open">
+    <div id="cafeai-container" class="open">
 
         {{-- Header --}}
         <div class="cafeai-header">
+            <div class="cafeai-header-avatar">
+                <span style="font-size:22px;">☕</span>
+            </div>
             <div class="cafeai-header-info">
-                <div class="cafeai-avatar">☕</div>
-                <div>
-                    <div class="cafeai-name">CaféAI</div>
-                    <div class="cafeai-status">
-                        <span class="cafeai-status-dot"></span>
-                        Trực tuyến
-                    </div>
+                <h3>
+                    CaféAI
+                    <span class="cafeai-header-badge">BETA</span>
+                </h3>
+                <div class="cafeai-header-status">
+                    <span class="status-dot"></span>
+                    Trợ lý ảo thông minh
                 </div>
             </div>
-            <button wire:click="close" class="cafeai-close-btn" aria-label="Đóng">✕</button>
+            <button wire:click="close" class="cafeai-close-btn" aria-label="Đóng"
+                style="background:none;border:none;color:white;cursor:pointer;font-size:18px;padding:4px 8px;opacity:0.8;transition:opacity .2s;"
+                onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.8">✕</button>
         </div>
 
         {{-- Messages --}}
         <div class="cafeai-messages" id="cafeai-messages">
             {{-- Tin nhắn chào mừng --}}
-            <div class="cafeai-msg cafeai-msg--bot" id="cafeai-welcome">
-                <div class="cafeai-bubble">
-                    <p>Xin chào{{ $userName ? ' ' . $userName : '' }}! 👋</p>
-                    <p>Tôi là <strong>CaféAI</strong>, trợ lý ảo của XDTHECOFFEEHOUSE.</p>
-                    <p>Tôi có thể giúp bạn:</p>
-                    <ul style="margin:6px 0 0 16px;padding:0;">
-                        <li>☕ Tìm đồ uống phù hợp</li>
-                        <li>📦 Theo dõi đơn hàng</li>
-                        <li>🌤️ Gợi ý theo thời tiết</li>
-                    </ul>
+            <div class="cafeai-msg-wrapper bot" id="cafeai-welcome">
+                <div class="cafeai-bot-avatar">
+                    <span style="font-size:16px;">☕</span>
+                </div>
+                <div class="cafeai-msg-content">
+                    <div class="cafeai-bubble">
+                        <p>Xin chào{{ $userName ? ' <strong>' . $userName . '</strong>' : '' }}! 👋</p>
+                        <p>Tôi là <strong>CaféAI</strong>, trợ lý ảo của XDTHECOFFEEHOUSE.</p>
+                        <p>Tôi có thể giúp bạn:</p>
+                        <ul style="margin:6px 0 0 16px;padding:0;line-height:1.8;">
+                            <li>☕ Tìm đồ uống phù hợp</li>
+                            <li>📦 Theo dõi đơn hàng</li>
+                            <li>🌤️ Gợi ý theo thời tiết</li>
+                            <li>💡 Tư vấn theo sở thích</li>
+                        </ul>
+                    </div>
+                    <div class="cafeai-msg-time">{{ now()->format('H:i') }}</div>
                 </div>
             </div>
         </div>
 
         {{-- Quick Suggestions --}}
-        <div class="cafeai-suggestions" id="cafeai-suggestions">
-            <button class="cafeai-chip" onclick="cafeAISend('Gợi ý đồ uống cho tôi')">💡 Gợi ý</button>
-            <button class="cafeai-chip" onclick="cafeAISend('Thời tiết hôm nay thế nào?')">🌤️ Thời tiết</button>
-            <button class="cafeai-chip" onclick="cafeAISend('Xem menu')">☕ Menu</button>
-            @if($isAuth)
-                <button class="cafeai-chip" onclick="cafeAISend('Đơn hàng của tôi')">📦 Đơn hàng</button>
-            @endif
+        <div class="cafeai-chips" id="cafeai-suggestions">
+            <button class="cafeai-chip" onclick="cafeAISend('Menu')">☕ Menu</button>
+            <button class="cafeai-chip" onclick="cafeAISend('Gợi ý cho tôi')">💡 Gợi ý cho tôi</button>
+            <button class="cafeai-chip" onclick="cafeAISend('Theo dõi đơn hàng')">📦 Đơn hàng</button>
+            <button class="cafeai-chip" onclick="cafeAISend('Thời tiết hôm nay thế nào?')">🌤️ Theo thời tiết</button>
         </div>
 
         {{-- Input --}}
         <div class="cafeai-input-area">
-            <input
-                type="text"
-                id="cafeai-input"
-                class="cafeai-input"
-                placeholder="Nhập tin nhắn..."
-                maxlength="500"
-                autocomplete="off"
-                onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); cafeAISendFromInput(); }"
-            >
-            <button class="cafeai-send-btn" onclick="cafeAISendFromInput()" aria-label="Gửi">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                </svg>
-            </button>
+            <div class="cafeai-input-box">
+                <input
+                    type="text"
+                    id="cafeai-input"
+                    class="cafeai-input"
+                    placeholder="Hỏi CaféAI bất cứ điều gì..."
+                    maxlength="500"
+                    autocomplete="off"
+                    onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); cafeAISendFromInput(); }"
+                >
+                <button id="cafeai-send" onclick="cafeAISendFromInput()" aria-label="Gửi">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -149,16 +160,35 @@
         var container = document.getElementById('cafeai-messages');
         if (!container) return;
 
-        var div = document.createElement('div');
-        div.className = 'cafeai-msg cafeai-msg--' + (role === 'user' ? 'user' : 'bot');
+        var now = new Date();
+        var timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+
+        var wrapper = document.createElement('div');
+        wrapper.className = 'cafeai-msg-wrapper ' + (role === 'user' ? 'user' : 'bot');
+
+        if (role === 'bot') {
+            var avatarDiv = document.createElement('div');
+            avatarDiv.className = 'cafeai-bot-avatar';
+            avatarDiv.innerHTML = '<span style="font-size:16px;">☕</span>';
+            wrapper.appendChild(avatarDiv);
+        }
+
+        var contentDiv = document.createElement('div');
+        contentDiv.className = 'cafeai-msg-content';
 
         var bubble = document.createElement('div');
         bubble.className = 'cafeai-bubble';
-        // Chuyển **bold** và \n thành HTML
+        // Render markdown đầy đủ: bold, list, xuống dòng
         bubble.innerHTML = formatMessage(text);
 
-        div.appendChild(bubble);
-        container.appendChild(div);
+        var timeDiv = document.createElement('div');
+        timeDiv.className = 'cafeai-msg-time';
+        timeDiv.textContent = timeStr;
+
+        contentDiv.appendChild(bubble);
+        contentDiv.appendChild(timeDiv);
+        wrapper.appendChild(contentDiv);
+        container.appendChild(wrapper);
         scrollToBottom();
     }
 
@@ -168,26 +198,37 @@
         if (!container || !products.length) return;
 
         var wrapper = document.createElement('div');
-        wrapper.className = 'cafeai-products-row';
+        wrapper.className = 'cafeai-msg-wrapper bot';
+
+        var botAvatar = document.createElement('div');
+        botAvatar.className = 'cafeai-bot-avatar';
+        botAvatar.innerHTML = '<span style="font-size:16px;">☕</span>';
+        wrapper.appendChild(botAvatar);
+
+        var scroller = document.createElement('div');
+        scroller.className = 'cafeai-products-scroller';
 
         products.slice(0, 4).forEach(function (p) {
-            var price = p.discount_price || p.price;
+            var price = p.discount_price || p.effective_price || p.price;
             var card  = document.createElement('div');
-            card.className = 'cafeai-product-card';
+            card.className = 'cafeai-card';
             card.innerHTML =
-                '<img src="' + (p.image ? '/' + p.image : '/images/menu-1.jpg') + '" alt="' + escHtml(p.name) + '" onerror="this.src=\'/images/menu-1.jpg\'">' +
-                '<div class="cafeai-product-info">' +
-                    '<div class="cafeai-product-name">' + escHtml(p.name) + '</div>' +
-                    '<div class="cafeai-product-price">' + formatPrice(price) + '</div>' +
+                '<div class="cafeai-card-img">' +
+                    '<img src="' + (p.image ? '/' + p.image : '/images/menu-1.jpg') + '" alt="' + escHtml(p.name) + '" loading="lazy" onerror="this.src=\'/images/menu-1.jpg\'">' +
                 '</div>' +
-                '<a href="/san-pham/' + escHtml(p.slug || '') + '" class="cafeai-product-btn">Xem</a>';
-            wrapper.appendChild(card);
+                '<div class="cafeai-card-body">' +
+                    '<div class="cafeai-card-name">' + escHtml(p.name) + '</div>' +
+                    '<div class="cafeai-card-price">' + formatPrice(price) + '</div>' +
+                    '<button class="cafeai-add-btn" onclick="window.location.href=\'/san-pham/' + escHtml(p.slug || '') + '\'">' +
+                        '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>' +
+                        ' Xem ngay' +
+                    '</button>' +
+                '</div>';
+            scroller.appendChild(card);
         });
 
-        var msgDiv = document.createElement('div');
-        msgDiv.className = 'cafeai-msg cafeai-msg--bot';
-        msgDiv.appendChild(wrapper);
-        container.appendChild(msgDiv);
+        wrapper.appendChild(scroller);
+        container.appendChild(wrapper);
         scrollToBottom();
     }
 
@@ -216,11 +257,26 @@
     function showTyping() {
         var container = document.getElementById('cafeai-messages');
         if (!container) return;
-        var div = document.createElement('div');
-        div.id = 'cafeai-typing';
-        div.className = 'cafeai-msg cafeai-msg--bot';
-        div.innerHTML = '<div class="cafeai-bubble cafeai-typing-bubble"><span></span><span></span><span></span></div>';
-        container.appendChild(div);
+
+        var wrapper = document.createElement('div');
+        wrapper.id = 'cafeai-typing';
+        wrapper.className = 'cafeai-msg-wrapper bot';
+
+        var avatar = document.createElement('div');
+        avatar.className = 'cafeai-bot-avatar';
+        avatar.innerHTML = '<span style="font-size:16px;">☕</span>';
+
+        var contentDiv = document.createElement('div');
+        contentDiv.className = 'cafeai-msg-content';
+
+        var bubble = document.createElement('div');
+        bubble.className = 'cafeai-bubble cafeai-typing-bubble';
+        bubble.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+        contentDiv.appendChild(bubble);
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(contentDiv);
+        container.appendChild(wrapper);
         scrollToBottom();
     }
 
@@ -235,11 +291,47 @@
         if (c) c.scrollTop = c.scrollHeight;
     }
 
+    /**
+     * formatMessage — Chuyển markdown đơn giản sang HTML
+     * Hỗ trợ: **bold**, _italic_, dòng đánh số, dòng gạch đầu, xuống dòng
+     */
     function formatMessage(text) {
-        return text
-            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br>');
+        // 1. Escape HTML đặc biệt trước
+        var safe = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        // 2. Xử lý danh sách có đánh số (1. 2. 3.) — gom thành <ol>
+        safe = safe.replace(/((?:^\d+\.\s+.+\n?)+)/gm, function(block) {
+            var items = block.trim().split('\n').map(function(line) {
+                return '<li>' + line.replace(/^\d+\.\s+/, '') + '</li>';
+            }).join('');
+            return '<ol style="margin:6px 0 6px 18px;padding:0;">' + items + '</ol>';
+        });
+
+        // 3. Xử lý danh sách gạch đầu (- item) — gom thành <ul>
+        safe = safe.replace(/((?:^[-*]\s+.+\n?)+)/gm, function(block) {
+            var items = block.trim().split('\n').map(function(line) {
+                return '<li>' + line.replace(/^[-*]\s+/, '') + '</li>';
+            }).join('');
+            return '<ul style="margin:6px 0 6px 18px;padding:0;">' + items + '</ul>';
+        });
+
+        // 4. Bold: **text**
+        safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        // 5. Italic: _text_ hoặc *text*
+        safe = safe.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
+        safe = safe.replace(/_([^_]+)_/g, '<em>$1</em>');
+
+        // 6. Xuống dòng thường → <br> (nhưng không thêm sau thẻ block)
+        safe = safe.replace(/\n(?!<\/?(ol|ul|li))/g, '<br>');
+
+        // 7. Dọn kép <br>
+        safe = safe.replace(/(<br>){3,}/g, '<br><br>');
+
+        return safe;
     }
 
     function escHtml(str) {

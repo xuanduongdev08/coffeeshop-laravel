@@ -68,7 +68,7 @@
                                 <a href="{{ route('orders.history') }}" class="btn btn-primary mr-2">
                                     <span class="icon-list-alt mr-1"></span> Lịch sử mua hàng
                                 </a>
-                                <a href="{{ route('profile.edit') }}" class="btn btn-outline-primary btn-sm">
+                                <a href="{{ route('profile.edit') }}" class="btn btn-primary">
                                     <span class="icon-edit mr-1"></span> Chỉnh sửa
                                 </a>
                             </div>

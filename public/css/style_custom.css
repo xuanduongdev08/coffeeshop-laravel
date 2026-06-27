@@ -249,11 +249,11 @@ body .icon-view-profile .form-group label i {
 /* Disabled email fix - Force Absolute White */
 .icon-view-profile input:disabled,
 .icon-view-profile input[readonly] {
-    color: #ffffff !important;
-    opacity: 1 !important; /* QUAN TRỌNG: Phải để 1 để chữ trắng tinh, không bị mờ xám */
-    -webkit-text-fill-color: #ffffff !important; /* Dành cho Safari và Chrome */
+    color: #495057 !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #495057 !important; /* Dành cho Safari và Chrome */
     cursor: not-allowed;
-    background: transparent !important;
+    background: #e9ecef !important;
 }
 
 .profile-input.form-control {

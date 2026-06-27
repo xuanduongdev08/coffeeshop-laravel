@@ -78,43 +78,40 @@
                         {{-- Buttons --}}
                         <div class="d-flex justify-content-center flex-wrap" style="gap:12px;">
                             <a href="{{ route('home') }}" class="btn btn-outline-primary btn-lg mb-2">
-                                🏠 Về trang chủ
+                                Về trang chủ
                             </a>
                             <a href="{{ route('orders.show', $order) }}" class="btn btn-primary btn-lg mb-2">
-                                👁 Xem chi tiết đơn hàng
+                                Xem chi tiết đơn hàng
                             </a>
                             <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-lg mb-2">
-                                🛍 Tiếp tục mua sắm
+                                Tiếp tục mua sắm
                             </a>
                         </div>
                     </div>
                 </div>
-
+ 
                 {{-- Các bước tiếp theo --}}
                 <div class="card mt-4 border-0 shadow-sm">
                     <div class="card-body p-4">
                         <h5 class="mb-3">
-                            <span style="color:#c49b63;">📋</span> Các bước tiếp theo
+                            Các bước tiếp theo
                         </h5>
                         <div class="row text-center">
                             <div class="col-md-4 mb-3">
                                 <div class="p-3" style="transition:all 0.3s;">
                                     <div style="width:50px;height:50px;border-radius:50%;background:#c49b63;color:white;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.2rem;margin-bottom:10px;">1</div>
-                                    <div style="font-size:2rem;margin-bottom:8px;">📦</div>
                                     <p class="mb-0 font-weight-600">Đơn hàng được xác nhận</p>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="p-3">
                                     <div style="width:50px;height:50px;border-radius:50%;background:#c49b63;color:white;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.2rem;margin-bottom:10px;">2</div>
-                                    <div style="font-size:2rem;margin-bottom:8px;">🚚</div>
                                     <p class="mb-0">Đơn hàng được giao</p>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="p-3">
                                     <div style="width:50px;height:50px;border-radius:50%;background:#c49b63;color:white;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.2rem;margin-bottom:10px;">3</div>
-                                    <div style="font-size:2rem;margin-bottom:8px;">😊</div>
                                     <p class="mb-0">Bạn nhận hàng</p>
                                 </div>
                             </div>

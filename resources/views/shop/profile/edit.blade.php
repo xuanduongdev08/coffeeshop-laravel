@@ -20,15 +20,15 @@
     </div>
 </section>
 
-<section class="ftco-section">
+<section class="ftco-section profile-section">
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row icon-view-profile justify-content-center">
             <div class="col-md-8">
 
                 {{-- Cập nhật thông tin --}}
                 <div class="card mb-4">
                     <div class="card-body p-4">
-                        <h4 class="mb-4" style="color:#6f4e37;">👤 Thông tin cá nhân</h4>
+                        <h3 class="mb-4"><span class="icon-user mr-2"></span> Thông tin cá nhân</h3>
 
                         <form method="POST" action="{{ route('profile.update') }}">
                             @csrf
@@ -62,8 +62,8 @@
                             </div>
 
                             <div class="d-flex justify-content-between mt-4">
-                                <a href="{{ route('profile.show') }}" class="btn btn-outline-secondary">← Hủy bỏ</a>
-                                <button type="submit" class="btn btn-primary px-5">Lưu thay đổi</button>
+                                <a href="{{ route('profile.show') }}" class="btn btn-outline-primary py-3 px-4" style="border-radius: 50px;">← Hủy bỏ</a>
+                                <button type="submit" class="btn btn-primary py-3 px-5" style="border-radius: 50px;">Lưu thay đổi</button>
                             </div>
                         </form>
                     </div>
@@ -73,7 +73,7 @@
                 @if(!$user->provider)
                 <div class="card mb-4">
                     <div class="card-body p-4">
-                        <h4 class="mb-4" style="color:#6f4e37;">🔒 Đổi mật khẩu</h4>
+                        <h3 class="mb-4"><span class="icon-lock mr-2"></span> Đổi mật khẩu</h3>
 
                         <form method="POST" action="{{ route('profile.password') }}">
                             @csrf
@@ -98,54 +98,76 @@
                             </div>
 
                             <div class="text-right mt-4">
-                                <button type="submit" class="btn btn-warning px-5">Đổi mật khẩu</button>
+                                <button type="submit" class="btn btn-primary py-3 px-5" style="border-radius: 50px;">Đổi mật khẩu</button>
                             </div>
                         </form>
                     </div>
                 </div>
                 @endif
-
-                {{-- Xóa tài khoản --}}
-                <div class="card border-danger">
-                    <div class="card-body p-4">
-                        <h4 class="mb-2 text-danger">⚠️ Vùng nguy hiểm</h4>
-                        <p class="text-muted mb-3">Xóa tài khoản sẽ xóa toàn bộ dữ liệu của bạn và không thể khôi phục.</p>
-
-                        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal">
-                            Xóa tài khoản
-                        </button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 </section>
 
-{{-- Delete Account Modal --}}
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger">⚠️ Xác nhận xóa tài khoản</h5>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <p>Bạn có chắc chắn muốn xóa tài khoản? Hành động này <strong>không thể hoàn tác</strong>.</p>
-                <form method="POST" action="{{ route('profile.destroy') }}" id="delete-account-form">
-                    @csrf
-                    @method('DELETE')
-                    <div class="form-group">
-                        <label>Nhập mật khẩu để xác nhận:</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                <button type="submit" form="delete-account-form" class="btn btn-danger">Xóa tài khoản</button>
-            </div>
-        </div>
-    </div>
-</div>
+@push('styles')
+<style>
+body .profile-section .card .form-control {
+    background: #ffffff !important;
+    border: 1px solid rgba(196, 155, 99, 0.3) !important;
+    color: #495057 !important;
+    border-radius: 10px !important;
+    padding: 12px 15px !important;
+    transition: all 0.3s ease !important;
+    height: auto !important;
+}
+
+body .profile-section .card .form-control:focus {
+    background: #ffffff !important;
+    border-color: #c49b63 !important;
+    box-shadow: 0 0 10px rgba(196, 155, 99, 0.2) !important;
+    color: #495057 !important;
+}
+
+body .profile-section .card .form-control:disabled,
+body .profile-section .card .form-control[readonly] {
+    background: #e9ecef !important;
+    color: #495057 !important;
+    -webkit-text-fill-color: #495057 !important;
+    border-color: rgba(196, 155, 99, 0.1) !important;
+    cursor: not-allowed !important;
+    opacity: 1 !important;
+}
+
+.profile-section label {
+    color: #c49b63 !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 8px !important;
+}
+
+.profile-section .card-body h3 {
+    color: #c49b63 !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    border-bottom: 1px solid rgba(196, 155, 99, 0.2) !important;
+    padding-bottom: 15px !important;
+    margin-bottom: 25px !important;
+}
+
+.profile-section .btn-outline-primary {
+    border: 1px solid #c49b63 !important;
+    color: #c49b63 !important;
+    background: transparent !important;
+    transition: all 0.3s ease !important;
+}
+
+.profile-section .btn-outline-primary:hover {
+    background: #c49b63 !important;
+    color: #000 !important;
+}
+</style>
+@endpush
 
 @endsection

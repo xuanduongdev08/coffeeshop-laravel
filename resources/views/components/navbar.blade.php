@@ -303,7 +303,7 @@ function loadNotifications() {
         var html = '';
         data.notifications.forEach(function(n) {
             var unreadClass = n.is_unread ? ' unread' : '';
-            var title = (n.data && n.data.title) ? n.data.title : 'Thông báo';
+            var title = (n.data && n.data.title) ? n.data.title : ((n.data && n.data.status_label) ? n.data.status_label : 'Thông báo');
             var desc  = (n.data && n.data.message) ? n.data.message : '';
             var icon  = (n.data && n.data.icon) ? n.data.icon : '🔔';
             html += '<div class="notif-item' + unreadClass + '" onclick="markRead(\'' + n.id + '\')">';

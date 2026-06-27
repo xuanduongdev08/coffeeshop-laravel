@@ -58,17 +58,17 @@
                         Trợ lý ảo thông minh
                     </div>
                 </div>
-                <button class="cafeai-header-close" id="cafeai-close">&times;</button>
             </div>
+            
             
             <div class="cafeai-messages" id="cafeai-messages"></div>
             
             <div class="cafeai-quick-menu">
-                <button class="cafeai-quick-btn" data-action="menu">☕ Menu</button>
-                <button class="cafeai-quick-btn" data-action="recommend">🔍 Gợi ý cho tôi</button>
-                <button class="cafeai-quick-btn" data-action="weather_suggest">🌤️ Theo thời tiết</button>
-                <button class="cafeai-quick-btn" data-action="track_order">📦 Đơn hàng</button>
-                <button class="cafeai-quick-btn" data-action="mood">💬 Tâm trạng</button>
+                <button class="cafeai-quick-btn" data-action="menu">Menu</button>
+                <button class="cafeai-quick-btn" data-action="recommend">Gợi ý cho tôi</button>
+                <button class="cafeai-quick-btn" data-action="weather_suggest">Theo thời tiết</button>
+                <button class="cafeai-quick-btn" data-action="track_order">Đơn hàng</button>
+                <button class="cafeai-quick-btn" data-action="mood">Tâm trạng</button>
             </div>
             
             <div class="cafeai-input-area">
@@ -84,7 +84,6 @@
 
         // Event Listeners
         toggle.addEventListener('click', toggleChat);
-        document.getElementById('cafeai-close').addEventListener('click', toggleChat);
         document.getElementById('cafeai-send').addEventListener('click', sendMessage);
         
         const input = document.getElementById('cafeai-input');
@@ -351,7 +350,7 @@
         btn.className = 'cafeai-add-btn';
         btn.style.background = '#c49b63';
         btn.style.color = 'white';
-        btn.textContent = '✅ Xác nhận thêm vào giỏ';
+        btn.textContent = 'Xác nhận thêm vào giỏ';
         btn.onclick = () => {
             addToCart(cartAction.product_id, cartAction.product_name);
             wrap.remove();
@@ -362,19 +361,19 @@
 
     async function addToCart(id, name = '') {
         if (document.body.getAttribute('data-logged-in') !== 'true') {
-            addBotMessage('🔐 Bạn cần đăng nhập để đặt hàng.', [], [{ text: '🔑 Đăng nhập', action: 'login' }]);
+            addBotMessage('Bạn cần đăng nhập để đặt hàng.', [], [{ text: 'Đăng nhập', action: 'login' }]);
             return;
         }
         showTyping();
         const res = await apiCall('add_to_cart', { product_id: id, quantity: 1 });
         hideTyping();
         if (res.success) {
-            addBotMessage(`✅ Đã thêm **${name || 'sản phẩm'}** vào giỏ hàng!`);
-            showToast(`🛒 Đã thêm vào giỏ hàng!`);
+            addBotMessage(`Đã thêm **${name || 'sản phẩm'}** vào giỏ hàng!`);
+            showToast(`Đã thêm vào giỏ hàng!`);
             const badge = document.querySelector('.bag small');
             if (badge && res.total_qty !== undefined) badge.textContent = res.total_qty;
         } else {
-            addBotMessage('❌ ' + (res.error || 'Lỗi thêm vào giỏ'));
+            addBotMessage(res.error || 'Lỗi thêm vào giỏ');
         }
     }
 
@@ -413,7 +412,7 @@
     function showToast(msg) {
         const t = document.createElement('div');
         t.className = 'cafeai-toast';
-        t.innerHTML = `<span>✅</span> ${msg}`;
+        t.innerHTML = msg;
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 3000);
     }

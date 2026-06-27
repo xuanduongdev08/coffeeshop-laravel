@@ -179,15 +179,27 @@
 
         /* ===== Cards ===== */
         .stat-card {
-            background: #fff; border-radius: 12px; padding: 20px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-            border-left: 4px solid var(--coffee-pale);
+            background: #fff; border-radius: 14px; padding: 24px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border-left: 5px solid var(--coffee-pale);
             transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
         }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .stat-card .stat-value { font-size: 28px; font-weight: 700; color: var(--coffee); }
-        .stat-card .stat-label { font-size: 13px; color: #888; margin-top: 4px; }
-        .stat-card .stat-icon { font-size: 32px; opacity: 0.2; }
+        .stat-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08); 
+        }
+        .stat-card .stat-value { font-size: 30px; font-weight: 700; color: var(--coffee); line-height: 1.2; }
+        .stat-card .stat-label { font-size: 13px; font-weight: 600; color: #7f8c8d; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Card Specific Styles */
+        .stat-card.card-orders { border-left-color: var(--coffee-pale); background: linear-gradient(135deg, #ffffff 0%, #fffbf6 100%); }
+        .stat-card.card-pending { border-left-color: #e74c3c; background: linear-gradient(135deg, #ffffff 0%, #fffbfb 100%); }
+        .stat-card.card-revenue { border-left-color: #27ae60; background: linear-gradient(135deg, #ffffff 0%, #fbfdfa 100%); }
+        .stat-card.card-customers { border-left-color: #3498db; background: linear-gradient(135deg, #ffffff 0%, #fafcff 100%); }
+        .stat-card.card-products { border-left-color: #9b59b6; background: linear-gradient(135deg, #ffffff 0%, #fcfaff 100%); }
+        .stat-card.card-warning { border-left-color: #e67e22; background: linear-gradient(135deg, #ffffff 0%, #fffbfa 100%); }
 
         /* ===== Tables ===== */
         .admin-table {
@@ -222,6 +234,66 @@
         }
         .btn-coffee:hover { background: var(--coffee-light); color: #fff; transform: translateY(-1px); }
 
+        /* ===== Coffee Theme Buttons inside Tables (Action column) ===== */
+        .admin-table tbody td .btn:not(.btn-danger):not(.btn-outline-danger):not(.btn-delete-confirm) {
+            color: var(--coffee) !important;
+            border-color: var(--coffee) !important;
+            background-color: transparent !important;
+            transition: var(--transition-smooth);
+        }
+        .admin-table tbody td .btn:not(.btn-danger):not(.btn-outline-danger):not(.btn-delete-confirm):hover {
+            color: #fff !important;
+            background-color: var(--coffee) !important;
+            border-color: var(--coffee) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(111, 78, 55, 0.15);
+        }
+        
+        /* ===== Pagination Circle Coffee Theme Overrides ===== */
+        .pagination {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            gap: 6px;
+            justify-content: flex-end !important;
+        }
+        .pagination .page-item {
+            margin: 0 !important;
+            border: none !important;
+            background: transparent !important;
+        }
+        .pagination .page-link {
+            color: #c49b63 !important;
+            background-color: #fff !important;
+            border: 1px solid #674c27 !important;
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            transition: var(--transition-smooth);
+        }
+        .pagination .page-link:hover {
+            color: #fff !important;
+            background-color: #c49b63 !important;
+            border-color: transparent !important;
+        }
+        .pagination .page-item.active .page-link {
+            color: #fff !important;
+            background-color: #c49b63 !important;
+            border-color: transparent !important;
+        }
+        .pagination .page-item.disabled .page-link {
+            color: #ccc !important;
+            background-color: #fff !important;
+            border-color: #f5ede3 !important;
+            opacity: 0.6;
+        }
+
         /* ===== Forms & Cards ===== */
         .admin-card {
             background: #fff; border-radius: 12px; padding: 24px;
@@ -250,7 +322,7 @@
 {{-- Sidebar --}}
 <aside class="admin-sidebar" id="adminSidebar">
     <div class="sidebar-brand">
-        <h4>☕ XDTHECOFFEEHOUSE</h4>
+        <h4><span class="ion-md-cafe" style="margin-right:6px;"></span>XDTHECOFFEEHOUSE</h4>
         <small>Trang quản trị</small>
     </div>
     <nav class="sidebar-nav">
@@ -273,6 +345,7 @@
 
         <div class="sidebar-divider"></div>
 
+        @role('admin')
         <a href="{{ route('admin.customers.index') }}" class="sidebar-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
             <span class="icon ion-md-people"></span> Quản lý khách hàng
         </a>
@@ -281,13 +354,19 @@
         </a>
 
         <div class="sidebar-divider"></div>
+        @endrole
 
+        @role('admin|cashier')
         <a href="{{ route('admin.statistics.index') }}" class="sidebar-link {{ request()->routeIs('admin.statistics.*') ? 'active' : '' }}">
             <span class="icon ion-md-stats"></span> Thống kê doanh thu
         </a>
+        @endrole
+
+        @role('admin')
         <a href="{{ route('admin.email-templates.index') }}" class="sidebar-link {{ request()->routeIs('admin.email-templates.*') ? 'active' : '' }}">
             <span class="icon ion-md-mail"></span> Email Template
         </a>
+        @endrole
 
         <div class="sidebar-divider"></div>
 

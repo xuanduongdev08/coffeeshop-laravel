@@ -65,6 +65,11 @@ class OrderController extends Controller
         $oldStatus = $order->status;
         $newStatus = $request->status;
 
+        // Đối với đơn hàng đã hoàn thành hoặc đã hủy thì không được phép thay đổi trạng thái nữa
+        if (in_array($oldStatus, ['Hoàn thành', 'Đã hủy']) && $newStatus !== $oldStatus) {
+            return back()->with('error', "Đơn hàng đã ở trạng thái \"{$oldStatus}\" nên không thể thay đổi trạng thái được nữa.");
+        }
+
         // Hoàn kho khi chuyển sang "Đã hủy" (và trước đó chưa hủy)
         if ($newStatus === 'Đã hủy' && $oldStatus !== 'Đã hủy') {
             $order->load('items');
@@ -82,14 +87,17 @@ class OrderController extends Controller
         $order->update($updateData);
 
         // Gửi email thông báo trạng thái đơn hàng cho khách hàng
+        // Chỉ gửi khi đơn hàng KHÔNG có drink (đơn có drink sẽ được thông báo qua DrinkStatusController)
+        // Nếu có drink, vẫn gửi email trạng thái đơn nhưng KHÔNG bị trùng với email pha chế
         try {
+            $order->load('user'); // Eager load để tránh N+1
             $template = EmailTemplate::where('template_key', 'order_status_updated')->first();
             if ($template && $order->user) {
                 $placeholders = [
                     '{customer_name}'    => $order->user->name,
                     '{order_code}'       => $order->tracking_code,
                     '{order_status}'     => $newStatus,
-                    '{shipping_address}' => $order->shipping_address,
+                    '{shipping_address}' => $order->shipping_address ?? 'Không có địa chỉ',
                     '{total_price}'      => $order->formatted_total,
                     '{order_link}'       => route('orders.show', $order),
                 ];
@@ -108,7 +116,18 @@ class OrderController extends Controller
             'payment_status' => 'required|in:pending,paid,failed,refunded',
         ]);
 
-        $order->update(['payment_status' => $request->payment_status]);
+        $oldStatus = $order->payment_status;
+        $newStatus = $request->payment_status;
+
+        if ($oldStatus === 'paid' && !in_array($newStatus, ['paid', 'refunded'])) {
+            return back()->with('error', 'Đơn hàng đã thanh toán chỉ có thể chuyển sang trạng thái "Hoàn tiền".');
+        }
+
+        if ($oldStatus === 'refunded' && $newStatus !== 'refunded') {
+            return back()->with('error', 'Không thể thay đổi trạng thái của đơn hàng đã hoàn tiền.');
+        }
+
+        $order->update(['payment_status' => $newStatus]);
 
         return back()->with('success', "Đã cập nhật trạng thái thanh toán đơn #{$order->tracking_code}.");
     }

@@ -185,7 +185,75 @@ class PaymentController extends Controller
     {
         abort_if($order->user_id !== auth()->id(), 403);
         $order->load('items');
+
+        // Gửi email đặt hàng thành công
+        $this->sendOrderPlacedEmail($order);
+
         return view('shop.payment.success', compact('order'));
+    }
+
+    /**
+     * Gửi email thông báo đặt hàng thành công
+     */
+    private function sendOrderPlacedEmail(Order $order): void
+    {
+        $sessionKey = 'sent_order_email_' . $order->id;
+        if (session()->has($sessionKey)) {
+            return;
+        }
+
+        try {
+            $template = \App\Models\EmailTemplate::where('template_key', 'order_placed')->first();
+            if ($template && $order->user && $order->user->email) {
+                // Tạo bảng sản phẩm HTML chuyên nghiệp
+                $itemsHtml = '<table class="order-table" style="width:100%; border-collapse: collapse; margin: 20px 0;">';
+                $itemsHtml .= '<thead>';
+                $itemsHtml .= '<tr style="border-bottom: 2px solid #6f4e37;">';
+                $itemsHtml .= '<th style="text-align: left; padding: 10px 8px; font-size: 14px; color: #6f4e37; font-weight: 700;">Sản phẩm</th>';
+                $itemsHtml .= '<th style="text-align: center; padding: 10px 8px; font-size: 14px; color: #6f4e37; font-weight: 700; width: 60px;">SL</th>';
+                $itemsHtml .= '<th style="text-align: right; padding: 10px 8px; font-size: 14px; color: #6f4e37; font-weight: 700; width: 100px;">Thành tiền</th>';
+                $itemsHtml .= '</tr>';
+                $itemsHtml .= '</thead>';
+                $itemsHtml .= '<tbody>';
+                
+                foreach ($order->items as $item) {
+                    $sizeLabel = $item->size ? " (Size {$item->size})" : "";
+                    $imgUrl = $item->product_image ? asset('storage/' . $item->product_image) : asset('images/menu-1.jpg');
+                    $itemsHtml .= '<tr>';
+                    $itemsHtml .= '<td style="border-bottom: 1px solid #f5ede3; padding: 12px 8px; vertical-align: middle;">';
+                    $itemsHtml .= '<div style="display: flex; align-items: center;">';
+                    $itemsHtml .= '<img src="' . $imgUrl . '" style="width: 40px; height: 40px; border-radius: 6px; margin-right: 12px; object-fit: cover; border: 1px solid #e8dec9; display: inline-block; vertical-align: middle;">';
+                    $itemsHtml .= '<span style="font-size: 14px; color: #555555; vertical-align: middle;">' . e($item->product_name) . $sizeLabel . '</span>';
+                    $itemsHtml .= '</div>';
+                    $itemsHtml .= '</td>';
+                    $itemsHtml .= '<td style="border-bottom: 1px solid #f5ede3; padding: 12px 8px; text-align: center; font-size: 14px; color: #555555; vertical-align: middle;">' . $item->quantity . '</td>';
+                    $itemsHtml .= '<td style="border-bottom: 1px solid #f5ede3; padding: 12px 8px; text-align: right; font-size: 14px; color: #555555; vertical-align: middle;">' . number_format($item->subtotal, 0, ',', '.') . 'đ</td>';
+                    $itemsHtml .= '</tr>';
+                }
+                
+                $itemsHtml .= '</tbody>';
+                $itemsHtml .= '</table>';
+
+                $placeholders = [
+                    '{customer_name}'    => $order->recipient_name ?? $order->user->name,
+                    '{order_code}'       => $order->tracking_code,
+                    '{recipient_name}'   => $order->recipient_name ?? 'Khách hàng',
+                    '{phone}'            => $order->phone ?? 'Không có',
+                    '{shipping_address}' => $order->shipping_address ?? 'Nhận tại cửa hàng',
+                    '{items_list}'       => $itemsHtml,
+                    '{total_price}'      => number_format($order->total, 0, ',', '.') . 'đ',
+                    '{payment_method}'   => $order->payment_method ?? 'Không rõ',
+                    '{order_link}'       => route('orders.show', $order),
+                ];
+
+                \Illuminate\Support\Facades\Mail::to($order->user->email)
+                    ->send(new \App\Mail\DynamicTemplateMail($template, $placeholders));
+
+                session()->put($sessionKey, true);
+            }
+        } catch (\Exception $e) {
+            \Log::warning("Failed to send order placed success email for order #{$order->tracking_code}: " . $e->getMessage());
+        }
     }
 
     /**
