@@ -9,7 +9,7 @@
     {{-- Order Info --}}
     <div class="col-md-8">
         <div class="admin-card mb-4">
-            <h5>📦 Thông tin đơn hàng</h5>
+            <h5><span class="ion-md-cube" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Thông tin đơn hàng</h5>
             <div class="row">
                 <div class="col-sm-6">
                     <p><strong>Người nhận:</strong> {{ $order->recipient_name }}</p>
@@ -31,7 +31,7 @@
 
         {{-- Items --}}
         <div class="admin-card mb-4">
-            <h5>🛒 Sản phẩm đã đặt</h5>
+            <h5><span class="ion-md-cart" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Sản phẩm đã đặt</h5>
             <div class="table-responsive">
                 <table class="table table-sm">
                     <thead style="background:#f8f9fa;">
@@ -98,7 +98,7 @@
     <div class="col-md-4">
         {{-- Trạng thái đơn hàng --}}
         <div class="admin-card mb-4">
-            <h5>📋 Cập nhật trạng thái</h5>
+            <h5><span class="ion-md-list" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Cập nhật trạng thái</h5>
             <form method="POST" action="{{ route('admin.orders.status', $order) }}">
                 @csrf @method('PATCH')
                 <div class="form-group">
@@ -115,7 +115,7 @@
 
         {{-- Trạng thái thanh toán --}}
         <div class="admin-card mb-4">
-            <h5>💳 Trạng thái thanh toán</h5>
+            <h5><span class="ion-md-card" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Trạng thái thanh toán</h5>
             <form method="POST" action="{{ route('admin.orders.payment-status', $order) }}">
                 @csrf @method('PATCH')
                 <div class="form-group">
@@ -132,7 +132,7 @@
         {{-- Trạng thái pha chế --}}
         @if($order->drink_status !== null)
             <div class="admin-card mb-4">
-                <h5>☕ Trạng thái pha chế</h5>
+                <h5><span class="ion-md-cafe" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Trạng thái pha chế</h5>
                 <div class="text-center mb-3">
                     @php
                         $steps = ['pending' => 1, 'brewing' => 2, 'completed' => 3];

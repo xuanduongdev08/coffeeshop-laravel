@@ -22,7 +22,13 @@ class ProductController extends Controller
             $query->where('category_id', $request->category);
         }
         if ($request->filled('status')) {
-            $query->where('is_active', $request->status === 'active');
+            if ($request->status === 'active') {
+                $query->whereNull('deleted_at')->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->whereNull('deleted_at')->where('is_active', false);
+            } elseif ($request->status === 'deleted') {
+                $query->onlyTrashed();
+            }
         }
 
         $products   = $query->latest()->paginate(15)->withQueryString();
@@ -48,16 +54,18 @@ class ProductController extends Controller
             'stock'         => 'required|integer|min:0',
             'is_active'     => 'boolean',
             'is_featured'   => 'boolean',
-            'has_size'      => 'boolean',
             'has_topping'   => 'boolean',
             'allow_sugar'   => 'boolean',
             'allow_ice'     => 'boolean',
             'allow_milk'    => 'boolean',
             'image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             // Sizes
-            'sizes'         => 'exclude_unless:has_size,1|nullable|array',
-            'sizes.*.size'  => 'required_with:sizes|in:M,L,XL',
-            'sizes.*.price' => 'required_with:sizes|numeric|min:0',
+            'has_size_m'    => 'boolean',
+            'has_size_l'    => 'boolean',
+            'has_size_xl'   => 'boolean',
+            'price_m'       => 'required_if:has_size_m,1|nullable|numeric|min:0',
+            'price_l'       => 'required_if:has_size_l,1|nullable|numeric|min:0',
+            'price_xl'      => 'required_if:has_size_xl,1|nullable|numeric|min:0',
         ]);
 
         // Upload ảnh
@@ -68,25 +76,43 @@ class ProductController extends Controller
 
         $data['is_active']   = $request->boolean('is_active', true);
         $data['is_featured'] = $request->boolean('is_featured');
-        $data['has_size']    = $request->boolean('has_size');
         $data['has_topping'] = $request->boolean('has_topping');
         $data['allow_sugar'] = $request->boolean('allow_sugar', true);
         $data['allow_ice']   = $request->boolean('allow_ice', true);
         $data['allow_milk']  = $request->boolean('allow_milk');
 
+        $hasSizeM = $request->boolean('has_size_m');
+        $hasSizeL = $request->boolean('has_size_l');
+        $hasSizeXL = $request->boolean('has_size_xl');
+        $data['has_size'] = $hasSizeM || $hasSizeL || $hasSizeXL;
+
         $product = Product::create($data);
 
         // Lưu sizes nếu has_size
-        if ($data['has_size'] && $request->filled('sizes')) {
-            foreach ($request->sizes as $sizeData) {
-                if (! empty($sizeData['size']) && isset($sizeData['price'])) {
-                    ProductSize::create([
-                        'product_id' => $product->id,
-                        'size'       => $sizeData['size'],
-                        'price'      => $sizeData['price'],
-                        'is_active'  => true,
-                    ]);
-                }
+        if ($data['has_size']) {
+            if ($hasSizeM && isset($data['price_m'])) {
+                ProductSize::create([
+                    'product_id' => $product->id,
+                    'size'       => 'M',
+                    'price'      => $data['price_m'],
+                    'is_active'  => true,
+                ]);
+            }
+            if ($hasSizeL && isset($data['price_l'])) {
+                ProductSize::create([
+                    'product_id' => $product->id,
+                    'size'       => 'L',
+                    'price'      => $data['price_l'],
+                    'is_active'  => true,
+                ]);
+            }
+            if ($hasSizeXL && isset($data['price_xl'])) {
+                ProductSize::create([
+                    'product_id' => $product->id,
+                    'size'       => 'XL',
+                    'price'      => $data['price_xl'],
+                    'is_active'  => true,
+                ]);
             }
         }
 
@@ -117,19 +143,22 @@ class ProductController extends Controller
             'category_id'   => 'nullable|exists:categories,id',
             'description'   => 'nullable|string',
             'price'         => 'required|numeric|min:0',
-            'discount_price'=> 'nullable|numeric|min:0',
+            'discount_price'=> 'nullable|numeric|min:0|lt:price',
             'stock'         => 'required|integer|min:0',
             'is_active'     => 'boolean',
             'is_featured'   => 'boolean',
-            'has_size'      => 'boolean',
             'has_topping'   => 'boolean',
             'allow_sugar'   => 'boolean',
             'allow_ice'     => 'boolean',
             'allow_milk'    => 'boolean',
             'image'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'sizes'         => 'exclude_unless:has_size,1|nullable|array',
-            'sizes.*.size'  => 'required_with:sizes|in:M,L,XL',
-            'sizes.*.price' => 'required_with:sizes|numeric|min:0',
+            // Sizes
+            'has_size_m'    => 'boolean',
+            'has_size_l'    => 'boolean',
+            'has_size_xl'   => 'boolean',
+            'price_m'       => 'required_if:has_size_m,1|nullable|numeric|min:0',
+            'price_l'       => 'required_if:has_size_l,1|nullable|numeric|min:0',
+            'price_xl'      => 'required_if:has_size_xl,1|nullable|numeric|min:0',
         ]);
 
         if ($request->hasFile('image')) {
@@ -143,29 +172,45 @@ class ProductController extends Controller
 
         $data['is_active']   = $request->boolean('is_active');
         $data['is_featured'] = $request->boolean('is_featured');
-        $data['has_size']    = $request->boolean('has_size');
         $data['has_topping'] = $request->boolean('has_topping');
         $data['allow_sugar'] = $request->boolean('allow_sugar');
         $data['allow_ice']   = $request->boolean('allow_ice');
         $data['allow_milk']  = $request->boolean('allow_milk');
 
+        $hasSizeM = $request->boolean('has_size_m');
+        $hasSizeL = $request->boolean('has_size_l');
+        $hasSizeXL = $request->boolean('has_size_xl');
+        $data['has_size'] = $hasSizeM || $hasSizeL || $hasSizeXL;
+
         $product->update($data);
 
         // Cập nhật sizes
-        if ($data['has_size'] && $request->filled('sizes')) {
-            $product->sizes()->delete();
-            foreach ($request->sizes as $sizeData) {
-                if (! empty($sizeData['size']) && isset($sizeData['price'])) {
-                    ProductSize::create([
-                        'product_id' => $product->id,
-                        'size'       => $sizeData['size'],
-                        'price'      => $sizeData['price'],
-                        'is_active'  => true,
-                    ]);
-                }
+        $product->sizes()->delete();
+        if ($data['has_size']) {
+            if ($hasSizeM && isset($data['price_m'])) {
+                ProductSize::create([
+                    'product_id' => $product->id,
+                    'size'       => 'M',
+                    'price'      => $data['price_m'],
+                    'is_active'  => true,
+                ]);
             }
-        } elseif (! $data['has_size']) {
-            $product->sizes()->delete();
+            if ($hasSizeL && isset($data['price_l'])) {
+                ProductSize::create([
+                    'product_id' => $product->id,
+                    'size'       => 'L',
+                    'price'      => $data['price_l'],
+                    'is_active'  => true,
+                ]);
+            }
+            if ($hasSizeXL && isset($data['price_xl'])) {
+                ProductSize::create([
+                    'product_id' => $product->id,
+                    'size'       => 'XL',
+                    'price'      => $data['price_xl'],
+                    'is_active'  => true,
+                ]);
+            }
         }
 
         return redirect()->route('admin.products.index')

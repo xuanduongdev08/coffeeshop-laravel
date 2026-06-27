@@ -41,7 +41,16 @@ class CustomerController extends Controller
             abort(404);
         }
 
+        // Không cho xóa nếu còn đơn đang xử lý (Chờ xử lý hoặc Đang giao)
+        $activeOrders = $user->orders()->whereIn('status', ['Chờ xử lý', 'Đang giao'])->count();
+        if ($activeOrders > 0) {
+            return redirect()->route('admin.customers.index')
+                ->with('error', "Không thể xóa tài khoản \"{$user->name}\" vì còn {$activeOrders} đơn hàng đang được xử lý.");
+        }
+
+        // Soft delete: user bị vô hiệu hóa nhưng lịch sử đơn hàng vẫn được giữ lại
         $user->delete();
-        return redirect()->route('admin.customers.index')->with('success', "Đã xóa tài khoản khách hàng \"{$user->name}\".");
+        return redirect()->route('admin.customers.index')
+            ->with('success', "Đã xóa tài khoản khách hàng \"{$user->name}\". Lịch sử đơn hàng vẫn được lưu lại.");
     }
 }

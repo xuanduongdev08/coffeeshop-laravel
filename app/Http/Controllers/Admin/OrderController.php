@@ -65,6 +65,11 @@ class OrderController extends Controller
         $oldStatus = $order->status;
         $newStatus = $request->status;
 
+        // Không cho phép đổi từ "Đã hủy" sang trạng thái khác (tránh sai lệch kho)
+        if ($oldStatus === 'Đã hủy' && $newStatus !== 'Đã hủy') {
+            return back()->with('error', 'Không thể thay đổi trạng thái đơn hàng đã bị hủy. Vui lòng tạo đơn hàng mới nếu cần.');
+        }
+
         // Hoàn kho khi chuyển sang "Đã hủy" (và trước đó chưa hủy)
         if ($newStatus === 'Đã hủy' && $oldStatus !== 'Đã hủy') {
             $order->load('items');
@@ -82,14 +87,17 @@ class OrderController extends Controller
         $order->update($updateData);
 
         // Gửi email thông báo trạng thái đơn hàng cho khách hàng
+        // Chỉ gửi khi đơn hàng KHÔNG có drink (đơn có drink sẽ được thông báo qua DrinkStatusController)
+        // Nếu có drink, vẫn gửi email trạng thái đơn nhưng KHÔNG bị trùng với email pha chế
         try {
+            $order->load('user'); // Eager load để tránh N+1
             $template = EmailTemplate::where('template_key', 'order_status_updated')->first();
             if ($template && $order->user) {
                 $placeholders = [
                     '{customer_name}'    => $order->user->name,
                     '{order_code}'       => $order->tracking_code,
                     '{order_status}'     => $newStatus,
-                    '{shipping_address}' => $order->shipping_address,
+                    '{shipping_address}' => $order->shipping_address ?? 'Không có địa chỉ',
                     '{total_price}'      => $order->formatted_total,
                     '{order_link}'       => route('orders.show', $order),
                 ];

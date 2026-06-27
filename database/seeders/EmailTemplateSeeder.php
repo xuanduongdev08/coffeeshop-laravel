@@ -44,6 +44,27 @@ class EmailTemplateSeeder extends Seeder
 <p>Trân trọng,<br>Đội ngũ XDTHECOFFEEHOUSE</p>',
                 'description' => 'Gửi khi trạng thái pha chế đồ uống thay đổi.',
             ],
+            [
+                'template_key' => 'order_placed',
+                'subject' => 'Xác nhận đơn hàng #{order_code} đã đặt thành công!',
+                'content' => '<h3>Chào {customer_name},</h3>
+<p>Cảm ơn bạn đã mua hàng tại <strong>XDTHECOFFEEHOUSE</strong>.</p>
+<p>Đơn hàng của bạn <strong>#{order_code}</strong> đã được hệ thống ghi nhận thành công và đang được xử lý.</p>
+<p><strong>Thông tin giao nhận:</strong></p>
+<ul>
+    <li>Người nhận: {recipient_name}</li>
+    <li>Số điện thoại: {phone}</li>
+    <li>Địa chỉ giao hàng: {shipping_address}</li>
+</ul>
+<p><strong>Chi tiết đơn hàng:</strong></p>
+{items_list}
+<p>Tổng tiền thanh toán: <strong>{total_price}</strong></p>
+<p>Phương thức thanh toán: <strong>{payment_method}</strong></p>
+<p><a href="{order_link}" style="background-color: #6f4e37; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Xem chi tiết đơn hàng</a></p>
+<br>
+<p>Trân trọng,<br>Đội ngũ XDTHECOFFEEHOUSE</p>',
+                'description' => 'Gửi cho khách hàng khi đặt hàng thành công.',
+            ],
         ];
 
         foreach ($templates as $tpl) {

@@ -29,7 +29,7 @@ class EmailTemplateController extends Controller
         } elseif ($emailTemplate->template_key === 'order_status_updated') {
             $placeholders = ['{customer_name}', '{order_code}', '{order_status}', '{shipping_address}', '{total_price}', '{order_link}'];
         } elseif ($emailTemplate->template_key === 'drink_status_updated') {
-            $placeholders = ['{customer_name}', '{order_code}', '{drink_status_label}', '{order_link}'];
+            $placeholders = ['{customer_name}', '{order_code}', '{drink_status_label}', '{extra_note}', '{order_link}'];
         }
 
         return view('admin.email-templates.edit', compact('emailTemplate', 'placeholders'));

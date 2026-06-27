@@ -38,7 +38,7 @@
             </select>
         </div>
         <div class="col-md-2 mb-2">
-            <button type="submit" class="btn btn-sm btn-coffee w-100">🔍 Lọc</button>
+            <button type="submit" class="btn btn-sm btn-coffee w-100"><span class="ion-md-search" style="margin-right:4px;"></span>Lọc</button>
         </div>
     </form>
 </div>
