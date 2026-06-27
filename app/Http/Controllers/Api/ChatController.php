@@ -230,12 +230,36 @@ class ChatController extends Controller
             // 'greeting'       => $this->intentGreeting($user, $isVi),
             'product_lookup' => $this->intentProductLookup($message, $isVi),
             'order_tracking' => $this->intentOrderTracking($user, $message, $isVi),
-            'weather'        => $this->intentWeather($isVi),
+            // Nếu vừa hỏi thời tiết VỮA hỏi gợi ý/cà phê → để Gemini trả lời thông minh hơn
+            'weather'        => $this->intentWeatherSmart($message, $isVi),
             'mood'           => $this->intentMood($message, $isVi),
             'recommendation' => $this->intentRecommendation($user, $isVi),
             'escalation'     => $this->intentEscalation($isVi),
             default          => null,
         };
+    }
+
+    /**
+     * Smart weather handler: nếu câu hỏi chỉ hỏi về thời tiết thuần tú y → local.
+     * Nếu kết hợp gợi ý/đồ uống → để Gemini xử lý (trả null).
+     */
+    private function intentWeatherSmart(string $message, bool $isVi): ?array
+    {
+        $msg = mb_strtolower($message, 'UTF-8');
+
+        // Nếu câu hỏi có từ gợi ý/uống/cà phê → phức tạp, để Gemini xử lý thông minh hơn
+        $hasRecommendRequest = preg_match(
+            '/gợi ý|tư vấn|nên uống|uống gì|muốn uống|recommend|suggest|what.*drink|cho.*ly|c[aà]\s*ph[eê]/iu',
+            $msg
+        );
+
+        if ($hasRecommendRequest) {
+            // Trả null → fallback Gemini với full context (menu + weather)
+            return null;
+        }
+
+        // Câu hỏi thuần về thời tiết (vd: "thời tiết hôm nay thế nào?") → xử lý local
+        return $this->intentWeather($isVi);
     }
 
     private function intentGreeting(?object $user, bool $isVi): array
@@ -330,16 +354,33 @@ class ChatController extends Controller
     {
         $weather     = $this->getWeather();
         $suggestions = $this->getWeatherSuggestions($weather);
+        $products    = $suggestions['products'];
 
+        // Header thời tiết
         $msg = $isVi
             ? "**Thời tiết tại {$weather['city']}:**\n{$weather['temp']}°C | Độ ẩm: {$weather['humidity']}% | {$weather['description']}\n\n{$suggestions['message']}"
             : "**Weather in {$weather['city']}:**\n{$weather['temp']}°C | Humidity: {$weather['humidity']}% | {$weather['description']}\n\n{$suggestions['message']}";
 
-        foreach ($suggestions['products'] as $p) {
-            $msg .= "\n**{$p->name}** — " . number_format($p->effective_price, 0, ',', '.') . "đ";
+        if ($products->isNotEmpty()) {
+            // Có sản phẩm — liệt kê và trả về dưới dạng cards
+            foreach ($products as $p) {
+                $msg .= "\n**{$p->name}** — " . number_format($p->effective_price, 0, ',', '.') . "đ";
+            }
+            return [
+                'message'     => $msg,
+                'products'    => $products->toArray(),
+                'suggestions' => $this->getSuggestions('weather'),
+                'metadata'    => ['weather' => $weather],
+            ];
         }
 
-        return ['message' => $msg, 'products' => $suggestions['products']->toArray(), 'suggestions' => $this->getSuggestions('weather'), 'metadata' => ['weather' => $weather]];
+        // Không có sản phẩm match — trả null để Gemini xử lý thông minh hơn
+        return [
+            'message'     => $msg . ($isVi ? '\n\nHiện tại menu đang cập nhật, vui lòng xem thực đơn đầy đủ!' : '\n\nPlease check our full menu!'),
+            'products'    => [],
+            'suggestions' => $this->getSuggestions('weather'),
+            'metadata'    => ['weather' => $weather],
+        ];
     }
 
     private function intentMood(string $message, bool $isVi): array
@@ -404,28 +445,52 @@ class ChatController extends Controller
             return $this->fallbackResponse($message, $language);
         }
 
-        $menuContext = Product::active()->with('category')->take(20)->get()
-            ->map(fn($p) => "[ID:{$p->id}] {$p->name} — " . number_format($p->effective_price, 0, ',', '.') . "đ — {$p->description}")
+        // Lấy full menu với danh mục, giá, mô tả để AI có context đầy đủ
+        $menuContext = Product::active()->with('category')->take(30)->get()
+            ->map(fn($p) =>
+                "[ID:{$p->id}] {$p->name}" .
+                ($p->category ? " (Danh mục: {$p->category->name})" : '') .
+                " — " . number_format($p->effective_price, 0, ',', '.') . "đ" .
+                ($p->description ? " — {$p->description}" : '')
+            )
             ->implode("\n");
 
         $weather = $this->getWeather();
+        $isVi    = $language === 'vi';
+        $lang    = $isVi ? 'Tiếng Việt' : 'English';
+        $userName = $user?->name ?? ($isVi ? 'Quý khách' : 'Guest');
 
-        $systemPrompt = "You are CaféAI, a friendly, professional virtual barista for the coffee shop 'XDTHECOFFEEHOUSE'.\n" .
-            "Language: " . ($language === 'vi' ? 'Vietnamese' : 'English') . "\n" .
-            "Customer Name: " . ($user?->name ?? 'Guest') . "\n" .
-            "Current Weather in Shop City: {$weather['temp']}°C, {$weather['description']}\n\n" .
-            "COFFEE SHOP DETAILS:\n" .
-            "- Address: 93 Lê Cao Lãng, Quận Tân Phú, TP.HCM\n" .
+        $systemPrompt =
+            "Bạn là CaféAI — trợ lý ảo thông minh của quán cà phê XDTHECOFFEEHOUSE. " .
+            "Hãy trả lời bằng {$lang}, giọng điệu thân thiện, tự nhiên như một barista chuyên nghiệp người Việt.\n\n" .
+
+            "THÔNG TIN KHÁCH HÀNG:\n" .
+            "- Tên: {$userName}\n" .
+            "- Thời tiết hiện tại: {$weather['temp']}°C, {$weather['description']} (tại {$weather['city']})\n\n" .
+
+            "THÔNG TIN QUÁN:\n" .
+            "- Địa chỉ: 93 Lê Cao Lãng, Quận Tân Phú, TP.HCM\n" .
             "- Hotline: +84 978 853 110\n" .
             "- Email: dn250621@coffeeshop.com\n" .
-            "- Opening Hours: 8:00 AM - 9:00 PM (Every day)\n\n" .
-            "PRODUCT MENU:\n{$menuContext}\n\n" .
-            "INSTRUCTIONS:\n" .
-            "1. You must answer questions using the shop details and menu context. If asked about recommendations, suggest drinks from the menu based on the weather, customer preferences, or mood.\n" .
-            "2. When recommending or mentioning a product from the MENU, you must append [ID:X] (where X is the product ID, e.g. [ID:3]) to the product name. This is crucial for the front-end to display clickable product cards.\n" .
-            "3. Keep your responses friendly, concise, natural, and helpful. Avoid using emojis inside the text to keep the interface clean.";
+            "- Giờ mở cửa: 8:00 - 21:00 (tất cả các ngày)\n\n" .
 
-        $history = ChatLog::where('session_id', $sessionId)->latest()->take(10)->get()->reverse()
+            "MENU SẢN PHẨM (chỉ gợi ý các sản phẩm có trong danh sách này):\n" .
+            "{$menuContext}\n\n" .
+
+            "NGUYÊN TẮC TRẢ LỜI (bắt buộc tuân thủ):\n" .
+            "1. THÔNG MINH & ĐÚNG TRỌNG TÂM: Đọc kỹ câu hỏi và trả lời chính xác những gì khách hàng hỏi. " .
+            "   Nếu hỏi về đồ uống cụ thể → nói về đồ uống đó. Nếu hỏi về giá → nói giá ngay.\n" .
+            "2. GẮN ID SẢN PHẨM: Khi đề cập hoặc gợi ý bất kỳ sản phẩm nào trong menu, PHẢI thêm [ID:X] " .
+            "   ngay sau tên sản phẩm (ví dụ: Cà phê Sữa Đá [ID:3]). Điều này rất quan trọng để hiển thị card sản phẩm.\n" .
+            "3. FORMAT RÕ RÀNG: Dùng **in đậm** cho tên sản phẩm và tiêu đề. Khi liệt kê nhiều sản phẩm, " .
+            "   mỗi sản phẩm trên một dòng riêng với giá và mô tả ngắn.\n" .
+            "4. NGẮN GỌN & ĐẦY ĐỦ: Câu trả lời phải HOÀN CHỈNH, không bỏ dở giữa chừng. " .
+            "   Nếu gợi ý nhiều sản phẩm, liệt kê đầy đủ tất cả rồi kết luận.\n" .
+            "5. GỢI Ý THÔNG MINH: Kết hợp thời tiết, tên khách, sở thích đã đề cập để gợi ý phù hợp nhất.\n" .
+            "6. TRUNG THỰC: Không bịa thông tin sản phẩm. Chỉ nói về sản phẩm có trong menu.\n" .
+            "7. KHÔNG DÙNG EMOJI trong nội dung chính (chỉ dùng ở đầu dòng nếu cần liệt kê).";
+
+        $history = ChatLog::where('session_id', $sessionId)->latest()->take(12)->get()->reverse()
             ->map(fn($log) => ['role' => $log->role, 'content' => $log->message])
             ->values()->toArray();
 
@@ -437,23 +502,31 @@ class ChatController extends Controller
             'parts' => [['text' => $h['content']]],
         ], $history);
 
-        $model = config('services.gemini.model', 'gemini-3.5-flash');
+        $model = config('services.gemini.model', 'gemini-2.0-flash');
 
         try {
-            $response = Http::timeout(30)
+            $response = Http::timeout(45)
                 ->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
                     'contents'          => $contents,
                     'systemInstruction' => [
                         'parts' => [['text' => $systemPrompt]],
                     ],
                     'generationConfig'  => [
-                        'maxOutputTokens' => 1024,
-                        'temperature'     => 0.7,
+                        'maxOutputTokens' => 2048,  // Tăng từ 1024 để không bị cắt câu
+                        'temperature'     => 0.75,  // Tự nhiên hơn một chút
+                        'topK'            => 40,
+                        'topP'            => 0.95,
                     ],
                 ]);
 
             if ($response->successful()) {
                 $aiMessage = $response->json('candidates.0.content.parts.0.text', '');
+
+                // Kiểm tra finish reason để log nếu bị cắt
+                $finishReason = $response->json('candidates.0.finishReason', '');
+                if ($finishReason === 'MAX_TOKENS') {
+                    Log::warning('CaféAI: Response was cut off (MAX_TOKENS). Consider increasing maxOutputTokens further.');
+                }
 
                 // Extract product IDs mentioned
                 $products = collect();
@@ -521,10 +594,19 @@ class ChatController extends Controller
 
     private function smartProductSearch(string $query): \Illuminate\Database\Eloquent\Collection
     {
+        // Tách từng từ khóa và search OR từng từ — tránh tìm cả cụm không match
+        $keywords = array_filter(array_map('trim', explode(' ', $query)), fn($k) => mb_strlen($k, 'UTF-8') >= 2);
+
+        if (empty($keywords)) {
+            return collect();
+        }
+
         return Product::active()->inStock()
-            ->where(function ($q) use ($query) {
-                $q->where('name', 'like', "%{$query}%")
-                  ->orWhere('description', 'like', "%{$query}%");
+            ->where(function ($q) use ($keywords) {
+                foreach ($keywords as $keyword) {
+                    $q->orWhere('name', 'like', "%{$keyword}%")
+                      ->orWhere('description', 'like', "%{$keyword}%");
+                }
             })
             ->take(4)
             ->get();
@@ -567,11 +649,11 @@ class ChatController extends Controller
         $temp = $weather['temp'];
 
         if ($temp >= 30) {
-            $msg      = "Trời nóng {$temp}°C! Hãy thử những thức uống mát lạnh sau:";
-            $keywords = 'trà đá nước lạnh iced';
+            $msg      = "Trời nóng {$temp}°C! Đây là những thức uống mát lạnh phù hợp:";
+            $keywords = 'trà đá iced lạnh'; // Từng từ ngắn — smartProductSearch sẽ tách ra
         } elseif ($temp <= 20) {
             $msg      = "Trời lạnh {$temp}°C! Một ly nóng sẽ giúp bạn ấm lòng:";
-            $keywords = 'latte capuccino espresso nóng';
+            $keywords = 'latte espresso nóng capuccino';
         } else {
             $msg      = "Thời tiết dễ chịu {$temp}°C! Thưởng thức bất kỳ thức uống nào bạn thích:";
             $keywords = 'cà phê trà';
