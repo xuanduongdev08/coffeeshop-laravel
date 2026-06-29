@@ -40,8 +40,13 @@ class DynamicTemplateMail extends Mailable
      */
     public function content(): Content
     {
+        $renderedContent = $this->template->render($this->placeholders);
         return new Content(
-            htmlString: $this->template->render($this->placeholders),
+            view: 'emails.layout',
+            with: [
+                'content' => $renderedContent,
+                'subject' => $this->template->renderSubject($this->placeholders)
+            ]
         );
     }
 

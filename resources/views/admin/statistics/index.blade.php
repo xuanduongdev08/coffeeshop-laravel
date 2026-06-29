@@ -15,38 +15,46 @@
     @endforeach
     <a href="{{ route('admin.statistics.export', ['period' => $period]) }}"
        class="btn btn-sm btn-outline-success ml-auto">
-        📥 Xuất Excel
+        <span class="ion-md-download" style="margin-right:4px;"></span>Xuất Excel
     </a>
 </div>
 
 {{-- Summary Cards --}}
 <div class="row mb-4">
     <div class="col-md-3 mb-3">
-        <div class="stat-card" style="border-left-color:#27ae60;">
-            <div class="stat-value" style="color:#27ae60;font-size:20px;">
-                {{ number_format($totalRevenue, 0, ',', '.') }}đ
+        <div class="stat-card h-100 card-revenue">
+            <div>
+                <div class="stat-value" style="color:#27ae60;">
+                    {{ number_format($totalRevenue, 0, ',', '.') }}đ
+                </div>
+                <div class="stat-label">Tổng doanh thu</div>
             </div>
-            <div class="stat-label">Tổng doanh thu</div>
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="stat-card">
-            <div class="stat-value">{{ number_format($totalOrders) }}</div>
-            <div class="stat-label">Đơn hàng đã thanh toán</div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="stat-card" style="border-left-color:#3498db;">
-            <div class="stat-value" style="color:#3498db;font-size:20px;">
-                {{ $totalOrders > 0 ? number_format($totalRevenue / $totalOrders, 0, ',', '.') : 0 }}đ
+        <div class="stat-card h-100 card-orders">
+            <div>
+                <div class="stat-value">{{ number_format($totalOrders) }}</div>
+                <div class="stat-label">Đơn hàng đã thanh toán</div>
             </div>
-            <div class="stat-label">Giá trị đơn TB</div>
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="stat-card" style="border-left-color:#9b59b6;">
-            <div class="stat-value" style="color:#9b59b6;">{{ number_format($newCustomers) }}</div>
-            <div class="stat-label">Khách hàng mới</div>
+        <div class="stat-card h-100 card-customers">
+            <div>
+                <div class="stat-value" style="color:#3498db;">
+                    {{ $totalOrders > 0 ? number_format($totalRevenue / $totalOrders, 0, ',', '.') : 0 }}đ
+                </div>
+                <div class="stat-label">Giá trị đơn Trung Bình</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="stat-card h-100 card-products">
+            <div>
+                <div class="stat-value" style="color:#9b59b6;">{{ number_format($newCustomers) }}</div>
+                <div class="stat-label">Khách hàng mới</div>
+            </div>
         </div>
     </div>
 </div>
@@ -55,7 +63,7 @@
     {{-- Revenue Chart --}}
     <div class="col-md-8 mb-4">
         <div class="admin-card">
-            <h5>📈 Doanh thu theo ngày</h5>
+            <h5><span class="ion-md-stats" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Doanh thu theo ngày</h5>
             <canvas id="revenueChart" height="120"></canvas>
         </div>
     </div>
@@ -63,7 +71,7 @@
     {{-- Payment Methods --}}
     <div class="col-md-4 mb-4">
         <div class="admin-card">
-            <h5>💳 Phương thức thanh toán</h5>
+            <h5><span class="ion-md-card" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Phương thức thanh toán</h5>
             <canvas id="paymentChart" height="200"></canvas>
             <div class="mt-3">
                 @foreach($paymentMethods as $pm)
@@ -81,7 +89,7 @@
     {{-- Top Products --}}
     <div class="col-md-7 mb-4">
         <div class="admin-card">
-            <h5>🏆 Sản phẩm bán chạy</h5>
+            <h5><span class="ion-md-trophy" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Sản phẩm bán chạy</h5>
             <div class="table-responsive">
                 <table class="table table-sm">
                     <thead style="background:#f8f9fa;">
@@ -126,7 +134,7 @@
     {{-- Revenue by Category --}}
     <div class="col-md-5 mb-4">
         <div class="admin-card">
-            <h5>📂 Doanh thu theo danh mục</h5>
+            <h5><span class="ion-md-folder" style="margin-right:6px;color:#c49b63;opacity:0.7;"></span>Doanh thu theo danh mục</h5>
             @php $maxRevenue = $revenueByCategory->max('revenue') ?: 1; @endphp
             @foreach($revenueByCategory as $cat)
                 <div class="mb-3">

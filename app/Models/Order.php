@@ -24,6 +24,7 @@ class Order extends Model
         'status',
         'tracking_code',
         'notes',
+        'cancel_reason',
         // Drink status (Phase 2)
         'drink_status',
         'brewing_at',
@@ -125,6 +126,10 @@ class Order extends Model
      */
     public function getNextDrinkStatusAttribute(): ?string
     {
+        if ($this->status === 'Đã hủy') {
+            return null;
+        }
+
         return match ($this->drink_status) {
             'pending'   => 'brewing',
             'brewing'   => 'completed',

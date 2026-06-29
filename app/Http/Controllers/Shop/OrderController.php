@@ -164,13 +164,16 @@ class OrderController extends Controller
     /**
      * Hủy đơn hàng
      */
-    public function cancel(Order $order)
+    public function cancel(Order $order, Request $request)
     {
         if ($order->status !== 'Chờ xử lý') {
             return back()->with('error', 'Chỉ có thể hủy đơn hàng đang ở trạng thái "Chờ xử lý".');
         }
 
-        $order->update(['status' => 'Đã hủy']);
+        $order->update([
+            'status' => 'Đã hủy',
+            'cancel_reason' => $request->input('cancel_reason')
+        ]);
 
         // Hoàn kho hàng khi hủy đơn
         $order->load('items');

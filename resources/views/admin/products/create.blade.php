@@ -59,21 +59,38 @@
 
             {{-- Size M/L/XL --}}
             <div class="admin-card mb-4" id="sizeSection" style="display:none;">
-                <h5>📏 Giá theo Size M/L/XL</h5>
+                <h5>📏 Giá theo các Size đã chọn</h5>
                 <div class="row">
-                    @foreach(['M', 'L', 'XL'] as $size)
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="font-weight-bold">Size {{ $size }} (đ)</label>
-                                <input type="number" name="sizes[{{ $loop->index }}][price]"
-                                    class="form-control" min="0" step="1000"
-                                    placeholder="VD: {{ $size === 'M' ? '49000' : ($size === 'L' ? '59000' : '69000') }}">
-                                <input type="hidden" name="sizes[{{ $loop->index }}][size]" value="{{ $size }}">
-                            </div>
+                    <div class="col-md-4" id="sizeCol_M" style="{{ old('has_size_m') ? '' : 'display:none;' }}">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Size M (đ) <span class="text-danger">*</span></label>
+                            <input type="number" name="price_m" id="price_m"
+                                class="form-control @error('price_m') is-invalid @enderror" min="0" step="1000"
+                                value="{{ old('price_m') }}" placeholder="VD: 49000">
+                            @error('price_m') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
-                    @endforeach
+                    </div>
+                    
+                    <div class="col-md-4" id="sizeCol_L" style="{{ old('has_size_l') ? '' : 'display:none;' }}">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Size L (đ) <span class="text-danger">*</span></label>
+                            <input type="number" name="price_l" id="price_l"
+                                class="form-control @error('price_l') is-invalid @enderror" min="0" step="1000"
+                                value="{{ old('price_l') }}" placeholder="VD: 59000">
+                            @error('price_l') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4" id="sizeCol_XL" style="{{ old('has_size_xl') ? '' : 'display:none;' }}">
+                        <div class="form-group">
+                            <label class="font-weight-bold">Size XL (đ) <span class="text-danger">*</span></label>
+                            <input type="number" name="price_xl" id="price_xl"
+                                class="form-control @error('price_xl') is-invalid @enderror" min="0" step="1000"
+                                value="{{ old('price_xl') }}" placeholder="VD: 69000">
+                            @error('price_xl') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
                 </div>
-                <small class="text-muted">Nếu để trống, sẽ dùng giá gốc cho tất cả size.</small>
             </div>
         </div>
 
@@ -105,10 +122,25 @@
                 <hr>
                 <p class="small font-weight-bold text-muted mb-2">Đồ uống:</p>
                 <div class="form-check mb-2">
-                    <input type="hidden" name="has_size" value="0">
-                    <input type="checkbox" name="has_size" id="has_size" class="form-check-input" value="1" {{ old('has_size') ? 'checked' : '' }}
-                        onchange="document.getElementById('sizeSection').style.display = this.checked ? 'block' : 'none'">
-                    <label class="form-check-label" for="has_size">Có size M/L/XL</label>
+                    <input type="hidden" name="has_size_m" value="0">
+                    <input type="checkbox" name="has_size_m" id="has_size_m" class="form-check-input size-checkbox" value="1" 
+                        {{ old('has_size_m') ? 'checked' : '' }}
+                        onchange="toggleSizeInput('M', this.checked)">
+                    <label class="form-check-label" for="has_size_m">Có size M</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input type="hidden" name="has_size_l" value="0">
+                    <input type="checkbox" name="has_size_l" id="has_size_l" class="form-check-input size-checkbox" value="1" 
+                        {{ old('has_size_l') ? 'checked' : '' }}
+                        onchange="toggleSizeInput('L', this.checked)">
+                    <label class="form-check-label" for="has_size_l">Có size L</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input type="hidden" name="has_size_xl" value="0">
+                    <input type="checkbox" name="has_size_xl" id="has_size_xl" class="form-check-input size-checkbox" value="1" 
+                        {{ old('has_size_xl') ? 'checked' : '' }}
+                        onchange="toggleSizeInput('XL', this.checked)">
+                    <label class="form-check-label" for="has_size_xl">Có size XL</label>
                 </div>
                 <div class="form-check mb-2">
                     <input type="hidden" name="has_topping" value="0">
@@ -151,9 +183,36 @@ function previewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
-// Show size section if has_size is checked on load
-if (document.getElementById('has_size').checked) {
-    document.getElementById('sizeSection').style.display = 'block';
+
+function toggleSizeInput(size, isChecked) {
+    var col = document.getElementById('sizeCol_' + size);
+    var input = document.getElementById('price_' + size.toLowerCase());
+    
+    if (col) {
+        col.style.display = isChecked ? 'block' : 'none';
+    }
+    
+    if (isChecked && input) {
+        input.setAttribute('required', 'required');
+    } else if (input) {
+        input.removeAttribute('required');
+    }
+    
+    var checkedCount = document.querySelectorAll('.size-checkbox:checked').length;
+    var sizeSection = document.getElementById('sizeSection');
+    if (sizeSection) {
+        sizeSection.style.display = checkedCount > 0 ? 'block' : 'none';
+    }
 }
+
+// Khởi tạo lúc load trang
+document.addEventListener('DOMContentLoaded', function() {
+    ['M', 'L', 'XL'].forEach(function(size) {
+        var cb = document.getElementById('has_size_' + size.toLowerCase());
+        if (cb) {
+            toggleSizeInput(size, cb.checked);
+        }
+    });
+});
 </script>
 @endpush

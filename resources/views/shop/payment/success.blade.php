@@ -29,7 +29,7 @@
                         {{-- Success Icon --}}
                         <div class="success-icon mb-4">
                             <div class="success-circle">
-                                <span style="font-size:60px;line-height:1;">✓</span>
+                                <span style="font-size:60px;line-height:1;color:#ffffff !important;">✓</span>
                             </div>
                         </div>
 
@@ -78,43 +78,40 @@
                         {{-- Buttons --}}
                         <div class="d-flex justify-content-center flex-wrap" style="gap:12px;">
                             <a href="{{ route('home') }}" class="btn btn-outline-primary btn-lg mb-2">
-                                🏠 Về trang chủ
+                                Về trang chủ
                             </a>
                             <a href="{{ route('orders.show', $order) }}" class="btn btn-primary btn-lg mb-2">
-                                👁 Xem chi tiết đơn hàng
+                                Xem chi tiết đơn hàng
                             </a>
                             <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-lg mb-2">
-                                🛍 Tiếp tục mua sắm
+                                Tiếp tục mua sắm
                             </a>
                         </div>
                     </div>
                 </div>
-
+ 
                 {{-- Các bước tiếp theo --}}
                 <div class="card mt-4 border-0 shadow-sm">
                     <div class="card-body p-4">
                         <h5 class="mb-3">
-                            <span style="color:#c49b63;">📋</span> Các bước tiếp theo
+                            Các bước tiếp theo
                         </h5>
                         <div class="row text-center">
                             <div class="col-md-4 mb-3">
                                 <div class="p-3" style="transition:all 0.3s;">
                                     <div style="width:50px;height:50px;border-radius:50%;background:#c49b63;color:white;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.2rem;margin-bottom:10px;">1</div>
-                                    <div style="font-size:2rem;margin-bottom:8px;">📦</div>
                                     <p class="mb-0 font-weight-600">Đơn hàng được xác nhận</p>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="p-3">
                                     <div style="width:50px;height:50px;border-radius:50%;background:#c49b63;color:white;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.2rem;margin-bottom:10px;">2</div>
-                                    <div style="font-size:2rem;margin-bottom:8px;">🚚</div>
                                     <p class="mb-0">Đơn hàng được giao</p>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="p-3">
                                     <div style="width:50px;height:50px;border-radius:50%;background:#c49b63;color:white;display:inline-flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.2rem;margin-bottom:10px;">3</div>
-                                    <div style="font-size:2rem;margin-bottom:8px;">😊</div>
                                     <p class="mb-0">Bạn nhận hàng</p>
                                 </div>
                             </div>
@@ -138,13 +135,32 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: white !important;
     animation: scaleIn 0.5s ease-out;
+}
+.success-circle span {
+    color: #ffffff !important;
 }
 @keyframes scaleIn {
     0%   { transform: scale(0); opacity: 0; }
     50%  { transform: scale(1.1); }
     100% { transform: scale(1); opacity: 1; }
+}
+.card {
+    background: #ffffff !important;
+}
+.card h5 {
+    color: #c49b63 !important;
+    font-weight: 700 !important;
+}
+.card p {
+    color: #555555 !important;
+}
+.card strong {
+    color: #2b2b2b !important;
+}
+.card-body {
+    color: #555555 !important;
 }
 </style>
 @endpush

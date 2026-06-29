@@ -56,12 +56,13 @@ return [
         'city'    => env('SHOP_CITY', 'Ho Chi Minh City'),
     ],
 
-    // VNPay
-    'vnpay' => [
-        'tmn_code'   => env('VNPAY_TMN_CODE'),
-        'hash_secret'=> env('VNPAY_HASH_SECRET'),
-        'url'        => env('VNPAY_URL', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),
-        'return_url' => env('VNPAY_RETURN_URL'),
+    // PayPal
+    'paypal' => [
+        'client_id'       => env('PAYPAL_CLIENT_ID'),
+        'client_secret'   => env('PAYPAL_CLIENT_SECRET'),
+        'mode'            => env('PAYPAL_MODE', 'sandbox'), // sandbox | live
+        'webhook_id'      => env('PAYPAL_WEBHOOK_ID'),
+        'vnd_to_usd_rate' => env('PAYPAL_VND_TO_USD_RATE', 25000),
     ],
 
     // MoMo

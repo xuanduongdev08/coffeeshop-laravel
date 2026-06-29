@@ -58,20 +58,29 @@
                 </form>
             </div>
             <div class="col-md-4 d-flex justify-content-end">
-                <form method="GET" action="{{ route('products.index') }}" class="form-inline">
-                    @if(request('search'))
-                        <input type="hidden" name="search" value="{{ request('search') }}">
-                    @endif
-                    @if(request('category'))
-                        <input type="hidden" name="category" value="{{ request('category') }}">
-                    @endif
-                    <select name="sort" class="form-control mr-2" onchange="this.form.submit()">
-                        <option value="latest" {{ $sort == 'latest' ? 'selected' : '' }}>Mới nhất</option>
-                        <option value="price_asc" {{ $sort == 'price_asc' ? 'selected' : '' }}>Giá tăng dần</option>
-                        <option value="price_desc" {{ $sort == 'price_desc' ? 'selected' : '' }}>Giá giảm dần</option>
-                        <option value="name" {{ $sort == 'name' ? 'selected' : '' }}>Tên A-Z</option>
-                    </select>
-                </form>
+                <div class="dropdown">
+                    @php
+                        $sortLabels = [
+                            'latest' => 'Mới nhất',
+                            'price_asc' => 'Giá tăng dần',
+                            'price_desc' => 'Giá giảm dần',
+                            'name' => 'Tên A-Z'
+                        ];
+                        $currentSortLabel = $sortLabels[$sort] ?? 'Mới nhất';
+                    @endphp
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="sortDropdown"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ $currentSortLabel }}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="sortDropdown">
+                        @foreach($sortLabels as $key => $label)
+                            <a class="dropdown-item {{ $sort == $key ? 'active' : '' }}"
+                                href="{{ request()->fullUrlWithQuery(['sort' => $key]) }}">
+                                {{ $label }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
 

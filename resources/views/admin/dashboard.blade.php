@@ -7,69 +7,51 @@
 
 {{-- Stat Cards --}}
 <div class="row mb-4">
-    <div class="col-md-2 col-sm-4 mb-3">
-        <div class="stat-card">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="stat-value">{{ number_format($stats['total_orders']) }}</div>
-                    <div class="stat-label">Tổng đơn hàng</div>
-                </div>
-                <span class="stat-icon">📋</span>
+    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+        <div class="stat-card card-orders h-100">
+            <div>
+                <div class="stat-value">{{ number_format($stats['total_orders']) }}</div>
+                <div class="stat-label">Tổng đơn hàng</div>
             </div>
         </div>
     </div>
-    <div class="col-md-2 col-sm-4 mb-3">
-        <div class="stat-card" style="border-left-color:#e74c3c;">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="stat-value" style="color:#e74c3c;">{{ number_format($stats['pending_orders']) }}</div>
-                    <div class="stat-label">Chờ xử lý</div>
-                </div>
-                <span class="stat-icon">⏳</span>
+    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+        <div class="stat-card card-pending h-100">
+            <div>
+                <div class="stat-value" style="color:#e74c3c;">{{ number_format($stats['pending_orders']) }}</div>
+                <div class="stat-label">Chờ xử lý</div>
             </div>
         </div>
     </div>
-    <div class="col-md-2 col-sm-4 mb-3">
-        <div class="stat-card" style="border-left-color:#27ae60;">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="stat-value" style="color:#27ae60;font-size:20px;">{{ number_format($stats['total_revenue'], 0, ',', '.') }}đ</div>
-                    <div class="stat-label">Doanh thu (đã TT)</div>
-                </div>
-                <span class="stat-icon">💰</span>
+    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+        <div class="stat-card card-revenue h-100">
+            <div>
+                <div class="stat-value" style="color:#27ae60;">{{ number_format($stats['total_revenue'], 0, ',', '.') }}đ</div>
+                <div class="stat-label">Doanh thu</div>
             </div>
         </div>
     </div>
-    <div class="col-md-2 col-sm-4 mb-3">
-        <div class="stat-card" style="border-left-color:#3498db;">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="stat-value" style="color:#3498db;">{{ number_format($stats['total_customers']) }}</div>
-                    <div class="stat-label">Khách hàng</div>
-                </div>
-                <span class="stat-icon">👥</span>
+    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+        <div class="stat-card card-customers h-100">
+            <div>
+                <div class="stat-value" style="color:#3498db;">{{ number_format($stats['total_customers']) }}</div>
+                <div class="stat-label">Khách hàng</div>
             </div>
         </div>
     </div>
-    <div class="col-md-2 col-sm-4 mb-3">
-        <div class="stat-card" style="border-left-color:#9b59b6;">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="stat-value" style="color:#9b59b6;">{{ number_format($stats['total_products']) }}</div>
-                    <div class="stat-label">Sản phẩm</div>
-                </div>
-                <span class="stat-icon">☕</span>
+    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+        <div class="stat-card card-products h-100">
+            <div>
+                <div class="stat-value" style="color:#9b59b6;">{{ number_format($stats['total_products']) }}</div>
+                <div class="stat-label">Sản phẩm</div>
             </div>
         </div>
     </div>
-    <div class="col-md-2 col-sm-4 mb-3">
-        <div class="stat-card" style="border-left-color:#e67e22;">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <div class="stat-value" style="color:#e67e22;">{{ number_format($stats['low_stock']) }}</div>
-                    <div class="stat-label">Sắp hết hàng</div>
-                </div>
-                <span class="stat-icon">⚠️</span>
+    <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+        <div class="stat-card card-warning h-100">
+            <div>
+                <div class="stat-value" style="color:#e67e22;">{{ number_format($stats['low_stock']) }}</div>
+                <div class="stat-label">Sắp hết hàng</div>
             </div>
         </div>
     </div>
@@ -77,43 +59,10 @@
 
 <div class="row mb-4">
     {{-- Revenue Chart --}}
-    <div class="col-md-8 mb-4">
+    <div class="col-12 mb-4">
         <div class="admin-card">
-            <h5>📈 Doanh thu 7 ngày gần nhất</h5>
-            <canvas id="revenueChart" height="100"></canvas>
-        </div>
-    </div>
-
-    {{-- Brewing Orders --}}
-    <div class="col-md-4 mb-4">
-        <div class="admin-card">
-            <h5>☕ Đơn đang pha chế</h5>
-            @forelse($brewingOrders as $order)
-                <div class="d-flex justify-content-between align-items-center mb-3 p-2" style="background:#fdfaf7;border-radius:8px;border-left:3px solid #c49b63;">
-                    <div>
-                        <strong style="font-size:13px;">#{{ $order->tracking_code }}</strong>
-                        <div style="font-size:12px;color:#888;">{{ $order->recipient_name }}</div>
-                    </div>
-                    <div class="text-right">
-                        @if($order->drink_status === 'pending')
-                            <span class="badge badge-warning">✅ Đã nhận</span>
-                        @elseif($order->drink_status === 'brewing')
-                            <span class="badge badge-info">☕ Đang pha</span>
-                        @endif
-                        <form method="POST" action="{{ route('admin.orders.drink-status.update', $order) }}" class="mt-1">
-                            @csrf @method('PATCH')
-                            <button type="submit" class="btn btn-sm btn-coffee" style="font-size:11px;padding:2px 8px;">
-                                {{ $order->drink_status === 'pending' ? 'Bắt đầu pha' : 'Hoàn thành' }}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            @empty
-                <div class="text-center text-muted py-3">
-                    <div style="font-size:32px;">☕</div>
-                    <p class="mt-2 mb-0">Không có đơn đang pha chế</p>
-                </div>
-            @endforelse
+            <h5><span class="ion-md-stats" style="margin-right:6px;color:#c49b63;opacity:0.6;"></span>Doanh thu 7 ngày gần nhất</h5>
+            <canvas id="revenueChart" height="80"></canvas>
         </div>
     </div>
 </div>
@@ -121,7 +70,7 @@
 {{-- Latest Orders --}}
 <div class="admin-card">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 style="margin:0;border:none;padding:0;">📋 Đơn hàng mới nhất</h5>
+        <h5 style="margin:0;border:none;padding:0;"><span class="ion-md-clipboard" style="margin-right:6px;color:#c49b63;opacity:0.6;"></span>Đơn hàng mới nhất</h5>
         <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-coffee">Xem tất cả</a>
     </div>
     <div class="table-responsive">

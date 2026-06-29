@@ -29,10 +29,11 @@ class StatisticsController extends Controller
         $totalRevenue = $revenueByDay->sum('revenue');
         $totalOrders  = $revenueByDay->sum('orders');
 
-        // Sản phẩm bán chạy
+        // Sản phẩm bán chạy (chỉ tính đơn đã thanh toán)
         $topProducts = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.id')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->where('orders.payment_status', 'paid') // Chỉ tính đơn đã thanh toán
             ->where('orders.created_at', '>=', $startDate)
             ->selectRaw('products.name, products.image, SUM(order_items.quantity) as total_qty, SUM(order_items.subtotal) as total_revenue')
             ->groupBy('products.id', 'products.name', 'products.image')
@@ -57,6 +58,7 @@ class StatisticsController extends Controller
             ->where('created_at', '>=', $startDate)
             ->selectRaw('payment_method, COUNT(*) as count, SUM(total) as revenue')
             ->groupBy('payment_method')
+            ->orderByDesc('revenue')
             ->get();
 
         // Khách hàng mới

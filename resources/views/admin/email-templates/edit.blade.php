@@ -57,6 +57,7 @@
                             @elseif($ph === '{total_price}') Tổng giá trị đơn hàng (bao gồm phí vận chuyển).
                             @elseif($ph === '{order_link}') Đường dẫn xem chi tiết đơn hàng ở trang cá nhân.
                             @elseif($ph === '{drink_status_label}') Trạng thái pha chế (Đang pha chế, Hoàn thành).
+                            @elseif($ph === '{extra_note}') Ghi chú bổ sung tự động: "đang pha chế" hoặc "đã hoàn thành và sẵn sàng giao".
                             @endif
                         </div>
                     </div>
