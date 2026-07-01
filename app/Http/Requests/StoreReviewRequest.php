@@ -20,6 +20,7 @@ class StoreReviewRequest extends FormRequest
         return [
             'rating'  => ['required', 'integer', 'min:1', 'max:5'],
             'comment' => ['required', 'string', 'min:10', 'max:1000'],
+            'image'   => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ];
     }
 
@@ -32,6 +33,9 @@ class StoreReviewRequest extends FormRequest
             'comment.required' => 'Vui lòng nhập nhận xét.',
             'comment.min'      => 'Nhận xét phải có ít nhất 10 ký tự.',
             'comment.max'      => 'Nhận xét không được quá 1000 ký tự.',
+            'image.image'      => 'Tệp tải lên phải là một hình ảnh.',
+            'image.mimes'      => 'Hình ảnh phải có định dạng: jpeg, png, jpg, gif, webp.',
+            'image.max'        => 'Dung lượng ảnh tối đa là 2MB.',
         ];
     }
 }

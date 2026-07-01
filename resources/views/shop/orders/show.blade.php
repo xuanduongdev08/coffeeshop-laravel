@@ -23,12 +23,18 @@
 <section class="ftco-section">
     <div class="container">
         <div class="row mb-3">
-            <div class="col-12">
+            <div class="col-12 d-flex flex-wrap" style="gap:10px;">
                 <a href="{{ route('orders.history') }}"
                     style="display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:transparent;border:2px solid #b5883e;color:#b5883e;border-radius:25px;font-weight:600;font-size:14px;text-decoration:none;"
                     onmouseover="this.style.background='#b5883e';this.style.color='#fff';"
                     onmouseout="this.style.background='transparent';this.style.color='#b5883e';">
                     ← Quay lại lịch sử đơn hàng
+                </a>
+                <a href="{{ route('orders.pdf', $order) }}" target="_blank"
+                    style="display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:transparent;border:2px solid #b5883e;color:#b5883e;border-radius:25px;font-weight:600;font-size:14px;text-decoration:none;"
+                    onmouseover="this.style.background='#b5883e';this.style.color='#fff';"
+                    onmouseout="this.style.background='transparent';this.style.color='#b5883e';">
+                    Xuất hóa đơn online
                 </a>
             </div>
         </div>
@@ -103,6 +109,24 @@
                                         <span class="badge badge-warning">⏳ Chờ thanh toán</span>
                                     @endif
                                 </p>
+                                @if($order->has_drink)
+                                    <p>
+                                        <strong>Trạng thái pha chế:</strong>
+                                        @switch($order->drink_status)
+                                            @case('pending')
+                                                <span class="badge badge-warning">⏳ Chờ pha chế</span>
+                                                @break
+                                            @case('brewing')
+                                                <span class="badge badge-info" style="background:#8b6f47; color:#fff; border: none;">☕ Đang pha chế</span>
+                                                @break
+                                            @case('completed')
+                                                <span class="badge badge-success">🎉 Đã pha chế xong</span>
+                                                @break
+                                            @default
+                                                <span class="badge badge-secondary">{{ $order->drink_status }}</span>
+                                        @endswitch
+                                    </p>
+                                @endif
                             </div>
                         </div>
 

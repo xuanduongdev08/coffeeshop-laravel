@@ -31,7 +31,7 @@ class DrinkStatusUpdated extends Notification implements ShouldQueue
         $message = match ($this->order->drink_status) {
             'pending'   => "Đơn hàng #{$this->order->tracking_code} đã được nhận. Chúng tôi đang chuẩn bị!",
             'brewing'   => "Đơn hàng #{$this->order->tracking_code} đang được pha chế. Vui lòng chờ trong giây lát!",
-            'completed' => "Đơn hàng #{$this->order->tracking_code} đã hoàn thành. Mời bạn nhận đồ!",
+            'completed' => "Sản phẩm thức uống của đơn hàng #{$this->order->tracking_code} đã pha xong và chuẩn bị đem giao hàng.",
             default     => "Đơn hàng #{$this->order->tracking_code} đã được cập nhật.",
         };
 

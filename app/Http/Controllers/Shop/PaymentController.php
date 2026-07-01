@@ -189,6 +189,17 @@ class PaymentController extends Controller
         // Gửi email đặt hàng thành công
         $this->sendOrderPlacedEmail($order);
 
+        // Gửi thông báo chuông "Đã nhận đơn" nếu có đồ uống và chưa được thông báo
+        if ($order->drink_status === 'pending') {
+            $hasNotification = $order->user->notifications()
+                ->where('data->order_id', $order->id)
+                ->where('data->drink_status', 'pending')
+                ->exists();
+            if (!$hasNotification && $order->user) {
+                $order->user->notify(new \App\Notifications\DrinkStatusUpdated($order));
+            }
+        }
+
         return view('shop.payment.success', compact('order'));
     }
 
@@ -218,7 +229,7 @@ class PaymentController extends Controller
                 
                 foreach ($order->items as $item) {
                     $sizeLabel = $item->size ? " (Size {$item->size})" : "";
-                    $imgUrl = $item->product_image ? asset('storage/' . $item->product_image) : asset('images/menu-1.jpg');
+                    $imgUrl = $item->product_image ? asset($item->product_image) : asset('images/menu-1.jpg');
                     $itemsHtml .= '<tr>';
                     $itemsHtml .= '<td style="border-bottom: 1px solid #f5ede3; padding: 12px 8px; vertical-align: middle;">';
                     $itemsHtml .= '<div style="display: flex; align-items: center;">';

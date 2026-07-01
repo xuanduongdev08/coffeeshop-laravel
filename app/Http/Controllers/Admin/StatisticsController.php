@@ -97,15 +97,27 @@ class StatisticsController extends Controller
             'Khách hàng'      => $o->recipient_name,
             'SĐT'             => $o->phone,
             'Địa chỉ'         => $o->shipping_address,
-            'Tổng tiền'       => $o->total,
+            'Tổng tiền'       => number_format($o->total, 0, ',', '.') . 'đ',
             'Thanh toán'      => $o->payment_method,
             'TT thanh toán'   => $o->payment_status,
             'Trạng thái'      => $o->status,
             'Ngày đặt'        => $o->created_at->format('d/m/Y H:i'),
         ]);
 
-        $fileName = 'don-hang-' . now()->format('Ymd-His') . '.xlsx';
+        $fileName = 'XDTHECOFFEEHOUSE-REPORT-' . now()->format('Ymd-His') . '.xlsx';
 
-        return (new \Rap2hpoutre\FastExcel\FastExcel($rows))->download($fileName);
+        $headerStyle = (new \OpenSpout\Common\Entity\Style\Style())
+            ->setFontBold()
+            ->setFontSize(12)
+            ->setFontColor(\OpenSpout\Common\Entity\Style\Color::WHITE)
+            ->setBackgroundColor('6F4E37'); // Nâu cà phê sang trọng
+
+        $rowsStyle = (new \OpenSpout\Common\Entity\Style\Style())
+            ->setFontSize(11);
+
+        return (new \Rap2hpoutre\FastExcel\FastExcel($rows))
+            ->headerStyle($headerStyle)
+            ->rowsStyle($rowsStyle)
+            ->download($fileName);
     }
 }

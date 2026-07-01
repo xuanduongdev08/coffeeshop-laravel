@@ -43,9 +43,8 @@ class Order extends Model
     protected static function booted(): void
     {
         static::created(function (Order $order) {
-            $order->update([
-                'tracking_code' => 'XD' . str_pad($order->id, 5, '0', STR_PAD_LEFT),
-            ]);
+            $order->tracking_code = 'XD' . str_pad($order->id, 5, '0', STR_PAD_LEFT);
+            $order->saveQuietly();
         });
     }
 
@@ -108,7 +107,7 @@ class Order extends Model
         return match ($this->drink_status) {
             'pending'   => '✅ Đã nhận đơn',
             'brewing'   => '☕ Đang pha chế',
-            'completed' => '🎉 Đã hoàn thành',
+            'completed' => '🎉 Đã pha chế xong',
             default     => '',
         };
     }

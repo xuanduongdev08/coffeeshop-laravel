@@ -93,6 +93,8 @@ class ProcessPaymentWebhook implements ShouldQueue
             'payment_method' => 'VietQR',
         ]);
 
+        $this->sendConfirmationNotification($order);
+
         Log::info("Casso: Order {$trackingCode} marked paid. Amount={$amount}");
     }
 
@@ -127,6 +129,8 @@ class ProcessPaymentWebhook implements ShouldQueue
             'payment_status' => 'paid',
             'payment_method' => 'MoMo',
         ]);
+
+        $this->sendConfirmationNotification($order);
 
         Log::info("MoMo: Order {$trackingCode} marked paid.");
     }
@@ -179,7 +183,22 @@ class ProcessPaymentWebhook implements ShouldQueue
             'payment_method' => 'PayPal',
         ]);
 
+        $this->sendConfirmationNotification($order);
+
         Log::info("PayPal: Order {$trackingCode} marked paid.");
+    }
+
+    private function sendConfirmationNotification(Order $order): void
+    {
+        if ($order->drink_status === 'pending') {
+            $hasNotification = $order->user->notifications()
+                ->where('data->order_id', $order->id)
+                ->where('data->drink_status', 'pending')
+                ->exists();
+            if (!$hasNotification && $order->user) {
+                $order->user->notify(new \App\Notifications\DrinkStatusUpdated($order));
+            }
+        }
     }
 
     /**

@@ -23,18 +23,30 @@ class OrdersExport
     {
         $orders = $this->getData();
 
-        return (new FastExcel($orders))->download(
-            'don-hang-' . now()->format('Y-m-d') . '.xlsx',
-            function (Order $order) {
+        $headerStyle = (new \OpenSpout\Common\Entity\Style\Style())
+            ->setFontBold()
+            ->setFontSize(12)
+            ->setFontColor(\OpenSpout\Common\Entity\Style\Color::WHITE)
+            ->setBackgroundColor('6F4E37'); // Nâu cà phê sang trọng
+
+        $rowsStyle = (new \OpenSpout\Common\Entity\Style\Style())
+            ->setFontSize(11);
+
+        return (new FastExcel($orders))
+            ->headerStyle($headerStyle)
+            ->rowsStyle($rowsStyle)
+            ->download(
+                'XDTHECOFFEEHOUSE-REPORT-' . now()->format('Ymd-His') . '.xlsx',
+                function (Order $order) {
                 return [
                     'Mã đơn'              => $order->tracking_code,
                     'Khách hàng'          => $order->user?->name ?? 'Khách vãng lai',
                     'Người nhận'          => $order->recipient_name,
                     'SĐT'                 => $order->phone,
                     'Địa chỉ'             => $order->shipping_address,
-                    'Tạm tính (đ)'        => $order->subtotal,
-                    'Phí ship (đ)'        => $order->shipping_fee,
-                    'Tổng cộng (đ)'       => $order->total,
+                    'Tạm tính'            => number_format($order->subtotal, 0, ',', '.') . 'đ',
+                    'Phí ship'            => number_format($order->shipping_fee, 0, ',', '.') . 'đ',
+                    'Tổng cộng'           => number_format($order->total, 0, ',', '.') . 'đ',
                     'Phương thức TT'      => $order->payment_method,
                     'Trạng thái TT'       => match ($order->payment_status) {
                         'paid'    => 'Đã thanh toán',

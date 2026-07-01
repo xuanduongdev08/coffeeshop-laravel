@@ -345,6 +345,13 @@
                             @endfor
                         </div>
                         <p style="color:#555;margin-bottom:5px;">{{ $review->comment }}</p>
+                        @if($review->image)
+                            <div class="review-image-wrapper mb-2" style="margin-top:10px;margin-bottom:10px;">
+                                <a href="{{ asset($review->image) }}" class="image-popup">
+                                    <img src="{{ asset($review->image) }}" alt="Hình ảnh đánh giá" style="max-width:150px;max-height:150px;border-radius:8px;object-fit:cover;border:1px solid #ddd;box-shadow:0 2px 5px rgba(0,0,0,0.1);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                </a>
+                            </div>
+                        @endif
                         <small style="color:#999;">{{ $review->created_at->format('d/m/Y H:i') }}</small>
                     </div>
                 </div>
@@ -362,7 +369,7 @@
             <div class="mt-4">
                 <div style="border:2px solid #6F4E37;border-radius:10px;padding:30px;background:white;">
                     <h5 style="color:#6F4E37;margin-bottom:20px;">Viết đánh giá của bạn</h5>
-                    <form action="{{ route('reviews.store', $product) }}" method="POST">
+                    <form action="{{ route('reviews.store', $product) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label style="font-weight:600;color:#000;">Đánh giá <span class="text-danger">*</span></label>
@@ -378,8 +385,22 @@
                             <label style="font-weight:600;color:#000;">Nhận xét <span class="text-danger">*</span></label>
                             <textarea name="comment" class="form-control" rows="4"
                                 placeholder="Chia sẻ trải nghiệm của bạn..." required
-                                style="border:2px solid #e0e0e0;border-radius:8px;font-size:14px;padding:10px;">{{ old('comment') }}</textarea>
+                                style="border:2px solid #e0e0e0;border-radius:8px;font-size:14px;padding:10px;color:#333 !important;background-color:#fff !important;">{{ old('comment') }}</textarea>
                             @error('comment') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="form-group mt-3">
+                            <label style="font-weight:600;color:#000;">Hình ảnh đính kèm <span class="text-muted">(tùy chọn)</span></label>
+                            <div class="custom-file-upload-wrapper">
+                                <label for="review-image" class="custom-file-upload" style="display:flex;align-items:center;justify-content:center;gap:10px;border:2px dashed #6F4E37;padding:15px;border-radius:8px;cursor:pointer;color:#6F4E37;font-weight:600;transition:all 0.3s;background:#faf8f5;">
+                                    <span style="font-size:20px;">📷</span> Chọn hình ảnh đánh giá (Tối đa 2MB)
+                                </label>
+                                <input type="file" name="image" id="review-image" accept="image/*" style="display:none;">
+                            </div>
+                            <div id="image-preview-container" class="mt-2 d-none" style="position:relative;display:inline-block;">
+                                <img id="image-preview" src="#" alt="Xem trước ảnh" style="max-width:150px;max-height:150px;border-radius:8px;border:1px solid #ddd;object-fit:cover;">
+                                <button type="button" id="remove-preview-btn" class="btn btn-sm btn-danger" style="position:absolute;top:-10px;right:-10px;border-radius:50%;width:25px;height:25px;padding:0;line-height:22px;text-align:center;font-weight:bold;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,0.2);">&times;</button>
+                            </div>
+                            @error('image') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>
                         <button type="submit" class="btn btn-primary"
                             style="background:linear-gradient(135deg,#6F4E37,#8B6F47);border:none;padding:12px 40px;border-radius:25px;font-weight:600;">
@@ -419,6 +440,11 @@
     opacity: 0.5 !important;
     border-color: #c49b63 !important;
     cursor: not-allowed;
+}
+.custom-file-upload:hover {
+    background: #6F4E37 !important;
+    color: #fff !important;
+    border-color: #6F4E37 !important;
 }
 </style>
 @endpush
@@ -660,6 +686,39 @@ if (starRating) {
         document.querySelectorAll('.star').forEach(function(s, i) {
             s.style.color = i < rating ? '#FFD700' : '#ddd';
         });
+    });
+}
+
+// Image upload preview logic
+var reviewImageInput = document.getElementById('review-image');
+var imagePreviewContainer = document.getElementById('image-preview-container');
+var imagePreview = document.getElementById('image-preview');
+var removePreviewBtn = document.getElementById('remove-preview-btn');
+
+if (reviewImageInput) {
+    reviewImageInput.addEventListener('change', function() {
+        var file = this.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreviewContainer.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.src = '#';
+            imagePreviewContainer.classList.add('d-none');
+        }
+    });
+}
+
+if (removePreviewBtn) {
+    removePreviewBtn.addEventListener('click', function() {
+        if (reviewImageInput) {
+            reviewImageInput.value = '';
+        }
+        imagePreview.src = '#';
+        imagePreviewContainer.classList.add('d-none');
     });
 }
 </script>

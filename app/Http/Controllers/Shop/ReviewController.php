@@ -25,11 +25,18 @@ class ReviewController extends Controller
             return back()->with('warning', 'Bạn đã đánh giá sản phẩm này rồi.');
         }
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('reviews', 'public');
+            $imagePath = 'storage/' . $path;
+        }
+
         Review::create([
             'product_id'  => $product->id,
             'user_id'     => auth()->id(),
             'rating'      => $request->rating,
             'comment'     => $request->comment,
+            'image'       => $imagePath,
             'is_approved' => true,
         ]);
 

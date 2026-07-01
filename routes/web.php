@@ -50,6 +50,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/{order}', [OrderController::class, 'show'])
             ->middleware('App\Http\Middleware\CheckOrderOwnership')
             ->name('show');
+        Route::get('/{order}/pdf', [OrderController::class, 'pdf'])
+            ->middleware('App\Http\Middleware\CheckOrderOwnership')
+            ->name('pdf');
         Route::patch('/{order}/huy', [OrderController::class, 'cancel'])
             ->middleware('App\Http\Middleware\CheckOrderOwnership')
             ->name('cancel');

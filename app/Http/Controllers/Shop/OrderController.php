@@ -62,15 +62,21 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             // Kiểm tra tồn kho trước khi đặt hàng
+            $hasDrink = false;
             foreach ($cart as $item) {
-                $product = Product::find($item['product_id']);
+                $product = Product::with('category')->find($item['product_id']);
                 if (!$product) {
                     throw new \Exception("Sản phẩm \"{$item['name']}\" không tồn tại.");
                 }
                 if ($product->stock < $item['quantity']) {
                     throw new \Exception("Sản phẩm \"{$product->name}\" chỉ còn {$product->stock} sản phẩm trong kho, không đủ cho số lượng {$item['quantity']} bạn yêu cầu.");
                 }
+                // Đơn có đồ uống (thuộc danh mục Cà phê hoặc Nước trái cây) → cần theo dõi pha chế
+                if ($product->category && in_array($product->category->name, ['Cà phê', 'Nước trái cây'])) {
+                    $hasDrink = true;
+                }
             }
+
             $order = Order::create([
                 'user_id'          => auth()->id(),
                 'recipient_name'   => $request->recipient_name,
@@ -83,9 +89,8 @@ class OrderController extends Controller
                 'payment_status'   => 'pending',
                 'status'           => 'Chờ xử lý',
                 'notes'            => $request->notes,
+                'drink_status'     => $hasDrink ? 'pending' : null,
             ]);
-
-            $hasDrink = false;
 
             foreach ($cart as $item) {
                 $orderItem = OrderItem::create([
@@ -116,16 +121,6 @@ class OrderController extends Controller
                         ]);
                     }
                 }
-
-                // Đơn có size = đồ uống dùng ly → cần theo dõi pha chế
-                if (! empty($item['size'])) {
-                    $hasDrink = true;
-                }
-            }
-
-            // Set drink_status nếu đơn có đồ uống
-            if ($hasDrink) {
-                $order->update(['drink_status' => 'pending']);
             }
 
             DB::commit();
@@ -182,6 +177,18 @@ class OrderController extends Controller
         }
 
         return back()->with('success', 'Đã hủy đơn hàng #' . $order->tracking_code . ' thành công.');
+    }
+
+    /**
+     * Xuất hóa đơn PDF online
+     */
+    public function pdf(Order $order)
+    {
+        $order->load(['items.modifiers']);
+        
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('shop.orders.pdf', compact('order'));
+        
+        return $pdf->stream('XDTHECOFFEEHOUSE-INVOICE-' . $order->tracking_code . '.pdf');
     }
 
     /**
