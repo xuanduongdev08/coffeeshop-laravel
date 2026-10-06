@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XDTHECOFFEEHOUSE — Tinh Hoa Di Sản Cà Phê Việt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ================= TOP NAVIGATION ================= -->
+  <nav id="mainNav">
+    <div class="nav-inner">
+      <a class="logo" href="index.html">
+        <div class="logo-badge">☕</div>
+        <div class="brand-name">
+          <b>XDTHECOFFEEHOUSE</b>
+          <small>HƯƠNG VỊ DI SẢN · RANG MỘC THỦ CÔNG</small>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="active">Trang chủ</a></li>
+        <li class="dropdown">
+          <a href="menu.html">Thực đơn ▾</a>
+          <div class="dropdown-menu">
+            <a href="menu.html?cat=ca-phe">☕ Cà phê truyền thống & Ý</a>
+            <a href="menu.html?cat=hat-ca-phe">🌱 Hạt cà phê mộc</a>
+            <a href="menu.html?cat=nuoc-trai-cay">🍹 Trà & Trái cây tươi</a>
+            <a href="menu.html?cat=banh-ngot">🍰 Bánh ngọt hảo hạng</a>
+          </div>
+        </li>
+        <li><a href="about.html">Câu chuyện</a></li>
+        <li><a href="gallery.html">Không gian</a></li>
+        <li><a href="reservation.html">Đặt bàn</a></li>
+        <li><a href="blog.html">Góc Cà phê</a></li>
+        <li><a href="contact.html">Liên hệ</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="nav-search" action="menu.html" method="get">
+          <input type="text" name="q" placeholder="Tìm món...">
+          <button type="submit" aria-label="Tìm kiếm">🔍</button>
+        </form>
+
+        <button type="button" class="cart-toggle-btn" aria-label="Xem giỏ hàng" title="Giỏ hàng">
+          🛒
+          <span class="cart-badge" style="display:none;">0</span>
+        </button>
+
+        <button type="button" class="mobile-toggle" aria-label="Menu di động">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= HERO EDITORIAL SECTION ================= -->
+  <header class="hero">
+    <div class="hero-pattern"></div>
+    
+    <!-- SVG Golden Aroma Waves -->
+    <svg class="hero-waves-svg" viewBox="0 0 1200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="goldAroma" x1="0" y1="0" x2="1200" y2="400" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#F0D998" stop-opacity="0.2"/>
+          <stop offset="50%" stop-color="#D4AF37" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#F0D998" stop-opacity="0.2"/>
+        </linearGradient>
+      </defs>
+      <path class="aroma-path" d="M50 320 C 180 220, 200 360, 350 240 C 500 120, 480 300, 650 200 C 800 100, 850 280, 1000 180 C 1100 110, 1140 220, 1180 150" stroke="url(#goldAroma)" stroke-width="2"/>
+      <path class="aroma-path" style="animation-delay: 0.8s;" d="M20 280 C 140 180, 260 260, 420 180 C 580 100, 680 240, 840 160 C 980 90, 1080 180, 1160 120" stroke="url(#goldAroma)" stroke-width="1.2"/>
+    </svg>
+
+    <div class="hero-content">
+      <span class="eyebrow" style="color: var(--gold-light);">Đậm đà tinh hoa đất trời Cầu Đất</span>
+      <h1 class="hero-title">
+        HƯƠNG VỊ DI SẢN<br>
+        <em>Từng Giọt Cà Phê Mộc</em>
+      </h1>
+      <p class="hero-desc">
+        Từ những triền đồi cao nguyên 1.600m ngập tràn sương sớm, chúng tôi tỉ mỉ tuyển chọn từng hạt cà phê chín mọng, rang mộc thủ công để trao gửi đến bạn trọn vẹn phong vị mộc mạc mà đắm say.
+      </p>
+
+      <div class="hero-actions">
+        <a href="menu.html" class="btn btn-gold">Khám phá Thực đơn</a>
+        <a href="reservation.html" class="btn btn-ghost">Đặt bàn trước</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <b>100%</b>
+          <span>Hạt Rang Mộc Tự Nhiên</span>
+        </div>
+        <div class="stat-item">
+          <b>1.600m</b>
+          <span>Độ Cao Vùng Trồng Cầu Đất</span>
+        </div>
+        <div class="stat-item">
+          <b>16+</b>
+          <span>Công Thức Pha Chế Tinh Tế</span>
+        </div>
+        <div class="stat-item">
+          <b>4.9★</b>
+          <span>Đánh Giá Từ Khách Hàng</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <div class="mouse-wheel"></div>
+      <span>CUỘN XUỐNG</span>
+    </div>
+  </header>
+
+  <!-- ================= 01. KHỞI NGUỒN CÂU CHUYỆN ================= -->
+  <section class="section" id="story">
+    <div class="about-grid">
+      <div class="about-image-wrap">
+        <img src="images/about.jpg" alt="Câu chuyện cà phê">
+        <div class="about-stamp">
+          <b>8+</b>
+          <span>Năm Gìn Giữ Hương Vị</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="section-num">01 — KHỞI NGUỒN ĐAM MÊ</span>
+        <h2 style="font-size: 2.3rem; margin-bottom: 20px;">
+          Nơi nhịp thở chậm lại cùng <span style="color: var(--coffee-amber);">giọt phin tí tách</span>
+        </h2>
+        <p style="color: var(--text-muted); margin-bottom: 18px; font-size: 0.98rem;">
+          Tại <b>XDTHECOFFEEHOUSE</b>, chúng tôi không chỉ bán một thức uống để tỉnh táo. Chúng tôi tạo nên một điểm chạm văn hóa — nơi bạn có thể trút bỏ những bộn bề sau cánh cửa gỗ, lắng nghe bản tình ca du dương và cảm nhận vị ngọt hậu kéo dài của những hạt Robusta & Arabica nguyên bản.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.98rem;">
+          Mỗi hạt cà phê đều được rang theo biểu đồ nhiệt chuẩn xác, nói không với hương liệu công nghiệp hay bơ tẩm, giữ trọn vẹn những nốt hương hoa quả và sô-cô-la tự nhiên nhất.
+        </p>
+
+        <div class="about-features">
+          <div class="about-feature-box">
+            <h4>🌱 Nguồn gốc rõ ràng</h4>
+            <p>Hợp tác trực tiếp với các nông hộ Đà Lạt & Đắk Lắk canh tác bền vững.</p>
+          </div>
+          <div class="about-feature-box">
+            <h4>☕ Pha chế thủ công</h4>
+            <p>Từng tách cà phê phin, pour-over hay espresso đều chuẩn nhiệt và tỉ lệ.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+          <a href="about.html" class="btn btn-dark">Đọc thêm về hành trình →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 02. MÓN NỔI BẬT (FEATURED PRODUCTS) ================= -->
+  <section class="section" style="padding-top: 0;">
+    <div class="section-head">
+      <span class="section-num">02 — TINH HOA THỰC ĐƠN</span>
+      <h2>Những Thức Uống Được Yêu Thích Nhất</h2>
+      <p>Tuyển chọn từ những công thức đặc trưng nhất của quán, chiều chuộng vị giác của mọi tín đồ sành cà phê.</p>
+    </div>
+
+    <div class="products-grid" id="featuredProducts">
+      <!-- Injected by JavaScript -->
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+      <a href="menu.html" class="btn btn-gold">Xem Toàn Bộ Thực Đơn (16 Món) →</a>
+    </div>
+  </section>
+
+  <!-- ================= 03. KHÔNG GIAN TRẢI NGHIỆM ================= -->
+  <section class="section section-dark">
+    <div class="section-head">
+      <span class="section-num" style="color: var(--gold-light);">03 — KHÔNG GIAN TRẢI NGHIỆM</span>
+      <h2>Góc Bình Yên Giữa Lòng Phố Thị</h2>
+      <p>Thiết kế hòa quyện giữa nét thâm trầm ấm áp của gỗ mộc và khoảng xanh mát rượi của thiên nhiên.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="images/gallery-1.jpg" alt="Ban công đón nắng">
+        <div class="gallery-overlay">
+          <h4>Ban Công Đón Nắng</h4>
+          <small>Góc nhìn phố phường xanh mát</small>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/gallery-2.jpg" alt="Quầy Barista">
+        <div class="gallery-overlay">
+          <h4>Quầy Barista Mộc</h4>
+          <small>Nơi nghệ thuật pha chế bắt đầu</small>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/gallery-3.jpg" alt="Khu vực đọc sách">
+        <div class="gallery-overlay">
+          <h4>Khu Vực Yên Tĩnh</h4>
+          <small>Không gian làm việc & đọc sách</small>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/gallery-4.jpg" alt="Góc sân vườn">
+        <div class="gallery-overlay">
+          <h4>Khu Sân Vườn</h4>
+          <small>Thư giãn dưới vòm cây xanh</small>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="gallery.html" class="btn btn-ghost">Khám phá thư viện ảnh →</a>
+    </div>
+  </section>
+
+  <!-- ================= 04. ĐẶT BÀN TRƯỚC ================= -->
+  <section class="section">
+    <div class="reservation-card">
+      <div class="section-head" style="margin-bottom: 35px;">
+        <span class="section-num">04 — TIỆN ÍCH ĐẶT CHỖ</span>
+        <h2>Đặt Bàn Thưởng Thức</h2>
+        <p>Để chúng tôi chuẩn bị sẵn sàng vị trí ưng ý nhất cho bạn và người thương.</p>
+      </div>
+
+      <form id="reservationForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Họ và tên của bạn</label>
+            <input type="text" name="name" class="form-control" placeholder="Nguyễn Văn A" required>
+          </div>
+          <div class="form-group">
+            <label>Số điện thoại liên hệ</label>
+            <input type="tel" name="phone" class="form-control" placeholder="0987 654 321" required>
+          </div>
+          <div class="form-group">
+            <label>Ngày hẹn</label>
+            <input type="date" name="date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Giờ hẹn</label>
+            <select name="time" class="form-control" required>
+              <option value="08:30">08:30 Sáng</option>
+              <option value="09:30">09:30 Sáng</option>
+              <option value="11:00">11:00 Trưa</option>
+              <option value="14:00" selected>14:00 Chiều</option>
+              <option value="16:30">16:30 Chiều</option>
+              <option value="19:00">19:00 Tối</option>
+              <option value="20:30">20:30 Tối</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Số lượng khách</label>
+            <select name="guests" class="form-control">
+              <option value="1">1 người (Góc yên tĩnh)</option>
+              <option value="2" selected>2 người (Bàn hẹn hò)</option>
+              <option value="4">3 - 4 người (Bàn gia đình)</option>
+              <option value="8">5 - 8 người (Họp nhóm / Bạn bè)</option>
+              <option value="10">Trên 8 người (Liên hệ hotline)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Khu vực mong muốn</label>
+            <select name="location" class="form-control">
+              <option value="Trong nhà (Máy lạnh)">Trong nhà (Máy lạnh, yên tĩnh)</option>
+              <option value="Ban công ngắm phố">Ban công ngắm phố</option>
+              <option value="Sân vườn ngoài trời">Sân vườn ngoài trời thoáng đãng</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Ghi chú đặc biệt (Tùy chọn)</label>
+            <textarea name="note" class="form-control" rows="3" placeholder="Ví dụ: Cần bàn gần ổ cắm điện, chuẩn bị nến sinh nhật..."></textarea>
+          </div>
+        </div>
+
+        <div style="text-align: center;">
+          <button type="submit" class="btn btn-gold" style="min-width: 260px;">
+            Xác Nhận Đặt Bàn Ngay
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= 05. ĐÁNH GIÁ THỰC KHÁCH ================= -->
+  <section class="section" style="padding-top: 0;">
+    <div class="section-head">
+      <span class="section-num">05 — LẮNG NGHE KHÁCH HÀNG</span>
+      <h2>Cảm Nhận Từ Những Người Yêu Cà Phê</h2>
+      <p>Sự hài lòng và những nụ cười thư thái của quý khách là niềm tự hào lớn nhất của đội ngũ chúng tôi.</p>
+    </div>
+
+    <div class="blog-grid" id="testimonialsList">
+      <!-- Injected by JavaScript -->
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4 style="font-size: 1.3rem;">XDTHECOFFEEHOUSE</h4>
+        <p>
+          Không gian thưởng thức cà phê di sản thuần khiết. Nơi tôn vinh giá trị của từng giọt cà phê nguyên bản và tinh thần hiếu khách của người Việt.
+        </p>
+        <div style="margin-top: 18px; color: var(--gold-light); font-size: 0.85rem;">
+          📍 93 Lê Cao Lãng, Phường Phú Thạnh, Quận Tân Phú, TP. Hồ Chí Minh
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="menu.html">Thực đơn đầy đủ</a></li>
+          <li><a href="about.html">Câu chuyện hạt mộc</a></li>
+          <li><a href="gallery.html">Thư viện không gian</a></li>
+          <li><a href="reservation.html">Đặt bàn trước</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Giờ Mở Cửa</h4>
+        <p>
+          <b>Thứ 2 — Thứ 6:</b><br>07:30 — 22:00
+        </p>
+        <p style="margin-top: 10px;">
+          <b>Thứ 7 & Chủ Nhật:</b><br>07:00 — 22:30
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Hotline Hỗ Trợ</h4>
+        <p>Gọi đặt món mang về hoặc đặt tiệc:</p>
+        <a href="tel:0978853110" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold-light); font-weight: 700; display: block; margin: 10px 0;">
+          📞 0978 853 110
+        </a>
+        <p style="font-size: 0.78rem;">Email: lienhe@xdcoffee.vn</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 XDTHECOFFEEHOUSE. Bảo lưu mọi quyền.</div>
+      <div>Thiết kế với cảm hứng Di Sản Văn Hóa Cà Phê Việt.</div>
+    </div>
+  </footer>
+
+  <!-- ================= CART DRAWER ================= -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Giỏ Hàng Của Bạn</h3>
+      <button type="button" class="cart-close-btn" id="cartCloseBtn">✕</button>
+    </div>
+
+    <div class="cart-items" id="cartDrawerItems">
+      <!-- Items dynamically populated -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Tạm tính:</span>
+        <span id="cartDrawerTotal">0đ</span>
+      </div>
+
+      <form id="checkoutForm">
+        <div style="margin-bottom: 12px;">
+          <input type="text" name="name" class="form-control" placeholder="Tên của bạn *" required style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <input type="tel" name="phone" class="form-control" placeholder="Số điện thoại nhận món *" required style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+          <input type="text" name="address" class="form-control" placeholder="Địa chỉ giao / Nhận tại quán" style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <button type="submit" class="btn-checkout">
+          Xác Nhận Đặt Món (Thanh toán khi nhận)
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Render 6 Featured Products on Homepage
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('featuredProducts');
+      if (container && window.COFFEE_DATA) {
+        const featured = window.COFFEE_DATA.products.slice(0, 6);
+        container.innerHTML = featured.map(p => `
+          <div class="product-card">
+            <div class="product-thumb">
+              <img src="${p.image}" alt="${p.name}">
+              ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+              <button type="button" class="product-quickview-btn" onclick="window.CoffeeApp.openQuickView(${p.id})" title="Xem chi tiết">👁</button>
+            </div>
+            <div class="product-body">
+              <h3 class="product-title" onclick="window.CoffeeApp.openQuickView(${p.id})" style="cursor:pointer;">${p.name}</h3>
+              <p class="product-desc">${p.desc}</p>
+              <div class="product-footer">
+                <div class="product-price">${window.CoffeeApp.formatMoney(p.price)}</div>
+                <button type="button" class="btn-add-cart" onclick="window.CoffeeApp.addToCart(${p.id})">
+                  + Thêm món
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Render Testimonials
+      const tContainer = document.getElementById('testimonialsList');
+      if (tContainer && window.COFFEE_DATA) {
+        tContainer.innerHTML = window.COFFEE_DATA.testimonials.map(t => `
+          <div class="blog-card" style="padding: 30px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-size: 1.8rem; color: #D4AF37; margin-bottom: 12px;">❝</div>
+              <p style="font-size: 0.9rem; color: #4A3B32; font-style: italic; line-height: 1.7; margin-bottom: 20px;">
+                "${t.text}"
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; border-top: 1px solid #f2e7d8; padding-top: 16px;">
+              <img src="${t.avatar}" alt="${t.name}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #D4AF37;">
+              <div>
+                <h4 style="font-size: 0.95rem; margin-bottom: 2px;">${t.name}</h4>
+                <small style="color: #B24A24; font-weight: 600; font-size: 0.75rem;">${t.role}</small>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+    });
+  </script>
+</body>
+</html>

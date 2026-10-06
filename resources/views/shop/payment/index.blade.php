@@ -99,6 +99,7 @@
                             </div>
 
                             {{-- PayPal --}}
+                            @if(config('services.paypal.client_id'))
                             <div class="payment-option mb-3">
                                 <form method="POST" action="{{ route('payment.paypal', $order) }}">
                                     @csrf
@@ -115,8 +116,10 @@
                                     </button>
                                 </form>
                             </div>
+                            @endif
 
                             {{-- MoMo --}}
+                            @if(config('services.momo.partner_code'))
                             <div class="payment-option mb-3">
                                 <form method="POST" action="{{ route('payment.momo', $order) }}">
                                     @csrf
@@ -133,6 +136,7 @@
                                     </button>
                                 </form>
                             </div>
+                            @endif
                         </div>
 
                         <div class="text-center mt-4">

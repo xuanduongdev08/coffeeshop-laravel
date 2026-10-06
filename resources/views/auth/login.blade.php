@@ -92,6 +92,7 @@
                             </p>
                         </div>
 
+                        @if(config('services.google.client_id'))
                         {{-- Divider --}}
                         <div class="d-flex align-items-center my-4">
                             <hr style="flex:1;border-color:#e0e0e0;">
@@ -113,6 +114,7 @@
                                 Đăng nhập với Google
                             </a>
                         </div>
+                        @endif
 
                     </div>
                 </div>

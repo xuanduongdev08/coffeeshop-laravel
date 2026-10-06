@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đặt Bàn Trước — XDTHECOFFEEHOUSE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ================= TOP NAVIGATION ================= -->
+  <nav id="mainNav">
+    <div class="nav-inner">
+      <a class="logo" href="index.html">
+        <div class="logo-badge">☕</div>
+        <div class="brand-name">
+          <b>XDTHECOFFEEHOUSE</b>
+          <small>HƯƠNG VỊ DI SẢN · RANG MỘC THỦ CÔNG</small>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li class="dropdown">
+          <a href="menu.html">Thực đơn ▾</a>
+          <div class="dropdown-menu">
+            <a href="menu.html?cat=ca-phe">☕ Cà phê truyền thống & Ý</a>
+            <a href="menu.html?cat=hat-ca-phe">🌱 Hạt cà phê mộc</a>
+            <a href="menu.html?cat=nuoc-trai-cay">🍹 Trà & Trái cây tươi</a>
+            <a href="menu.html?cat=banh-ngot">🍰 Bánh ngọt hảo hạng</a>
+          </div>
+        </li>
+        <li><a href="about.html">Câu chuyện</a></li>
+        <li><a href="gallery.html">Không gian</a></li>
+        <li><a href="reservation.html" class="active">Đặt bàn</a></li>
+        <li><a href="blog.html">Góc Cà phê</a></li>
+        <li><a href="contact.html">Liên hệ</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="nav-search" action="menu.html" method="get">
+          <input type="text" name="q" placeholder="Tìm món...">
+          <button type="submit" aria-label="Tìm kiếm">🔍</button>
+        </form>
+
+        <button type="button" class="cart-toggle-btn" aria-label="Xem giỏ hàng">
+          🛒
+          <span class="cart-badge" style="display:none;">0</span>
+        </button>
+
+        <button type="button" class="mobile-toggle" aria-label="Menu di động">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= BANNER ================= -->
+  <header style="background: radial-gradient(ellipse at 50% 20%, #3a190d 0%, #1a0d08 100%); color: var(--cream); padding: 140px 5vw 60px; text-align: center;">
+    <span class="eyebrow" style="color: var(--gold-light);">Dịch Vụ Tiếp Đón Chu Đáo</span>
+    <h1 style="font-size: clamp(2.2rem, 4vw, 3.4rem); color: var(--cream); margin: 10px 0 16px;">
+      Đặt Bàn Trước
+    </h1>
+    <p style="max-width: 650px; margin: 0 auto; color: rgba(250, 244, 235, 0.8); font-size: 0.98rem;">
+      Giữ sẵn chỗ ngồi đẹp nhất cho buổi họp mặt gia đình, hẹn hò lãng mạn hay buổi làm việc sáng tạo của bạn.
+    </p>
+  </header>
+
+  <!-- ================= RESERVATION CONTENT ================= -->
+  <main class="section">
+    <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 50px; align-items: flex-start;">
+      <!-- Policy Column -->
+      <div>
+        <span class="section-num">QUYỀN LỢI ĐẶT TRƯỚC</span>
+        <h2 style="font-size: 2rem; margin-bottom: 20px;">Trải Nghiệm Trọn Vẹn</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 25px;">
+          Để đem đến không gian trọn vẹn và chu đáo nhất, chúng tôi luôn ưu tiên chuẩn bị trước bàn ghế, khăn trải và phục vụ đồ uống nhanh chóng ngay khi quý khách vừa tới quán.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="background: #fff; padding: 20px; border-radius: var(--radius-sm); border-left: 3px solid #D4AF37; box-shadow: var(--shadow-soft);">
+            <h4 style="font-size: 1rem; margin-bottom: 6px;">⏱ Giữ bàn chu đáo 15 phút</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Quán sẽ giữ bàn cho bạn trong 15 phút so với giờ hẹn đã đăng ký.</p>
+          </div>
+
+          <div style="background: #fff; padding: 20px; border-radius: var(--radius-sm); border-left: 3px solid #D4AF37; box-shadow: var(--shadow-soft);">
+            <h4 style="font-size: 1rem; margin-bottom: 6px;">🍰 Ưu đãi đặt tiệc & sinh nhật</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Tặng 1 phần bánh ngọt nướng tươi cho bàn từ 4 khách đặt trước sinh nhật.</p>
+          </div>
+
+          <div style="background: #fff; padding: 20px; border-radius: var(--radius-sm); border-left: 3px solid #D4AF37; box-shadow: var(--shadow-soft);">
+            <h4 style="font-size: 1rem; margin-bottom: 6px;">📞 Hỗ trợ hotline 24/7</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Nếu cần thay đổi giờ hoặc số lượng khách gấp, vui lòng gọi <b style="color: #8E2818;">0978 853 110</b>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Column -->
+      <div class="reservation-card" style="margin: 0; padding: 40px;">
+        <h3 style="font-size: 1.6rem; margin-bottom: 25px; text-align: center;">Thông Tin Đặt Bàn</h3>
+
+        <form id="reservationPageForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Họ và tên của bạn *</label>
+              <input type="text" name="name" class="form-control" placeholder="Nguyễn Văn A" required>
+            </div>
+            <div class="form-group">
+              <label>Số điện thoại liên hệ *</label>
+              <input type="tel" name="phone" class="form-control" placeholder="0987 654 321" required>
+            </div>
+            <div class="form-group">
+              <label>Ngày hẹn *</label>
+              <input type="date" name="date" class="form-control" required id="resDateInput">
+            </div>
+            <div class="form-group">
+              <label>Khung giờ hẹn *</label>
+              <select name="time" class="form-control" required>
+                <option value="08:00">08:00 Sáng</option>
+                <option value="09:00">09:00 Sáng</option>
+                <option value="10:30">10:30 Sáng</option>
+                <option value="14:00" selected>14:00 Chiều</option>
+                <option value="16:00">16:00 Chiều</option>
+                <option value="18:30">18:30 Tối</option>
+                <option value="20:00">20:00 Tối</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Số lượng người lớn</label>
+              <select name="guests" class="form-control">
+                <option value="1">1 Người (Bàn đơn)</option>
+                <option value="2" selected>2 Người (Bàn đôi)</option>
+                <option value="4">3 - 4 Người</option>
+                <option value="6">5 - 6 Người</option>
+                <option value="10">Nhóm từ 7 - 12 người</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Vị trí mong muốn</label>
+              <select name="location" class="form-control">
+                <option value="Trong nhà (Máy lạnh, yên tĩnh)">Khu máy lạnh (Yên tĩnh, làm việc)</option>
+                <option value="Ban công tầng 2 ngắm phố">Ban công tầng 2 (Thoáng đãng ngắm phố)</option>
+                <option value="Sân vườn tầng trệt">Khu sân vườn (Bóng cây xanh mát)</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Yêu cầu đặc biệt</label>
+              <textarea name="note" class="form-control" rows="3" placeholder="Ví dụ: Chuẩn bị nến sinh nhật, xếp bàn gần ổ cắm điện, có trẻ nhỏ..."></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-gold" style="width: 100%; padding: 15px;">
+            Gửi Yêu Cầu Đặt Bàn Ngay
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4 style="font-size: 1.3rem;">XDTHECOFFEEHOUSE</h4>
+        <p>
+          Không gian thưởng thức cà phê di sản thuần khiết. Nơi tôn vinh giá trị của từng giọt cà phê nguyên bản và tinh thần hiếu khách của người Việt.
+        </p>
+        <div style="margin-top: 18px; color: var(--gold-light); font-size: 0.85rem;">
+          📍 93 Lê Cao Lãng, Phường Phú Thạnh, Quận Tân Phú, TP. Hồ Chí Minh
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="menu.html">Thực đơn đầy đủ</a></li>
+          <li><a href="about.html">Câu chuyện hạt mộc</a></li>
+          <li><a href="gallery.html">Thư viện không gian</a></li>
+          <li><a href="reservation.html">Đặt bàn trước</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Giờ Mở Cửa</h4>
+        <p>
+          <b>Thứ 2 — Thứ 6:</b><br>07:30 — 22:00
+        </p>
+        <p style="margin-top: 10px;">
+          <b>Thứ 7 & Chủ Nhật:</b><br>07:00 — 22:30
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Hotline Hỗ Trợ</h4>
+        <p>Gọi đặt món mang về hoặc đặt tiệc:</p>
+        <a href="tel:0978853110" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold-light); font-weight: 700; display: block; margin: 10px 0;">
+          📞 0978 853 110
+        </a>
+        <p style="font-size: 0.78rem;">Email: lienhe@xdcoffee.vn</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 XDTHECOFFEEHOUSE. Bảo lưu mọi quyền.</div>
+      <div>Thiết kế với cảm hứng Di Sản Văn Hóa Cà Phê Việt.</div>
+    </div>
+  </footer>
+
+  <!-- ================= CART DRAWER ================= -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Giỏ Hàng Của Bạn</h3>
+      <button type="button" class="cart-close-btn" id="cartCloseBtn">✕</button>
+    </div>
+    <div class="cart-items" id="cartDrawerItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Tạm tính:</span>
+        <span id="cartDrawerTotal">0đ</span>
+      </div>
+      <form id="checkoutForm">
+        <div style="margin-bottom: 12px;">
+          <input type="text" name="name" class="form-control" placeholder="Tên của bạn *" required style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <input type="tel" name="phone" class="form-control" placeholder="Số điện thoại nhận món *" required style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+          <input type="text" name="address" class="form-control" placeholder="Địa chỉ giao / Nhận tại quán" style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <button type="submit" class="btn-checkout">
+          Xác Nhận Đặt Món (Thanh toán khi nhận)
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set default date to today
+      const dateInput = document.getElementById('resDateInput');
+      if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+        dateInput.min = today;
+      }
+
+      document.getElementById('reservationPageForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const data = new FormData(this);
+        
+        const reservation = {
+          name: data.get('name'),
+          phone: data.get('phone'),
+          date: data.get('date'),
+          time: data.get('time'),
+          guests: data.get('guests'),
+          location: data.get('location'),
+          note: data.get('note') || '',
+          createdAt: new Date().toLocaleString('vi-VN')
+        };
+
+        const existing = JSON.parse(localStorage.getItem('xdcoffee_reservations') || '[]');
+        existing.unshift(reservation);
+        localStorage.setItem('xdcoffee_reservations', JSON.stringify(existing));
+
+        let modal = document.getElementById('resConfirmModal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'resConfirmModal';
+          modal.className = 'modal-overlay';
+          modal.innerHTML = `
+            <div class="modal-card" style="max-width: 500px; text-align: center; padding: 45px 30px;">
+              <div style="font-size: 3.2rem; margin-bottom: 12px;">🗓️</div>
+              <span class="eyebrow" style="color: #D4AF37;">Đã Xác Nhận Đặt Chỗ</span>
+              <h2 style="font-size: 1.8rem; margin: 10px 0 15px;">Hẹn Gặp Quý Khách!</h2>
+              <p style="color: #6B5B52; font-size: 0.9rem; margin-bottom: 22px;">
+                Quán đã lưu thông tin đặt bàn của quý khách <b id="rcName" style="color:#1A0D08;"></b> vào lúc <b id="rcTime" style="color:#B24A24;"></b> ngày <b id="rcDate"></b>.
+              </p>
+              <button type="button" class="btn btn-gold" onclick="document.getElementById('resConfirmModal').classList.remove('active')">
+                Hoàn tất
+              </button>
+            </div>
+          `;
+          document.body.appendChild(modal);
+        }
+
+        document.getElementById('rcName').textContent = reservation.name;
+        document.getElementById('rcTime').textContent = reservation.time;
+        document.getElementById('rcDate').textContent = reservation.date;
+        modal.classList.add('active');
+        this.reset();
+      });
+    });
+  </script>
+</body>
+</html>

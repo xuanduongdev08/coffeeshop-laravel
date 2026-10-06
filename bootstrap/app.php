@@ -12,6 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*');
+
         // Redirect guests based on request path
         $middleware->redirectGuestsTo(function ($request) {
             return $request->is('admin*') ? route('admin.login') : route('login');

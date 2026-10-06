@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Câu Chuyện Di Sản — XDTHECOFFEEHOUSE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ================= TOP NAVIGATION ================= -->
+  <nav id="mainNav">
+    <div class="nav-inner">
+      <a class="logo" href="index.html">
+        <div class="logo-badge">☕</div>
+        <div class="brand-name">
+          <b>XDTHECOFFEEHOUSE</b>
+          <small>HƯƠNG VỊ DI SẢN · RANG MỘC THỦ CÔNG</small>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html">Trang chủ</a></li>
+        <li class="dropdown">
+          <a href="menu.html">Thực đơn ▾</a>
+          <div class="dropdown-menu">
+            <a href="menu.html?cat=ca-phe">☕ Cà phê truyền thống & Ý</a>
+            <a href="menu.html?cat=hat-ca-phe">🌱 Hạt cà phê mộc</a>
+            <a href="menu.html?cat=nuoc-trai-cay">🍹 Trà & Trái cây tươi</a>
+            <a href="menu.html?cat=banh-ngot">🍰 Bánh ngọt hảo hạng</a>
+          </div>
+        </li>
+        <li><a href="about.html" class="active">Câu chuyện</a></li>
+        <li><a href="gallery.html">Không gian</a></li>
+        <li><a href="reservation.html">Đặt bàn</a></li>
+        <li><a href="blog.html">Góc Cà phê</a></li>
+        <li><a href="contact.html">Liên hệ</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="nav-search" action="menu.html" method="get">
+          <input type="text" name="q" placeholder="Tìm món...">
+          <button type="submit" aria-label="Tìm kiếm">🔍</button>
+        </form>
+
+        <button type="button" class="cart-toggle-btn" aria-label="Xem giỏ hàng">
+          🛒
+          <span class="cart-badge" style="display:none;">0</span>
+        </button>
+
+        <button type="button" class="mobile-toggle" aria-label="Menu di động">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= BANNER ================= -->
+  <header style="background: radial-gradient(ellipse at 50% 20%, #3a190d 0%, #1a0d08 100%); color: var(--cream); padding: 140px 5vw 60px; text-align: center;">
+    <span class="eyebrow" style="color: var(--gold-light);">Hành Trình Gìn Giữ Di Sản</span>
+    <h1 style="font-size: clamp(2.2rem, 4vw, 3.4rem); color: var(--cream); margin: 10px 0 16px;">
+      Về XDTHECOFFEEHOUSE
+    </h1>
+    <p style="max-width: 650px; margin: 0 auto; color: rgba(250, 244, 235, 0.8); font-size: 0.98rem; line-height: 1.8;">
+      Chúng tôi tin rằng, một tách cà phê ngon không đơn thuần là hương vị — đó là câu chuyện của đất mẹ, của đôi bàn tay người nông dân và ngọn lửa đam mê của người thợ rang.
+    </p>
+  </header>
+
+  <!-- ================= STORY BODY ================= -->
+  <main class="section">
+    <div class="about-grid" style="margin-bottom: 80px;">
+      <div>
+        <span class="section-num">01 — KHỞI ĐẦU TỪ VÙNG CAO NGUYÊN</span>
+        <h2 style="font-size: 2.2rem; margin-bottom: 20px;">
+          Nơi Hạt Cà Phê Chín Đỏ <span style="color: var(--coffee-amber);">Được Đón Sương Mai</span>
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px;">
+          Năm 2018, những người sáng lập XDTHECOFFEEHOUSE đã rong ruổi qua khắp các nông trường cà phê bạt ngàn tại Cầu Đất (Lâm Đồng) và Cư M'gar (Đắk Lắk). Chứng kiến cảnh những hạt cà phê hảo hạng bị pha trộn tạp chất và hương liệu rẻ tiền trên thị trường, chúng tôi nung nấu quyết tâm đưa hạt cà phê Việt về đúng giá trị nguyên bản nhất.
+        </p>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Chúng tôi chỉ hợp tác với các hộ nông dân cam kết hái chín 100%, áp dụng phương pháp lên men tự nhiên và phơi trên giàn trong nhà màng, bảo vệ tối đa lớp đường mật tự nhiên của vỏ quả.
+        </p>
+      </div>
+      <div class="about-image-wrap">
+        <img src="images/bg_2.jpg" alt="Vùng trồng cà phê">
+      </div>
+    </div>
+
+    <!-- 4 Bước Quy Trình -->
+    <div style="background: #fff; padding: 60px 40px; border-radius: var(--radius-lg); border: 1px solid var(--border-gold); box-shadow: var(--shadow-soft); margin-bottom: 80px;">
+      <div class="section-head" style="margin-bottom: 45px;">
+        <span class="section-num">QUY TRÌNH TINH TUYỂN</span>
+        <h2>4 Bước Kiến Tạo Nên Hương Vị Di Sản</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px;">
+        <div style="border-left: 3px solid #D4AF37; padding-left: 18px;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #D4AF37; line-height: 1;">01</div>
+          <h4 style="font-size: 1.1rem; margin: 8px 0 6px;">Thu Hái Chín Cây</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Chỉ chọn lựa những trái cà phê chín mọng 100%, đồng đều lượng đường và độ ẩm hoàn hảo.</p>
+        </div>
+
+        <div style="border-left: 3px solid #D4AF37; padding-left: 18px;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #D4AF37; line-height: 1;">02</div>
+          <h4 style="font-size: 1.1rem; margin: 8px 0 6px;">Sơ Chế Mật Ong</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Phương pháp Honey Process giữ lại lớp nhầy giàu đường, tạo hậu vị ngọt sâu lắng khi uống.</p>
+        </div>
+
+        <div style="border-left: 3px solid #D4AF37; padding-left: 18px;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #D4AF37; line-height: 1;">03</div>
+          <h4 style="font-size: 1.1rem; margin: 8px 0 6px;">Rang Mộc Thủ Công</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Mỗi mẻ rang đều được căn chỉnh nhiệt độ chính xác bằng máy rang Hot Air hiện đại, không tẩm ướp.</p>
+        </div>
+
+        <div style="border-left: 3px solid #D4AF37; padding-left: 18px;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #D4AF37; line-height: 1;">04</div>
+          <h4 style="font-size: 1.1rem; margin: 8px 0 6px;">Chiết Xuất Hoàn Hảo</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Pha phin truyền thống hoặc máy Espresso áp suất chuẩn 9 bar, nâng niu trọn vẹn lớp crema sánh vàng.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 Cam Kết Vàng -->
+    <div class="about-grid" style="align-items: center;">
+      <div class="about-image-wrap">
+        <img src="images/bg_4.jpg" alt="Pha chế cà phê">
+      </div>
+      <div>
+        <span class="section-num">TRIẾT LÝ PHỤC VỤ</span>
+        <h2 style="font-size: 2.2rem; margin-bottom: 20px;">Ba Cam Kết Vàng Của Chúng Tôi</h2>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 18px;">
+          <li style="display: flex; gap: 14px;">
+            <span style="font-size: 1.4rem;">☕</span>
+            <div>
+              <h4 style="font-size: 1.05rem; margin-bottom: 4px;">100% Cà phê nguyên chất</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">Tuyệt đối không bơ, bắp, đậu nành hay hương liệu phụ gia tạo mùi.</p>
+            </div>
+          </li>
+          <li style="display: flex; gap: 14px;">
+            <span style="font-size: 1.4rem;">🤝</span>
+            <div>
+              <h4 style="font-size: 1.05rem; margin-bottom: 4px;">Đồng hành cùng người nông dân</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">Thu mua với mức giá công bằng (Fair Trade), bảo vệ môi trường canh tác rừng bền vững.</p>
+            </div>
+          </li>
+          <li style="display: flex; gap: 14px;">
+            <span style="font-size: 1.4rem;">💖</span>
+            <div>
+              <h4 style="font-size: 1.05rem; margin-bottom: 4px;">Tinh thần hiếu khách tận tâm</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">Mỗi thực khách ghé quán đều là một người bạn tri kỷ cùng chia sẻ niềm say mê cà phê.</p>
+            </div>
+          </li>
+        </ul>
+
+        <div style="margin-top: 35px;">
+          <a href="reservation.html" class="btn btn-gold">Đặt bàn trải nghiệm ngay →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4 style="font-size: 1.3rem;">XDTHECOFFEEHOUSE</h4>
+        <p>
+          Không gian thưởng thức cà phê di sản thuần khiết. Nơi tôn vinh giá trị của từng giọt cà phê nguyên bản và tinh thần hiếu khách của người Việt.
+        </p>
+        <div style="margin-top: 18px; color: var(--gold-light); font-size: 0.85rem;">
+          📍 93 Lê Cao Lãng, Phường Phú Thạnh, Quận Tân Phú, TP. Hồ Chí Minh
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="menu.html">Thực đơn đầy đủ</a></li>
+          <li><a href="about.html">Câu chuyện hạt mộc</a></li>
+          <li><a href="gallery.html">Thư viện không gian</a></li>
+          <li><a href="reservation.html">Đặt bàn trước</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Giờ Mở Cửa</h4>
+        <p>
+          <b>Thứ 2 — Thứ 6:</b><br>07:30 — 22:00
+        </p>
+        <p style="margin-top: 10px;">
+          <b>Thứ 7 & Chủ Nhật:</b><br>07:00 — 22:30
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Hotline Hỗ Trợ</h4>
+        <p>Gọi đặt món mang về hoặc đặt tiệc:</p>
+        <a href="tel:0978853110" style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold-light); font-weight: 700; display: block; margin: 10px 0;">
+          📞 0978 853 110
+        </a>
+        <p style="font-size: 0.78rem;">Email: lienhe@xdcoffee.vn</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 XDTHECOFFEEHOUSE. Bảo lưu mọi quyền.</div>
+      <div>Thiết kế với cảm hứng Di Sản Văn Hóa Cà Phê Việt.</div>
+    </div>
+  </footer>
+
+  <!-- ================= CART DRAWER ================= -->
+  <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Giỏ Hàng Của Bạn</h3>
+      <button type="button" class="cart-close-btn" id="cartCloseBtn">✕</button>
+    </div>
+
+    <div class="cart-items" id="cartDrawerItems"></div>
+
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Tạm tính:</span>
+        <span id="cartDrawerTotal">0đ</span>
+      </div>
+
+      <form id="checkoutForm">
+        <div style="margin-bottom: 12px;">
+          <input type="text" name="name" class="form-control" placeholder="Tên của bạn *" required style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <input type="tel" name="phone" class="form-control" placeholder="Số điện thoại nhận món *" required style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+          <input type="text" name="address" class="form-control" placeholder="Địa chỉ giao / Nhận tại quán" style="font-size: 0.82rem; padding: 10px 12px;">
+        </div>
+        <button type="submit" class="btn-checkout">
+          Xác Nhận Đặt Món (Thanh toán khi nhận)
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
